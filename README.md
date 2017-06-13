@@ -1,4 +1,4 @@
-## 查缺补漏记————不定期更新中
+## 不定期更新中————
 
 1.2017.05.15完结————[基于Vue、Nodejs、Socket.io的聊天应用](https://github.com/Aaaaaaaty/vue-im)
 

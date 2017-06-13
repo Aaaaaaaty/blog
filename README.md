@@ -7,3 +7,5 @@
 3.2017.06.06完结————[基于react的影院购票应用](https://github.com/Aaaaaaaty/react_movie)
 
 4.2017.06.09完结————[原来又到了校招季，一个前端新人的回忆](https://github.com/Aaaaaaaty/Blog/issues/4)
+
+5.2017.06.13完结————[基于 canvas 实现的一个截图小 demo](https://github.com/Aaaaaaaty/Blog/issues/5)

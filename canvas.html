@@ -1,0 +1,40 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<style type="text/css">
+#theCanvas{ 
+  /*background-color:#63F; */
+} 
+</style> 
+</head> 
+<body> 
+<canvas id="theCanvas" width="400" height="400"></canvas> 
+</body> 
+<script type="text/javascript"> 
+(function() {
+  var t = 0
+  var oCanvas=document.getElementById("theCanvas"); 
+  var content=oCanvas.getContext( "2d" );
+  var draw = function () {
+    content.clearRect(0, 0, width, height);
+    moveSin(t+=1)
+    setTimeout(draw, 35)
+  }
+  function moveSin(t){ 
+    
+    var x = 1; 
+    var y = 100; 
+    content.beginPath(); 
+    content.moveTo(x,y); 
+    for(var i = 1; i < oCanvas.width; i+=0.1) {
+      x=i*10; 
+      y=Math.sin(i)*30+100 + t; 
+      content.lineTo(x,y); 
+      content.stroke(); 
+    // content.closePath(); 
+    }
+  } 
+  // setTimeout(draw, 0)
+})()
+</script> 
+</html>

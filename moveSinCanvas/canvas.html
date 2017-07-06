@@ -1,0 +1,61 @@
+<!DOCTYPE html> 
+<html> 
+<head>
+<title>滚动波浪</title> 
+<style type="text/css">
+#theCanvas{ 
+} 
+</style> 
+</head> 
+<body> 
+<canvas id="theCanvas" width="400" height="400"></canvas> 
+</body> 
+<script type="text/javascript"> 
+(function() {
+  var t = 0
+  var x = 1
+  var initY = 100
+  var oCanvas=document.getElementById("theCanvas")
+  var content=oCanvas.getContext( "2d" );
+  var width = oCanvas.width
+  var height = oCanvas.height
+    var draw = function () {
+    var img = new Image()
+    img.onload = function(){
+      content.drawImage(img,0,0)
+      var c = content.getImageData(0, 0, width, height)
+      // for(var i = 0; i < height; ++i){
+      //   for(var j = 0; j < width; ++j){
+      //     var x = i*4*width + 4*j,  //imagedata读取的像素数据存储在data属性里，是从上到下，从左到右的，每个像素需要占用4位数据，分别是r,g,b,alpha透明通道
+      //     r = c.data[x],
+      //     g = c.data[x+1],
+      //     b = c.data[x+2];
+      //     c.data[x+3] = 150;    //透明度设置为150,0表示完全透明
+      //     //图片反相：
+      //     c.data[x] = 255-r;
+      //     c.data[x+1] = 255-g;
+      //     c.data[x+2] = 255-b; 
+      //   }
+      // }
+    }
+    img.src = './test.jpg';
+    // moveSin(t+=0.1)
+    // content.stroke()
+    // setTimeout(draw, 30)
+  }
+  function moveSin(t){ 
+    content.clearRect(0, 0, width, height);
+    content.beginPath()
+    // initY --
+    content.moveTo(1, Math.sin(-t) * 30 + initY)
+    for(var i = 0; i < width; i+=0.1) {
+      x=i*20
+      y=Math.sin(i - t)*40+initY
+      content.lineTo(x,y)
+    // content.closePath()
+    }
+  } 
+  setTimeout(draw, 0)
+})()
+</script> 
+</html>

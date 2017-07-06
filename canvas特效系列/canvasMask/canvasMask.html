@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图片蒙版</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<canvas id="canvas" width="738" height="610"></canvas>
+	<div><span class="btn">一键马赛克</span></div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	
+		var canvasId = 'canvas'
+		var canvas=document.getElementById(canvasId)
+		var ctx=canvas.getContext( "2d" )
+		var width = canvas.width
+		var height = canvas.height
+		var img = new Image()
+		img.src = './gaoqing3.jpg'
+		img.onload = function(){
+			ctx.drawImage(img,0,0)
+			$('.btn').click(function() {
+				var drawMove = function() {
+					ctx.drawImage(img,0,0)
+					var imgData = ctx.getImageData(0, 0, width, height)
+					var maskLevel = 6
+					var keyRow = 0
+					var keyCol = 0
+					var byte = 4 //4位一像素
+					for(var y = 0; y < height; y+=maskLevel) {
+						for(var x = 0; x < width; x+=maskLevel) {
+							var sym = x * byte + y * width * byte
+							for(var i = 1; i < maskLevel; i++) {
+								imgData.data[sym + i * byte + 0] = imgData.data[sym + 0]
+								imgData.data[sym + i * byte + 1] = imgData.data[sym + 1]
+								imgData.data[sym + i * byte + 2] = imgData.data[sym + 2]
+							}
+						}
+					}
+					for(var x = 0; x < width; x+=maskLevel) {
+						for(var y = 0; y < height; y+=maskLevel) {
+							var sym = x * byte + y * width * byte
+							for(var i = 1; i < maskLevel; i++) {
+								for(var j = 0; j < maskLevel; j++) {
+									imgData.data[sym + i * width * byte + j * byte + 0] = imgData.data[sym + 0]
+									imgData.data[sym + i * width * byte + j * byte + 1] = imgData.data[sym + 1]
+									imgData.data[sym + i * width * byte + j * byte + 2] = imgData.data[sym + 2]
+								}
+							}
+						}
+					}
+					console.log(imgData.data)
+					ctx.putImageData(imgData, 0, 0, 0, 0, width, height)
+				}
+				var timer = setTimeout(drawMove, 0)
+			})
+		} 
+	
+	
+</script>
+</html>

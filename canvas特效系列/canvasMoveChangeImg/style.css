@@ -1,0 +1,11 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+.btn {
+  display: inline-block;
+  padding: 5px 10px;
+  border: 1px solid;
+  border-radius: 10px;
+  cursor: pointer;
+}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>图片蒙版</title>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+	<canvas id="canvas" width="500" height="400"></canvas>
+	<div><span class="btn">一键马赛克</span></div>
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+<script>
+	var canvasId = 'canvas'
+	var canvas=document.getElementById(canvasId)
+	var ctx=canvas.getContext( "2d" )
+	var width = canvas.width
+	var height = canvas.height
+	var img = new Image()
+	img.src = './liangzi.png'
+	img.onload = function(){
+		ctx.drawImage(img,0,0)
+		$('.btn').click(function() {
+			var drawMove = function() {
+				ctx.drawImage(img,0,0)
+				function ConvolutionMatrix(matrix, divisor, offset){
+				    var imgData = ctx.getImageData(0, 0, width, height)
+				    var oD = imgData.data;
+				    var m = matrix;
+				    // 对除了边缘的点之外的内部点的 RGB 进行操作，透明度在最后都设为 255
+				    for (var y = 1; y < height-1; y += 1) {
+				        for (var x = 1; x < width-1; x += 1) {
+				            for (var c = 0; c < 3; c += 1) {
+				                var i = (y*width + x)*4 + c;
+				                oD[i] = offset
+				                    +(m[0]*oD[i-width*4-4] + m[1]*oD[i-width*4] + m[2]*oD[i-width*4+4]
+				                    + m[3]*oD[i-4]     	   + m[4]*oD[i]     	+ m[5]*oD[i+4]
+				                    + m[6]*oD[i+width*4-4] + m[7]*oD[i+width*4] + m[8]*oD[i+width*4+4])
+				                    / divisor;
+				            	oD[(y*width + x)*4 + 3] = 255; // 设置透明度
+				        	}
+				        }
+				    }
+				    console.log('imgData', imgData.data[16])
+				    ctx.putImageData(imgData, 0, 0, 0, 0, width, height)
+				}
+				ConvolutionMatrix([0, 0, 0, 0, 1, 0, 0, 0, 0], -1, 255)
+				// ConvolutionMatrix([-6, -3, 0, -3, 1, 3, 0, 3, 6], 1, 0)
+				// ConvolutionMatrix([-1, -1, -1, -1, 9, -1, -1, -1, -1], 1, 0)
+				
+			}
+			drawMove()
+		})
+	} 
+</script>
+</html>

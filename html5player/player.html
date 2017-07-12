@@ -113,24 +113,37 @@
 		height: 100%;
 	}
 	.play-time {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		width: 80px;
+	    position: absolute;
+	    top: 0px;
+	    left: 0px;
+	    width: 90px;
+	    text-align: center;
+	    height: 25px;
+	    line-height: 24px;
 	}
 	.play-sound {
 		display: block;
 		height: 100%;
 		position: relative;
-		margin-left: 80px;
-		margin-right: 50px;
+		margin-left: 90px;
+	}
+	.play-sound-switch {
+		width: 20px;
+	    height: 25px;
+	    float: left;
+	}
+	.play-sound-wrapper {
+	    height: 25px;
+	    width: 60px;
+	    float: left;
+	    position: relative;
 	}
 	.play-sound-all {
 		height: 2px;
 	    background-color: #737373;
 	    margin-top: 0px;
 	    position: relative;
-	    top: 9px;
+	    top: 11px;
 	}
 	.play-sound-drag {
 		position: absolute;
@@ -138,7 +151,7 @@
 	    height: 2px;
 	    border-radius: 1.5px;
 	    background-color: #478CDF;
-	    top: 9px;
+	    top: 11px;
 	    left: 0px;
 	}
 	.play-sound-btn {
@@ -148,20 +161,27 @@
 	    height: 6px;
 	    border-radius: 1.8px;
 	    background-color: #ffffff;
-	    top: 7px;
+	    top: 9px;
 	    left: 0px;
 	}
 	.play-screen {
 		position: absolute;
 		top: 0px;
 		right: 0px;
-		width: 50px;
+		width: 30px;
+		height: 25px;
 	}
 	.play-start{
 	    display: inline-block;
 	    width: 9px;
 	    height: 11px;
 	    background: url(./images/icon.png) no-repeat 0px -22px;
+	}
+	.play-pause {
+		display: inline-block;
+	    width: 9px;
+	    height: 11px;
+	    background: url(./images/icon.png) no-repeat 0px -10px;
 	}
 	.play-btn-wrapper {
 		width: 30px;
@@ -176,21 +196,51 @@
 	    background: url(./images/icon.png) no-repeat 0px 0px;
 	    margin-left: 8px;
 	}
-
+	.play-sound-on {
+		display: inline-block;
+	    width: 9px;
+	    height: 10px;
+	    background: url(./images/icon.png) no-repeat 0px -34px;
+	    margin-top: 6px;
+		margin-left: 2px;
+	}
+	.play-sound-off {
+	    display: inline-block;
+	    width: 11px;
+	    height: 9px;
+	    background: url(./images/icon.png) no-repeat 0px -47px;
+	    margin-top: 7px;
+    	margin-left: 2px;
+	}
+	.play-screen-not-full {
+		display: inline-block;
+	    width: 11px;
+	    height: 11px;
+	    background: url(./images/icon.png) no-repeat 0px -57px;
+	    margin-top: 5px;
+		margin-left: 10px;
+	}
+	.play-screen-full {
+		display: inline-block;
+	    width: 11px;
+	    height: 11px;
+	    background: url(./images/icon.png) no-repeat 0px -69px;
+	    margin-top: 5px;
+		margin-left: 10px;
+	}
 </style>
 
 </head>
 
 <body>
 <div class="playerPop">
-
 	<div class="inset">
 		<div class="playerbody" id="video">
-        	<video id="videoSource"  style="width:100%; height:100%;" src="111.mp4"poster="images/qr.png" autoplay></video>
+        	<video id="videoSource"  style="width:100%; height:100%;" src="111.mp4"poster="images/qr.png" ></video>
 				<div class="player-control">
 					<div class="play-btn ">
 						<div class="play-btn-wrapper">
-							<span class="play-start"></span>
+							<span id="play-start" class="play-start"></span>
 							<span class="play-stop"></span>
 						</div>
 					</div>
@@ -202,14 +252,21 @@
 					</div>
 					<div class="play-msg ">
 						<span class="play-time">
-							<span class="play-current-time">33:33</span>/<span class="play-all-time">33:33</span>
+							<span class="play-current-time">00:00</span>/<span class="play-all-time"></span>
 						</span>
 						<span class="play-sound">
-							<div class="play-sound-all"></div>
-							<div class="play-sound-drag"></div>
-							<span class="play-sound-btn"></span>
+							<div class="play-sound-switch">
+								<span id="sound-switch" class="play-sound-on"></span>	
+							</div>
+							<div class="play-sound-wrapper">
+								<div class="play-sound-all"></div>
+								<div class="play-sound-drag"></div>
+								<span class="play-sound-btn"></span>
+							</div>
 						</span>
-						<span class="play-screen">big</span>
+						<span class="play-screen">
+							<span id="screen-full-swtich" class="play-screen-not-full"></span>
+						</span>
 					</div>
 				</div>
     	</div>
@@ -226,70 +283,82 @@
 
 				</ul>
 			</div>
-
 		</div>
 	</div>
 </div>
 
 <script src="./jquery.min.js"></script>
 <script>
+	var videoshare = document.querySelector(".sidebar .share");
+	var showShareList = document.getElementById("videoshare");
+	var shareList = videoshare.querySelector("ul");
+	var hideShareList = videoshare.querySelector(".top");
+	var wxshare = videoshare.querySelector(".wx");
+	var wxqr = videoshare.querySelector(".qr");
 
-var videoshare = document.querySelector(".sidebar .share");
-var showShareList = document.getElementById("videoshare");
-
-var shareList = videoshare.querySelector("ul");
-var hideShareList = videoshare.querySelector(".top");
-var wxshare = videoshare.querySelector(".wx");
-var wxqr = videoshare.querySelector(".qr");
-
-showShareList.addEventListener("click",function(){
-	//shareList.classList.remove("hide")
-	shareList.classList.add("show")
-},false)
-hideShareList.addEventListener("click",function(){
-	//shareList.classList.add("hide")
-	shareList.classList.remove("show")
-},false)
-wxshare.addEventListener("click",function(){
-	var classlist = wxqr.classList;
-	if(!classlist.contains("show")){
-		classlist.add("show");
-	}else{
-		classlist.remove("show");
-	}
-
-},false)
+	showShareList.addEventListener("click",function(){
+		//shareList.classList.remove("hide")
+		shareList.classList.add("show")
+	},false)
+	hideShareList.addEventListener("click",function(){
+		//shareList.classList.add("hide")
+		shareList.classList.remove("show")
+	},false)
+	wxshare.addEventListener("click",function(){
+		var classlist = wxqr.classList;
+		if(!classlist.contains("show")){
+			classlist.add("show");
+		}else{
+			classlist.remove("show");
+		}
+	},false)
 </script>
 <script>
-	window.onload = function() {
+	function videoPlayer() {
+		$(window).resize(function() {
+			processWidth = $('.play-process').width()
+		})
 		var videoSource = document.getElementById('videoSource'),
 			timer,
 			duration = videoSource.duration || 0,
 			currentTime, 
-			isDrag = false,
-			processWidth = $('.play-process').width(), 
+			isPlay = false, //是否开始播放
+			isDrag = false, //是否拖拽进度条
+			isSound = false, //是否拖拽音量区域
+			isSoundOn = true, //是否开启声音
+			isFullScreen = false,
 			currentProcess,
 			dragProcessEl = $('.play-process-drag'),
-			dragTarget = $('.play-process-btn')
+			dragTarget = $('.play-process-btn'),
+			soundTarget = $('.play-sound-btn'), //音量高低条按钮
+			soundProcess = $('.play-sound-drag'), //音量高低条
+			dragTarget = $('.play-process-btn'), //播放进度条按钮
+			dragProcess = $('.play-process-drag'), //播放进度条,
+			playStartBtn = $('#play-start'), //播放按钮
+			soundSwitchBtn = $('#sound-switch'), //音频开关
+			playStopBtn = $('.play-stop'), //停止按钮
+			fullScreenBtn = $('#screen-full-swtich'),//全屏开关
+			processWidth = $('.play-process').width()
+
+
 		var dragControl = function() { //拖动元素、进度条元素、拖动总长
 			var startX = 0,
 				moveX = 0,
 				disX = 0,
 				dragDis = 0,
+				soundDis = 0,
 				leftInit = 55 //进度条整体距离左侧偏移
 				rightInit = 30 //音量条整体距离右侧偏移
-				dragTarget = $('.play-process-btn'), //播放进度条按钮
-				dragProcess = $('.play-process-drag'), //播放进度条
-				dragMaxLength = $('.play-process').width(), //播放进度条总长
 				dragProcessWidth = dragProcess.width(), //播放进度条当前长度
-				soundTarget = $('.play-sound-btn'), //播放进度条按钮
-				soundProcess = $('.play-sound-drag'), //播放进度条
-				soundMaxLength = $('.play-sound').width(), //播放进度条总长
-				soundProcessWidth = soundProcess.width() //播放进度条当前长度
+				soundMaxLength = $('.play-sound').width(), //音量高低条总长
+				soundProcessWidth = soundProcess.width() //音量高低条当前长度
+
+			$('.play-all-time').html(changeSecond(duration))
 			$('body').mousedown(function(e) {
 				startX = e.clientX
 				if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
 					isDrag = true
+					isPlay = false
 					dragDis = startX - leftInit
 					dragTarget.css({
 						left: dragDis
@@ -297,46 +366,79 @@ wxshare.addEventListener("click",function(){
 					dragProcess.css({
 						width: dragDis
 					})
+					playStartBtn.removeClass('play-start').addClass('play-pause')
 					videoSource.pause()
 					clearTimeout(timer)
 				}
-				if($(e.target).hasClass('play-sound') || $(e.target).parent().hasClass('play-sound')) {
+				if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
+					isSound = true
+					isSoundOn = true
 					var clientWidth = $('body').width()
-					var soundProcessCurrentWidth = 110 - (clientWidth - startX) - 20 // 110为进度条右侧总长，20为播放按钮占用长度
-					console.log(soundProcessCurrentWidth)
+					soundDis = 110 - (clientWidth - startX) - 20 // 110为进度条右侧总长，20为播放按钮占用长度
+					soundProcess.css({
+						width: soundDis
+					})
+					soundTarget.css({
+						left: soundDis
+					})
+					soundSwitchBtn.removeClass('play-sound-off').addClass('play-sound-on')
+					videoSource.volume = soundDis / soundMaxLength
 				}
 			}).mousemove(function(e) {
-				if(isDrag) {
-					moveX = e.clientX
+				moveX = e.clientX
 					disX = moveX - startX
-					var left = dragDis + disX
-					if(left > dragMaxLength) {
-						left = dragMaxLength
-					} else if(left < 0) {
-						left = 0
+				if(isDrag) {
+					if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
+						var left = dragDis + disX
+						if(left > processWidth - 9) { //9为拖拽条小图标的宽度
+							left = processWidth - 9
+						} else if(left < 0) {
+							left = 0
+						}
+						dragTarget.css({
+							left: left
+						})
+						dragProcess.css({
+							width: dragProcessWidth + left
+						})
 					}
-					dragTarget.css({
-						left: left
-					})
-					dragProcess.css({
-						width: dragProcessWidth + left
-					})
-
+				}
+				if(isSound) {
+					if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
+						var left = soundDis + disX
+						console.log(soundDis, disX)
+						if(left > soundMaxLength) {
+							left = soundMaxLength
+						} else if(left < 0) {
+							left = 0
+						}
+						soundTarget.css({
+							left: left
+						})
+						soundProcess.css({
+							width: soundProcessWidth + left
+						})
+						videoSource.volume = left / soundMaxLength
+					}
 				}
 			}).mouseup(function(e) {
-				isDrag = false
 				if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
+					isDrag = false
+					isPlay = true
 					videoSource.play()
-					videoSource.currentTime = $('.play-process-drag').width() / dragMaxLength * duration
+					videoSource.currentTime = $('.play-process-drag').width() / processWidth * duration
 					drawProcess()
+				}
+				if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
+					isSound = false
 				}
 			})
 		}
-		dragControl() 
 		var drawProcess = function(newCurentTime) {
 			if(!isDrag) {
 				currentTime = videoSource.currentTime
-				currentProcess = currentTime / duration * processWidth
+				$('.play-current-time').html(changeSecond(currentTime))
+				currentProcess = currentTime / duration * (processWidth - 9)//9为拖拽条小图标的宽度
 				dragProcessEl.css({
 					width: currentProcess
 				})
@@ -350,9 +452,111 @@ wxshare.addEventListener("click",function(){
 				}
 			}
 		}
-		// drawProcess()
+		var changeSecond = function(value) {
+			var sec = parseInt(value)// 秒 
+			var min = 0// 分 
+			var hour = 0// 小时 
+			if(sec > 60) { 
+			min = parseInt(sec/60) 
+			sec = parseInt(sec%60) 
+			if(min > 60) { 
+			hour = parseInt(min/60) 
+			min = parseInt(min%60) 
+			} 
+			} 
+			var result = parseInt(sec)
+			if(min === 0) {
+				if(result < 10) {
+					result =  "00:0" + result
+				} else {
+					result =  "00:" + result
+				}
+				
+
+			}
+			if(min > 0) { 
+			result = ""+parseInt(min)+":"+result 
+			} 
+			if(hour > 0) { 
+			result = ""+parseInt(hour)+":"+result 
+			} 
+			return result 
+		}
+		playStartBtn.click(function() {
+			if(isPlay) {
+				videoSource.pause()
+				$(this).removeClass('play-pause').addClass('play-start')
+				isPlay = false
+			} else {
+				videoSource.play()
+				$(this).removeClass('play-start').addClass('play-pause')
+				isPlay = true
+				drawProcess()
+			}
+			
+		})
+		soundSwitchBtn.click(function() {
+			if(isSoundOn) {
+				$(this).removeClass('play-sound-on').addClass('play-sound-off')
+				isSoundOn = false
+				videoSource.volume = 0
+				$('.play-sound-btn').css({left: 0})
+				$('.play-sound-drag').width(0)
+			} else {
+				$(this).removeClass('play-sound-off').addClass('play-sound-on')
+				isSoundOn = true
+			}
+		})
+		playStopBtn.click(function() {
+			videoSource.currentTime = 0
+			videoSource.pause()
+			dragTarget.css({left: 0})
+			dragProcess.width(0)
+			isPlay = false
+			playStartBtn.removeClass('play-pause').addClass('play-start')
+		})
+		fullScreenBtn.click(function() {
+			if(isFullScreen) {
+				isFullScreen = false
+				$(this).removeClass('play-screen-full').addClass('play-screen-not-full')
+				if (document.exitFullscreen) {  
+				    document.exitFullscreen();  
+				}  
+				else if (document.mozCancelFullScreen) {  
+				    document.mozCancelFullScreen();  
+				}  
+				else if (document.webkitCancelFullScreen) {  
+				    document.webkitCancelFullScreen();  
+				}
+				else if (document.msExitFullscreen) {
+				      document.msExitFullscreen();
+				}
+			} else {
+				isFullScreen = true
+				$(this).removeClass('play-screen-not-full').addClass('play-screen-full')
+				var docElm = document.documentElement;
+				//W3C  
+				if (docElm.requestFullscreen) {  
+				    docElm.requestFullscreen();  
+				}
+				//FireFox  
+				else if (docElm.mozRequestFullScreen) {  
+				    docElm.mozRequestFullScreen();  
+				}
+				//Chrome等  
+				else if (docElm.webkitRequestFullScreen) {  
+				    docElm.webkitRequestFullScreen();  
+				}
+				//IE11
+				else if (elem.msRequestFullscreen) {
+				  elem.msRequestFullscreen();
+				}
+			}
+			
+		})
+		dragControl() 
 	}
-		
+	window.onload = videoPlayer
 </script>
 </body>
 </html>

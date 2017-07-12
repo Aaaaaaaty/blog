@@ -176,25 +176,28 @@
 	    width: 9px;
 	    height: 11px;
 	    background: url(./images/icon.png) no-repeat 0px -22px;
+	    margin-left: 13px;
+	    margin-top: 7px;
 	}
 	.play-pause {
 		display: inline-block;
 	    width: 9px;
 	    height: 11px;
 	    background: url(./images/icon.png) no-repeat 0px -10px;
+	    margin-left: 13px;
+	    margin-top: 7px;
 	}
 	.play-btn-wrapper {
-		width: 30px;
-		margin: 0 auto;
+		width: 100%;
 		height: 25px;
-		line-height: 25px;
 	}
 	.play-stop {
 		display: inline-block;
 	    width: 9px;
 	    height: 10px;
 	    background: url(./images/icon.png) no-repeat 0px 0px;
-	    margin-left: 8px;
+	    margin-left: 6px;
+	    margin-top: 8px;
 	}
 	.play-sound-on {
 		display: inline-block;
@@ -238,6 +241,11 @@
 		margin-top: -45px;
 		cursor: pointer;
 	}
+	.btn-wrapper {
+		width: 50%;
+		height: 100%;
+		float: left;
+	}
 </style>
 
 </head>
@@ -252,8 +260,12 @@
 				<div class="player-control">
 					<div class="play-btn ">
 						<div class="play-btn-wrapper">
-							<span id="play-start" class="play-start"></span>
-							<span class="play-stop"></span>
+							<div class="btn-wrapper btn-wrapper-start">
+								<span id="play-start" class="play-start"></span>
+							</div>
+							<div class="btn-wrapper btn-wrapper-stop">
+								<span class="play-stop"></span>
+							</div>
 						</div>
 					</div>
 					<div class="play-process">
@@ -347,9 +359,9 @@
 			soundProcess = $('.play-sound-drag'), //音量高低条
 			dragTarget = $('.play-process-btn'), //播放进度条按钮
 			dragProcess = $('.play-process-drag'), //播放进度条,
-			playStartBtn = $('#play-start'), //播放按钮
+			playStartBtn = $('.btn-wrapper-start'), //播放按钮
 			soundSwitchBtn = $('#sound-switch'), //音频开关
-			playStopBtn = $('.play-stop'), //停止按钮
+			playStopBtn = $('.btn-wrapper-stop'), //停止按钮
 			fullScreenBtn = $('#screen-full-swtich'),//全屏开关
 			processWidth = $('.play-process').width(),
 			playSym = $('.play-sym ')
@@ -379,7 +391,7 @@
 					dragProcess.css({
 						width: dragDis
 					})
-					playStartBtn.removeClass('play-start').addClass('play-pause')
+					playStartBtn.find('span').removeClass('play-start').addClass('play-pause')
 					videoSource.pause()
 					playSym.hide()
 					clearTimeout(timer)
@@ -500,11 +512,12 @@
 			if(isPlay) {
 				videoSource.pause()
 				playSym.show()
-				$(this).removeClass('play-pause').addClass('play-start')
+				$(this).find('span').removeClass('play-pause').addClass('play-start')
 				isPlay = false
 			} else {
 				videoSource.play()
-				$(this).removeClass('play-start').addClass('play-pause')
+				playSym.hide()
+				$(this).find('span').removeClass('play-start').addClass('play-pause')
 				isPlay = true
 				drawProcess()
 			}
@@ -529,7 +542,7 @@
 			dragTarget.css({left: 0})
 			dragProcess.width(0)
 			isPlay = false
-			playStartBtn.removeClass('play-pause').addClass('play-start')
+			playStartBtn.find('span').removeClass('play-pause').addClass('play-start')
 		})
 		fullScreenBtn.click(function() {
 			if(isFullScreen) {
@@ -577,14 +590,14 @@
 				isPlay = false
 				videoSource.pause()
 				playSym.show()
-				playStartBtn.removeClass('play-pause').addClass('play-start')
+				playStartBtn.find('span').removeClass('play-pause').addClass('play-start')
 				clearTimeout(timer)
 			} else {
 				isPlay = true
 				videoSource.play()
 				playSym.hide()
 				drawProcess()
-				playStartBtn.removeClass('play-start').addClass('play-pause')
+				playStartBtn.find('span').removeClass('play-start').addClass('play-pause')
 			}
 		})
 		dragControl() 

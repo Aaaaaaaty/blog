@@ -6,15 +6,15 @@
 <meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width,user-scalable=yes">
 <meta name="format-detection" content="telephone=no" />
-<title>无标题文档</title>
+<title id="title">无标题文档</title>
 <style type="text/css">
 	body{ overflow:hidden;}
 	.l {float: left;}
 	.r {float: right;}
 	.playerPop *,body{padding:0;margin:0;}
 	.playerPop li{list-style: none;}
-	.playerPop{width: 100%; height: 100%; position: absolute; z-index: 100; box-shadow:1px 0  5px rgba(0,0,0,0.8); left: 0px; top:0; background: #000000;}
-	.playerPop .inset{background: #2a2a2a; width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
+	.playerPop{width: 100%; height: 100%; position: absolute; z-index: 100; left: 0px; top:0;}
+	.playerPop .inset{width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
 	.playerPop .playerTit{ line-height: 25px;  color:#dedede; padding-left: 9px; font-size: 0; line-height: 0 }
 	.playerPop .playerTit span{display: inline-block;height:25px;font:400 12px/24px "Microsoft Yahei"; vertical-align: top;}
 	.playerPop .playerTit .txt{max-width: 520px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;word-break:normal;word-wrap:normal;}
@@ -63,7 +63,7 @@
 		position: absolute;
 		z-index: 101;
 		bottom: 0;
-		background-color: #000000;
+		background-color: #2A2A2A;
 		font-size: 12px;
 		color: #ffffff;
 	}
@@ -228,15 +228,27 @@
 	    margin-top: 5px;
 		margin-left: 10px;
 	}
+	.play-sym {
+		width: 90px;
+		position: absolute;
+		z-index: 10000;
+		left: 50%;
+		top: 50%;
+		margin-left: -45px;
+		margin-top: -45px;
+		cursor: pointer;
+	}
 </style>
 
 </head>
 
 <body>
 <div class="playerPop">
+	<img class="play-sym" src="./images/play.png">
 	<div class="inset">
 		<div class="playerbody" id="video">
-        	<video id="videoSource"  style="width:100%; height:100%;" src="111.mp4"poster="images/qr.png" ></video>
+        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="111.mp4"poster="images/qr.png" ></video>
+        		
 				<div class="player-control">
 					<div class="play-btn ">
 						<div class="play-btn-wrapper">
@@ -271,7 +283,7 @@
 				</div>
     	</div>
 		<div class="sidebar">
-			<div class="good"><span></span></div>
+			<!-- <div class="good"><span></span></div> -->
 			<div class="share"><span id="videoshare"></span>
 				<ul>
 
@@ -284,6 +296,7 @@
 				</ul>
 			</div>
 		</div>
+
 	</div>
 </div>
 
@@ -338,8 +351,8 @@
 			soundSwitchBtn = $('#sound-switch'), //音频开关
 			playStopBtn = $('.play-stop'), //停止按钮
 			fullScreenBtn = $('#screen-full-swtich'),//全屏开关
-			processWidth = $('.play-process').width()
-
+			processWidth = $('.play-process').width(),
+			playSym = $('.play-sym ')
 
 		var dragControl = function() { //拖动元素、进度条元素、拖动总长
 			var startX = 0,
@@ -368,6 +381,7 @@
 					})
 					playStartBtn.removeClass('play-start').addClass('play-pause')
 					videoSource.pause()
+					playSym.hide()
 					clearTimeout(timer)
 				}
 				if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
@@ -399,7 +413,7 @@
 							left: left
 						})
 						dragProcess.css({
-							width: dragProcessWidth + left
+							width: left
 						})
 					}
 				}
@@ -485,6 +499,7 @@
 		playStartBtn.click(function() {
 			if(isPlay) {
 				videoSource.pause()
+				playSym.show()
 				$(this).removeClass('play-pause').addClass('play-start')
 				isPlay = false
 			} else {
@@ -510,6 +525,7 @@
 		playStopBtn.click(function() {
 			videoSource.currentTime = 0
 			videoSource.pause()
+			playSym.show()
 			dragTarget.css({left: 0})
 			dragProcess.width(0)
 			isPlay = false
@@ -554,9 +570,27 @@
 			}
 			
 		})
+		var i = 0
+		console.log("reapt", i)
+		$('#videoSource, .play-sym').click(function() {
+			if(isPlay) {
+				isPlay = false
+				videoSource.pause()
+				playSym.show()
+				playStartBtn.removeClass('play-pause').addClass('play-start')
+				clearTimeout(timer)
+			} else {
+				isPlay = true
+				videoSource.play()
+				playSym.hide()
+				drawProcess()
+				playStartBtn.removeClass('play-start').addClass('play-pause')
+			}
+		})
 		dragControl() 
+		videoSource.oncanplay =null;
 	}
-	window.onload = videoPlayer
+	videoSource.oncanplay = videoPlayer
 </script>
 </body>
 </html>

@@ -1,0 +1,358 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width,user-scalable=yes">
+<meta name="format-detection" content="telephone=no" />
+<title>无标题文档</title>
+<style type="text/css">
+	body{ overflow:hidden;}
+	.l {float: left;}
+	.r {float: right;}
+	.playerPop *,body{padding:0;margin:0;}
+	.playerPop li{list-style: none;}
+	.playerPop{width: 100%; height: 100%; position: absolute; z-index: 100; box-shadow:1px 0  5px rgba(0,0,0,0.8); left: 0px; top:0; background: #000000;}
+	.playerPop .inset{background: #2a2a2a; width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
+	.playerPop .playerTit{ line-height: 25px;  color:#dedede; padding-left: 9px; font-size: 0; line-height: 0 }
+	.playerPop .playerTit span{display: inline-block;height:25px;font:400 12px/24px "Microsoft Yahei"; vertical-align: top;}
+	.playerPop .playerTit .txt{max-width: 520px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;word-break:normal;word-wrap:normal;}
+	.playerPop .playerTit .look{margin-left: 20px; color:#989898;}
+	.playerPop .playerTit .look::before{content: ""; display: inline-block; vertical-align: middle; background: url(images/playerIcons.png) -80px -151px no-repeat; width: 14px; height: 10px; margin-right: 4px}
+	.playerPop .close{position: absolute; right: 7px; top:7px;background: url(images/playerIcons.png) 0px -150px no-repeat; cursor: pointer; width: 12px;height: 12px;z-index: 5;}
+	.playerPop .close:hover{background-position: -30px -150px;}
+	.playerPop .close.dis{opacity:0.15; cursor: default; }
+	.playerPop .close.dis:hover{background-position: 0 -150px;}
+	.playerPop .playerbody{width: 100%; height: 100%;}
+	.playerPop .sidebar{position: absolute; top: 162px; right: 4px; z-index: 10;}
+	.playerPop .good,.playerPop .share{width: 42px; height: 42px; margin-bottom: 3px; position: relative;line-height: 42px; text-align: center; cursor: pointer;}
+	.playerPop .good > span ,.playerPop .share > span{display: inline-block; background: url(images/playerIcons.png) 0 -220px no-repeat;vertical-align: middle; width: 100%; height: 100%;cursor: pointer; }
+	.playerPop .good{}
+	.playerPop .good > span:hover{background-position: -50px -220px}
+	.playerPop .share > span{background-position: 0 -170px}
+	.playerPop .share > span:hover{background-position: -50px -170px}
+	.playerPop .share ul{top: 43px;right: 0; position: absolute; width: 100%;display: none;}
+	.playerPop .share li{margin-bottom: 1px; width: 100%; height: 42px; position: relative; background-color: rgba(0,0,0,0.6)}
+	.playerPop .share li >b{border-radius: 100px; display: inline-block;background: url(images/playerIcons.png) 0 0 no-repeat;vertical-align: middle; width: 23px; height: 23px; }
+	.playerPop .share .wx b{background-position: 0 0;}
+	.playerPop .share .wx:hover b{background-position: -50px 0;}
+	.playerPop .share .wb b{background-position: 0 -30px;}
+	.playerPop .share .wb:hover b{background-position: -50px -30px;}
+	.playerPop .share .qq b{background-position: 0 -60px;}
+	.playerPop .share .qq:hover b{background-position: -50px -60px;}
+	.playerPop .share .qz b{background-position: 0 -90px;}
+	.playerPop .share .qz:hover b{background-position: -50px -90px;}
+	.playerPop .share .top{height: 22px; line-height: 22px;}
+	.playerPop .share .top b{ background-position: 0 -120px; border-radius: 0; width: 15px;height: 8px; opacity: 0.65}
+	.playerPop .share .top:hover b{opacity: 1;}
+	.playerPop .share .wx .qr{position: absolute; right: 44px; top:0;background: #FFF; width: 126px; height: 126px;padding-top: 5px;box-sizing:border-box;display: none; }
+	.playerPop .share .wx .qr img{vertical-align: top; width: 116px; height: 116px;}
+	.playerPop .share .show{display: block !important;}
+	.playerPop .share .hide{display: none !important;}
+	/*.playerPop .good::before{content: ""; position: absolute; left: 0; top:0; right:0;bottom:0;background: rgba(0,255,180,0.6)}
+	.playerPop .good:hover::before{background: rgba(0,255,180,0.75)}
+	.playerPop .good span{opacity: 0.9; width: 24px; height: 24px;}
+	.playerPop .share{}
+	.playerPop .share::before{content: ""; position: absolute; left: 0; top:0; right:0;bottom:0;background: rgba(11,212,255,0.6)}
+	.playerPop .share:hover::before{background: rgba(11,212,255,0.75)}
+	.playerPop .share span{opacity: 0.9; width: 24px; height: 24px;}*/
+	.player-control {
+		height: 25px;
+		width: 100%;
+		position: absolute;
+		z-index: 101;
+		bottom: 0;
+		background-color: #000000;
+		font-size: 12px;
+		color: #ffffff;
+	}
+	.play-btn {
+		width: 55px;
+		position: absolute;
+		left: 0px;
+		height: 100%;
+	}
+	.play-process {
+		margin-left: 55px;
+		margin-right: 200px;
+		height: 100%;
+		position: relative;
+	}
+	.play-process-all {
+	    height: 2px;
+	    background-color: #737373;
+	    position: relative;
+	    top: 11px;
+	    left: 0px;
+	}
+	.play-process-drag {
+		position: absolute;
+	    width: 9px;
+	    height: 2px;
+	    border-radius: 1.5px;
+	    background-color: #478CDF;
+	    top: 11px;
+	    left: 0px;
+	}
+	.play-process-btn {
+		display: block;
+	    position: absolute;
+	    width: 9px;
+	    height: 6px;
+	    border-radius: 1.8px;
+	    background-color: #ffffff;
+	    top: 9px;
+	    left: 0px;
+	}
+	.play-msg {
+		position: absolute;
+		right: 0px;
+		top: 0px;
+		width: 200px;
+		height: 100%;
+	}
+	.play-time {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: 80px;
+	}
+	.play-sound {
+		display: block;
+		height: 100%;
+		position: relative;
+		margin-left: 80px;
+		margin-right: 50px;
+	}
+	.play-sound-all {
+		height: 2px;
+	    background-color: #737373;
+	    margin-top: 0px;
+	    position: relative;
+	    top: 9px;
+	}
+	.play-sound-drag {
+		position: absolute;
+	    width: 9px;
+	    height: 2px;
+	    border-radius: 1.5px;
+	    background-color: #478CDF;
+	    top: 9px;
+	    left: 0px;
+	}
+	.play-sound-btn {
+		display: block;
+	    position: absolute;
+	    width: 9px;
+	    height: 6px;
+	    border-radius: 1.8px;
+	    background-color: #ffffff;
+	    top: 7px;
+	    left: 0px;
+	}
+	.play-screen {
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		width: 50px;
+	}
+	.play-start{
+	    display: inline-block;
+	    width: 9px;
+	    height: 11px;
+	    background: url(./images/icon.png) no-repeat 0px -22px;
+	}
+	.play-btn-wrapper {
+		width: 30px;
+		margin: 0 auto;
+		height: 25px;
+		line-height: 25px;
+	}
+	.play-stop {
+		display: inline-block;
+	    width: 9px;
+	    height: 10px;
+	    background: url(./images/icon.png) no-repeat 0px 0px;
+	    margin-left: 8px;
+	}
+
+</style>
+
+</head>
+
+<body>
+<div class="playerPop">
+
+	<div class="inset">
+		<div class="playerbody" id="video">
+        	<video id="videoSource"  style="width:100%; height:100%;" src="111.mp4"poster="images/qr.png" autoplay></video>
+				<div class="player-control">
+					<div class="play-btn ">
+						<div class="play-btn-wrapper">
+							<span class="play-start"></span>
+							<span class="play-stop"></span>
+						</div>
+					</div>
+					<div class="play-process">
+						<div class="play-process-all"></div>
+						<div class="play-process-drag"></div>
+						<div class="play-process-before"></div>
+						<span class="play-process-btn"></span>
+					</div>
+					<div class="play-msg ">
+						<span class="play-time">
+							<span class="play-current-time">33:33</span>/<span class="play-all-time">33:33</span>
+						</span>
+						<span class="play-sound">
+							<div class="play-sound-all"></div>
+							<div class="play-sound-drag"></div>
+							<span class="play-sound-btn"></span>
+						</span>
+						<span class="play-screen">big</span>
+					</div>
+				</div>
+    	</div>
+		<div class="sidebar">
+			<div class="good"><span></span></div>
+			<div class="share"><span id="videoshare"></span>
+				<ul>
+
+					<li class="wx"><b></b><div class="qr"><img src="images/qr.png" alt=""></div></li>
+					<li class="wb"><b></b></li>
+					<li class="qq"><b></b></li>
+					<li class="qz"><b></b></li>
+					<li class="top"><b></b></li>
+
+				</ul>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<script src="./jquery.min.js"></script>
+<script>
+
+var videoshare = document.querySelector(".sidebar .share");
+var showShareList = document.getElementById("videoshare");
+
+var shareList = videoshare.querySelector("ul");
+var hideShareList = videoshare.querySelector(".top");
+var wxshare = videoshare.querySelector(".wx");
+var wxqr = videoshare.querySelector(".qr");
+
+showShareList.addEventListener("click",function(){
+	//shareList.classList.remove("hide")
+	shareList.classList.add("show")
+},false)
+hideShareList.addEventListener("click",function(){
+	//shareList.classList.add("hide")
+	shareList.classList.remove("show")
+},false)
+wxshare.addEventListener("click",function(){
+	var classlist = wxqr.classList;
+	if(!classlist.contains("show")){
+		classlist.add("show");
+	}else{
+		classlist.remove("show");
+	}
+
+},false)
+</script>
+<script>
+	window.onload = function() {
+		var videoSource = document.getElementById('videoSource'),
+			timer,
+			duration = videoSource.duration || 0,
+			currentTime, 
+			isDrag = false,
+			processWidth = $('.play-process').width(), 
+			currentProcess,
+			dragProcessEl = $('.play-process-drag'),
+			dragTarget = $('.play-process-btn')
+		var dragControl = function() { //拖动元素、进度条元素、拖动总长
+			var startX = 0,
+				moveX = 0,
+				disX = 0,
+				dragDis = 0,
+				leftInit = 55 //进度条整体距离左侧偏移
+				rightInit = 30 //音量条整体距离右侧偏移
+				dragTarget = $('.play-process-btn'), //播放进度条按钮
+				dragProcess = $('.play-process-drag'), //播放进度条
+				dragMaxLength = $('.play-process').width(), //播放进度条总长
+				dragProcessWidth = dragProcess.width(), //播放进度条当前长度
+				soundTarget = $('.play-sound-btn'), //播放进度条按钮
+				soundProcess = $('.play-sound-drag'), //播放进度条
+				soundMaxLength = $('.play-sound').width(), //播放进度条总长
+				soundProcessWidth = soundProcess.width() //播放进度条当前长度
+			$('body').mousedown(function(e) {
+				startX = e.clientX
+				if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
+					isDrag = true
+					dragDis = startX - leftInit
+					dragTarget.css({
+						left: dragDis
+					})
+					dragProcess.css({
+						width: dragDis
+					})
+					videoSource.pause()
+					clearTimeout(timer)
+				}
+				if($(e.target).hasClass('play-sound') || $(e.target).parent().hasClass('play-sound')) {
+					var clientWidth = $('body').width()
+					var soundProcessCurrentWidth = 110 - (clientWidth - startX) - 20 // 110为进度条右侧总长，20为播放按钮占用长度
+					console.log(soundProcessCurrentWidth)
+				}
+			}).mousemove(function(e) {
+				if(isDrag) {
+					moveX = e.clientX
+					disX = moveX - startX
+					var left = dragDis + disX
+					if(left > dragMaxLength) {
+						left = dragMaxLength
+					} else if(left < 0) {
+						left = 0
+					}
+					dragTarget.css({
+						left: left
+					})
+					dragProcess.css({
+						width: dragProcessWidth + left
+					})
+
+				}
+			}).mouseup(function(e) {
+				isDrag = false
+				if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
+					videoSource.play()
+					videoSource.currentTime = $('.play-process-drag').width() / dragMaxLength * duration
+					drawProcess()
+				}
+			})
+		}
+		dragControl() 
+		var drawProcess = function(newCurentTime) {
+			if(!isDrag) {
+				currentTime = videoSource.currentTime
+				currentProcess = currentTime / duration * processWidth
+				dragProcessEl.css({
+					width: currentProcess
+				})
+				dragTarget.css({
+					left: currentProcess
+				})
+				if(currentTime < duration) {
+					timer = setTimeout(drawProcess, 10)
+				} else {
+					clearTimeout(timer)
+				}
+			}
+		}
+		// drawProcess()
+	}
+		
+</script>
+</body>
+</html>

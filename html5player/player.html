@@ -13,6 +13,9 @@
 	.r {float: right;}
 	.playerPop *,body{padding:0;margin:0;}
 	.playerPop li{list-style: none;}
+	#videoSource {
+		background-color: #383838; 
+	}
 	.playerPop{width: 100%; height: 100%; position: absolute; z-index: 100; left: 0px; top:0;}
 	.playerPop .inset{width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
 	.playerPop .playerTit{ line-height: 25px;  color:#dedede; padding-left: 9px; font-size: 0; line-height: 0 }
@@ -252,10 +255,9 @@
 
 <body>
 <div class="playerPop">
-	<img class="play-sym" src="./images/play.png">
 	<div class="inset">
 		<div class="playerbody" id="video">
-        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="111.mp4"poster="images/qr.png" ></video>
+        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="http://gslb.miaopai.com/stream/cECd7ur~vZ1VMxxhzT~XzD4cpOBGR6IB.mp4?ssig=ae9af138364ede2f9b93b26ecd850124&time_stamp=1499946451147&cookie_id=596745c156c9a&vend=1&os=3&partner=1&platform=2&cookie_id=&refer=miaopai&scid=cECd7ur%7EvZ1VMxxhzT%7EXzD4cpOBGR6IB" ></video>
         		
 				<div class="player-control">
 					<div class="play-btn ">
@@ -341,7 +343,7 @@
 </script>
 <script src="./player.js"></script>
 <script>
-	videoSource.oncanplay = videoPlayer
+	
 </script>
 </body>
 </html>

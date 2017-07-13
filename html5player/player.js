@@ -61,16 +61,13 @@ function videoPlayer() {
 			}
 			if(min > 0) { 
 				if(min < 10) {
-					result = "0"+parseInt(min)+":"+result
+					if(result < 10) {
+						result = "0"+parseInt(min)+":"+"0"+result
+					} else {
+						result = "0"+parseInt(min)+":"+result
+					}
 				} else {
 					result = ""+parseInt(min)+":"+result 
-				}
-			} 
-			if(hour > 0) { 
-				if(hour < 10) {
-					result = "0"+parseInt(hour)+":"+result 
-				} else {
-					result = ""+parseInt(hour)+":"+result 
 				}
 			} 
 			return result 
@@ -139,7 +136,7 @@ function videoPlayer() {
 							left = 0
 						}
 						dragTarget.css({
-							left: left
+							left: left - 5
 						})
 						dragProcess.css({
 							width: left
@@ -179,12 +176,6 @@ function videoPlayer() {
 				if(isSound) {
 					isSound = false
 				}
-				// if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
-					
-				// }
-				// if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
-					
-				// }
 			})
 		}
 		var drawProcess = function() {
@@ -280,6 +271,7 @@ function videoPlayer() {
 				$('.play-sound-drag').width(0)
 			} else {
 				$(this).removeClass('play-sound-off').addClass('play-sound-on')
+				videoSource.volume = soundValue
 				soundChangeProcess(soundValue)
 				isSoundOn = true
 			}
@@ -339,6 +331,12 @@ function videoPlayer() {
 		})
 		$('.play-sym').remove()
 		$('body').append('<img class="play-sym" src="./images/play.png">')
+		$('#fz').click(function(e) {
+			$('#sourceUrl').val($('#videoSource').attr('src')).select()
+			document.execCommand("Copy")
+			$('#fz span').html('完成复制')
+		})
+
 		dragControl() 
 		videoSource.oncanplay =null;
 }

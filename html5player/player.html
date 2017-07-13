@@ -8,7 +8,7 @@
 <meta name="format-detection" content="telephone=no" />
 <title id="title">无标题文档</title>
 <style type="text/css">
-	body{ overflow:hidden;}
+	body{ overflow:hidden;background-color: #383838; }
 	.l {float: left;}
 	.r {float: right;}
 	.playerPop *,body{padding:0;margin:0;}
@@ -28,7 +28,7 @@
 	.playerPop .close.dis{opacity:0.15; cursor: default; }
 	.playerPop .close.dis:hover{background-position: 0 -150px;}
 	.playerPop .playerbody{width: 100%; height: 100%;}
-	.playerPop .sidebar{position: absolute; top: 162px; right: 4px; z-index: 10;}
+	.playerPop .sidebar{position: absolute; top: 121px; right: 4px; z-index: 10;}
 	.playerPop .good,.playerPop .share{width: 42px; height: 42px; margin-bottom: 3px; position: relative;line-height: 42px; text-align: center; cursor: pointer;}
 	.playerPop .good > span ,.playerPop .share > span{display: inline-block; background: url(images/playerIcons.png) 0 -220px no-repeat;vertical-align: middle; width: 100%; height: 100%;cursor: pointer; }
 	.playerPop .good{}
@@ -53,6 +53,16 @@
 	.playerPop .share .wx .qr img{vertical-align: top; width: 116px; height: 116px;}
 	.playerPop .share .show{display: block !important;}
 	.playerPop .share .hide{display: none !important;}
+	.playerPop .share #fz span{
+        display: inline-block;
+	    vertical-align: middle;
+	    width: 24px;
+	    height: 29px;
+	    color: #fff;
+	    font-size: 12px;
+	    line-height: 14px;
+	    color: #D0D0D0;
+	}
 	/*.playerPop .good::before{content: ""; position: absolute; left: 0; top:0; right:0;bottom:0;background: rgba(0,255,180,0.6)}
 	.playerPop .good:hover::before{background: rgba(0,255,180,0.75)}
 	.playerPop .good span{opacity: 0.9; width: 24px; height: 24px;}
@@ -68,7 +78,7 @@
 		bottom: 0;
 		background-color: #2A2A2A;
 		font-size: 12px;
-		color: #ffffff;
+		color: #;
 	}
 	.play-btn {
 		width: 55px;
@@ -123,6 +133,7 @@
 	    text-align: center;
 	    height: 25px;
 	    line-height: 24px;
+	    color: #fff;
 	}
 	.play-sound {
 		display: block;
@@ -257,8 +268,8 @@
 <div class="playerPop">
 	<div class="inset">
 		<div class="playerbody" id="video">
-        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="http://gslb.miaopai.com/stream/cECd7ur~vZ1VMxxhzT~XzD4cpOBGR6IB.mp4?ssig=ae9af138364ede2f9b93b26ecd850124&time_stamp=1499946451147&cookie_id=596745c156c9a&vend=1&os=3&partner=1&platform=2&cookie_id=&refer=miaopai&scid=cECd7ur%7EvZ1VMxxhzT%7EXzD4cpOBGR6IB" ></video>
-        		
+        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="http://gslb.miaopai.com/stream/B~dRdhKMQeI6cuE5aqoGYoVaqbu0YNVn.mp4" ></video>
+        		<input id="sourceUrl" type="text">
 				<div class="player-control">
 					<div class="play-btn ">
 						<div class="play-btn-wrapper">
@@ -305,8 +316,8 @@
 					<li class="wb"><b></b></li>
 					<li class="qq"><b></b></li>
 					<li class="qz"><b></b></li>
+					<li id="fz" class="fz"><span>复制链接</span></li>
 					<li class="top"><b></b></li>
-
 				</ul>
 			</div>
 		</div>

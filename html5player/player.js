@@ -34,6 +34,7 @@ function videoPlayer() {
 			})
 			if(isFullScreen) {
 				if(!document.webkitIsFullScreen) {
+					console.log('document.webkitIsFullScreen')
 					isFullScreen = false 
 					fullScreenBtn.removeClass('play-screen-full').addClass('play-screen-not-full')
 				}
@@ -291,10 +292,14 @@ function videoPlayer() {
 		})
 		$(window).keypress(function(event) {
 			event.preventDefault()
+			console.log('当前keycode被监听event.keyCode', event.keyCode)
 			if(event.keyCode === 27 && isFullScreen === true) {
+				console.log(1)
 				fullScreen()
 			}
 		})
+		$('.play-sym-wrapper').remove()
+		$('body').append('<img class="play-sym" src="./images/play.png">')
 		$('#videoSource, .play-sym').click(function() {
 			clearTimeout(playTimer)
 			playTimer = setTimeout(function() {
@@ -327,16 +332,12 @@ function videoPlayer() {
 			if(isFullScreen) {
 				fullScreen()
 			}
-			
 		})
-		$('.play-sym').remove()
-		$('body').append('<img class="play-sym" src="./images/play.png">')
 		$('#fz').click(function(e) {
 			$('#sourceUrl').val($('#videoSource').attr('src')).select()
 			document.execCommand("Copy")
 			$('#fz span').html('完成复制')
 		})
-
 		dragControl() 
 		videoSource.oncanplay =null;
 }
@@ -345,8 +346,8 @@ function ifState() {
 	if(state === 4) {
 		videoPlayer()
 	} else {
-		$('.play-sym').remove()
-		$('body').append('<img class="play-sym" src="./images/loading.gif">')
+		$('.play-sym-wrapper').remove()
+		$('body').append('<div class="play-sym-wrapper"><img class="play-sym" src="./images/loading.gif"></div>')
 		setTimeout(ifState, 10)
 	}
 }

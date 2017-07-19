@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <style media="screen">
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            canvas {
+                box-shadow: 0 0 40px black;
+                margin: 50px;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="canvas" width="500" height="500">您的浏览器不支持canvas</canvas>
+    </body>
+    <script type="text/javascript">
+        var canvas = document.querySelector('canvas');
+        var ctx = canvas.getContext('2d');
+
+        var canvasW = canvas.width;
+        var canvasH = canvas.height;
+
+        //随机数函数
+        function random(min,max) {
+            return parseInt(Math.random()*(max - min) + min);
+        }
+
+        //构造函数
+        function Ball(x, y, r, speedX, speedY) {
+            this.r = r || random(10, 30);
+            this.x = x || random(this.r, canvasW - this.r);
+            this.y = y || random(this.r, canvasH - this.r);
+            this.speedX = speedX || random(2, 5);
+            this.speedY = speedY || random(2, 5);
+            //draw方法
+            this.draw = function() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI*2, true);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+            }
+            //move方法
+            this.move = function() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if(this.x < this.r || this.x > canvasW - this.r) {
+                    this.speedX = -this.speedX;
+                }
+                if(this.y < this.r || this.y > canvasH - this.r) {
+                    this.speedY = -this.speedY;
+                }
+                this.draw();//调用draw方法
+            }
+        }
+
+        var ball1 = new Ball();
+        var ball2 = new Ball();
+        ball1.draw();
+        ball2.draw();
+
+        // 碰撞函数
+        function isCrash(obj1, obj2) {
+            var x = obj1.x - obj2.x;
+            var y = obj1.y - obj2.y;
+            var distance = Math.sqrt(x*x + y*y);//开方函数
+            if(distance < obj1.r + obj2.r) {//判断碰撞
+                obj1.speedX = -obj1.speedX;
+                obj1.speedY = -obj1.speedY;
+                obj2.speedX = -obj2.speedX;
+                obj2.speedY = -obj2.speedY;
+            }
+        }
+
+        var frameNum = 0;
+        var prevDate = new Date();
+
+        function gameloop() {
+            frameNum++;
+            ctx.clearRect(0, 0, canvasW, canvasH);
+            ball1.move();
+            ball2.move();
+            isCrash(ball1,ball2);
+            window.requestAnimationFrame(gameloop);//跟setTimeout相似，根据帧率执行
+        }
+        gameloop();
+    </script>
+</html>

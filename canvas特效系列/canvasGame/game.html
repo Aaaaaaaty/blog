@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <title></title>
+    <style media="screen">
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+      #canvas {
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas">您的浏览器不支持canvas</canvas>
+  </body>
+  <script type="text/javascript" src="./js/requestAnimationFramePolyfill.js"></script>
+  <script type="text/javascript" src="./js/jquery.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      var canvas = document.querySelector('canvas'),
+          ctx = canvas.getContext('2d'),
+          canvasW,
+          canvasH,
+          _k = 0.7, //canvas高占屏幕比例
+          defaultOption = {
+            _k: _k
+          },
+          hinderOPtion = {
+            startY: 0.4, //障碍绘制区域所在相对于canvas的位置
+            endY: 0.6,
+            minWidth: 50,
+            maxWidth: 100,
+            minSpeedX: 10,
+            maxSpeedX: 30
+          },
+          hinderArray = [],
+          i = 0
+      function drawCanvas(defaultOption) {
+        var width = window.innerWidth
+        var height = window.innerHeight
+        canvasW = canvas.width = width
+        canvasH = canvas.height = height * defaultOption._k
+      }
+      function drawTarget() {}
+      function Hinder(type, startY, width, speedX) {
+        this.type = type || Math.random() > 0.5 ? 0 : 1 //从左侧还是右侧进入；0左侧，1右侧
+        this.x = this.type === 0 ? 0 : canvasW
+        this.y = startY || random(hinderOPtion.startY * canvasH, hinderOPtion.endY * canvasH)
+        this.width = width || random(hinderOPtion.minWidth, hinderOPtion.maxWidth)
+        this.speedX = speedX / 10 || random(hinderOPtion.minSpeedX, hinderOPtion.maxSpeedX) / 10
+        this.draw = function() {
+          var img = new Image(),
+              _self = this
+          img.src = './images/dadiao.jpeg'
+          img.onload = function() {
+            var whScale = img.height / img.width
+            ctx.clearRect(_self.x, _self.y, _self.width, _self.width * whScale)
+            if(!_self.type) {
+              _self.x += _self.speedX
+            } else {
+              _self.x -= _self.speedX
+            }
+            if(_self.x > canvasW || _self.x < 0 - canvasW) return false
+            ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * whScale)
+          }
+        }
+      }
+      
+      function random(min,max) {
+          return parseInt(Math.random()*(max - min) + min);
+      }
+
+      function init() {
+        drawCanvas(defaultOption)
+        function hinderLoop() {
+          i++
+          if(i % 100 === 0) {
+            hinderArray.push(new Hinder())
+          }
+          hinderArray.forEach(function(item, index) {
+            item.draw()
+          })
+          window.requestAnimationFrame(hinderLoop)
+        }
+
+
+
+          // console.log(newHinder)
+          // hinderArray.push(newHinder)
+        // }
+        // hinderArray.forEach(function(item, index) {
+        //   item.draw()
+        // })
+      //   drawTarget()
+      //   drawHinder()
+        hinderLoop()
+      }
+      init()
+    })
+  </script>
+</html>

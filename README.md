@@ -15,3 +15,5 @@
 7.2017.06.19完结————[从Console中看看jQuery的原型链](https://github.com/Aaaaaaaty/Blog/issues/7)
 
 8.2017.06.22完结————[基于 node 的微小服务——细说缓存与304](https://github.com/Aaaaaaaty/Blog/issues/8)
+
+9.2017.07.20完结————[从零实现一个自定义html5播放器](https://github.com/Aaaaaaaty/Blog/issues/9)

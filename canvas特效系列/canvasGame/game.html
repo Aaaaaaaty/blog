@@ -9,7 +9,7 @@
         padding: 0px;
       }
       #canvas {
-        background-color: #ccc;
+        /*background-color: #ccc;*/
       }
     </style>
   </head>
@@ -22,11 +22,10 @@
     $(function() {
       var canvas = document.querySelector('canvas'),
           ctx = canvas.getContext('2d'),
-          canvasW,
-          canvasH,
-          _k = 0.7, //canvas高占屏幕比例
+          canvasW = 0,
+          canvasH = 0,
           defaultOption = {
-            _k: _k
+            _k: 0.7 //canvas高占屏幕比例
           },
           hinderOPtion = {
             startY: 0.4, //障碍绘制区域所在相对于canvas的位置
@@ -36,15 +35,25 @@
             minSpeedX: 10,
             maxSpeedX: 30
           },
+          targetOption = {
+            startY: 0,
+            endY: 0.4,
+            minWidth: 20,
+            maxWidth: 100,
+            minTime: 3000,
+            maxTime: 5000,
+          },
           hinderArray = [],
-          i = 0
+          targetArray = [],
+          i = 0,//设定加载障碍频率
+          j = 0 //设定加载目标频率
       function drawCanvas(defaultOption) {
         var width = window.innerWidth
         var height = window.innerHeight
         canvasW = canvas.width = width
         canvasH = canvas.height = height * defaultOption._k
       }
-      function drawTarget() {}
+
       function Hinder(type, startY, width, speedX) {
         this.type = type || Math.random() > 0.5 ? 0 : 1 //从左侧还是右侧进入；0左侧，1右侧
         this.x = this.type === 0 ? 0 : canvasW
@@ -68,7 +77,41 @@
           }
         }
       }
-      
+      function Target(id, nowTime, x, y, width, time) {
+        this.id = id
+        this.x = x || random(0, canvasW)
+        this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH)
+        this.width = width || random(targetOption.minWidth, targetOption.maxWidth)
+        this.time = time || random(targetOption.minTime, targetOption.maxTime)
+        this.now = nowTime
+        this.whScale = 1
+        this.draw = function(item) {
+          var img = new Image(),
+              _self = this
+          img.src = './images/sun.jpg'
+          img.onload = function() {
+            this.whScale = img.height / img.width
+            if(item) {
+              var isOk = true
+              targetArray.forEach(function(obj, index) {
+                  var x = obj.x - item.x,
+                      y = obj.y - item.y,
+                      dis = Math.sqrt(x*x + y*y)
+                  if(dis < item.width / 2 + obj.width / 2) {
+                    isOk = false
+                  }
+              })
+              if(isOk) {
+                targetArray.push(item)
+                ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
+              } 
+            }
+          }
+        }
+        this.clear = function() {
+            ctx.clearRect(this.x, this.y, this.width, this.width * this.whScale)
+        }
+      }
       function random(min,max) {
           return parseInt(Math.random()*(max - min) + min);
       }
@@ -77,25 +120,28 @@
         drawCanvas(defaultOption)
         function hinderLoop() {
           i++
+          j++
           if(i % 100 === 0) {
             hinderArray.push(new Hinder())
+          }
+          if(j % 50 === 0) {
+            var nowTime = new Date().getTime()
+            var id = Math.random().toString().split('.')[1]
+            var newTarget = new Target(id, nowTime)
+            targetArray = targetArray.filter(function(item, index) {
+              console.log(item.time, item.now)
+              console.log(item.time + item.now ,nowTime);
+              if(item.time + item.now < nowTime) item.clear()
+              return item.time + item.now > nowTime
+            })
+            newTarget.draw(newTarget)
           }
           hinderArray.forEach(function(item, index) {
             item.draw()
           })
           window.requestAnimationFrame(hinderLoop)
         }
-
-
-
-          // console.log(newHinder)
-          // hinderArray.push(newHinder)
-        // }
-        // hinderArray.forEach(function(item, index) {
-        //   item.draw()
-        // })
-      //   drawTarget()
-      //   drawHinder()
+        hinderArray.push(new Hinder())
         hinderLoop()
       }
       init()

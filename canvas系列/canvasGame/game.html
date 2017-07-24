@@ -43,8 +43,13 @@
             minTime: 3000,
             maxTime: 5000,
           },
+          arrowOption = {
+            speedX: 0,
+            speedY: 0
+          }
           hinderArray = [],
           targetArray = [],
+          arrowArray = [],
           i = 0,//设定加载障碍频率
           j = 0 //设定加载目标频率
       function drawCanvas(defaultOption) {
@@ -54,7 +59,8 @@
         canvasH = canvas.height = height * defaultOption._k
       }
 
-      function Hinder(type, startY, width, speedX) {
+      function Hinder(id, type, startY, width, speedX) {
+        this.id = id
         this.type = type || Math.random() > 0.5 ? 0 : 1 //从左侧还是右侧进入；0左侧，1右侧
         this.x = this.type === 0 ? 0 : canvasW
         this.y = startY || random(hinderOPtion.startY * canvasH, hinderOPtion.endY * canvasH)
@@ -72,7 +78,11 @@
             } else {
               _self.x -= _self.speedX
             }
-            if(_self.x > canvasW || _self.x < 0 - canvasW) return false
+            if(_self.x > canvasW || _self.x < 0 - canvasW) {
+              hinderArray = hinderArray.filter(function(item, index) {
+                return item.id !== _self.id
+              })
+            }
             ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * whScale)
           }
         }
@@ -112,6 +122,35 @@
             ctx.clearRect(this.x, this.y, this.width, this.width * this.whScale)
         }
       }
+      function Arrow(id, tX, tY, speed, x, y){
+        this.id = id
+        this.tX = tX || 0
+        this.tY = tY || 0
+        this.speed = speed || 5
+        this.sX = canvasW / 2
+        this.sY = canvasH
+        this.x = x || canvasW / 2
+        this.y = y || canvasH
+        var _k = (Math.abs(this.tY - this.sY)) / (Math.abs(this.tX - this.sX)),
+            speedX = this.speed / (Math.sqrt(_k * _k) + 1),
+            speedY = _k * speedX
+        this.draw = function() {
+          var img = new Image(),
+              _self = this
+          img.src = './images/arrow.jpeg'
+          img.onload = function() {
+            ctx.clearRect(_self.x, _self.y, img.width, img.height)
+            _self.x = _self.tX > _self.x ? _self.x + speedX : _self.x -speedX
+            _self.y = _self.y - speedY
+            if(_self.y< 0 - img.height) {
+              arrowArray = arrowArray.filter(function(item, index) {
+                return item.id !== _self.id
+              })
+            }
+            ctx.drawImage(img,_self.x, _self.y, img.width, img.height)
+          }
+        }
+      }
       function random(min,max) {
           return parseInt(Math.random()*(max - min) + min);
       }
@@ -122,12 +161,12 @@
           i++
           j++
           if(i % 100 === 0) {
-
-            hinderArray.push(new Hinder())
+            var id = Math.random().toString().split('.')[1]
+            hinderArray.push(new Hinder(id))
           }
           if(j % 50 === 0) {
-            var nowTime = new Date().getTime()
             var id = Math.random().toString().split('.')[1]
+            var nowTime = new Date().getTime()
             var newTarget = new Target(id, nowTime)
             targetArray = targetArray.filter(function(item, index) {
               if(item.time + item.now < nowTime) item.clear()
@@ -140,8 +179,20 @@
           })
           window.requestAnimationFrame(hinderLoop)
         }
-        hinderArray.push(new Hinder())
+        hinderArray.push(new Hinder(Math.random().toString().split('.')[1]))
         hinderLoop()
+        $('#canvas').click(function(e) {
+          var id = Math.random().toString().split('.')[1]
+          var arrow = new Arrow(id, e.clientX, e.clientY)
+          arrowArray.push(arrow)
+          function arrowShot() {
+            arrowArray.forEach(function(item, index) {
+              item.draw(id)
+            })
+            window.requestAnimationFrame(arrowShot)
+          }
+          arrowShot()
+        })
       }
       init()
     })

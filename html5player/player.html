@@ -28,11 +28,34 @@
 	.playerPop .close.dis{opacity:0.15; cursor: default; }
 	.playerPop .close.dis:hover{background-position: 0 -150px;}
 	.playerPop .playerbody{width: 100%; height: 100%;}
-	.playerPop .sidebar{position: absolute; top: 121px; right: 4px; z-index: 10;}
+	.playerPop .sidebar{position: absolute; top: 70px; right: 4px; z-index: 10;}
 	.playerPop .good,.playerPop .share{width: 42px; height: 42px; margin-bottom: 3px; position: relative;line-height: 42px; text-align: center; cursor: pointer;}
-	.playerPop .good > span ,.playerPop .share > span{display: inline-block; background: url(images/playerIcons.png) 0 -220px no-repeat;vertical-align: middle; width: 100%; height: 100%;cursor: pointer; }
-	.playerPop .good{}
-	.playerPop .good > span:hover{background-position: -50px -220px}
+	.playerPop .share > span{display: inline-block; background: url(images/playerIcons.png) 0 -220px no-repeat;vertical-align: middle; width: 100%; height: 100%;cursor: pointer; }
+	.playerPop .good span {
+	    display: inline-block;
+	    background: url(./images/zan.png);
+	    width: 19px;
+	    height: 19px;
+	    position: absolute;
+	    left: 50%;
+	    margin-left: -9.5px;
+	    top: 4px;
+	}
+	.playerPop .good p {
+		position: absolute;
+	    color: white;
+	    bottom: -12px;
+	    left: 5px;
+	    font-size: 14px;
+	    font-weight: 700;
+	}
+	.playerPop .good {
+		background-color: #17b188;
+		position: relative;
+	}
+	.good:hover{
+		background-color: #0ece98;
+	}
 	.playerPop .share > span{background-position: 0 -170px}
 	.playerPop .share > span:hover{background-position: -50px -170px}
 	.playerPop .share ul{top: 43px;right: 0; position: absolute; width: 100%;display: none;}
@@ -46,7 +69,7 @@
 	.playerPop .share .qq:hover b{background-position: -50px -60px;}
 	.playerPop .share .qz b{background-position: 0 -90px;}
 	.playerPop .share .qz:hover b{background-position: -50px -90px;}
-	.playerPop .share .top{height: 22px; line-height: 22px;}
+	.playerPop .share .top{height: 22px; line-height: 17px;}
 	.playerPop .share .top b{ background-position: 0 -120px; border-radius: 0; width: 15px;height: 8px; opacity: 0.65}
 	.playerPop .share .top:hover b{opacity: 1;}
 	.playerPop .share .wx .qr{position: absolute; right: 44px; top:0;background: #FFF; width: 126px; height: 126px;padding-top: 5px;box-sizing:border-box;display: none; }
@@ -93,7 +116,7 @@
 		position: relative;
 	}
 	.play-process-all {
-	    height: 2px;
+	    height: 3px;
 	    background-color: #737373;
 	    position: relative;
 	    top: 11px;
@@ -102,7 +125,7 @@
 	.play-process-drag {
 		position: absolute;
 	    width: 9px;
-	    height: 2px;
+	    height: 3px;
 	    border-radius: 1.5px;
 	    background-color: #478CDF;
 	    top: 11px;
@@ -115,7 +138,7 @@
 	    height: 6px;
 	    border-radius: 1.8px;
 	    background-color: #ffffff;
-	    top: 9px;
+	    top: 9.4px;
 	    left: 0px;
 	}
 	.play-msg {
@@ -153,7 +176,7 @@
 	    position: relative;
 	}
 	.play-sound-all {
-		height: 2px;
+		height: 3px;
 	    background-color: #737373;
 	    margin-top: 0px;
 	    position: relative;
@@ -162,7 +185,7 @@
 	.play-sound-drag {
 		position: absolute;
 	    width: 9px;
-	    height: 2px;
+	    height: 3px;
 	    border-radius: 1.5px;
 	    background-color: #478CDF;
 	    top: 11px;
@@ -175,7 +198,7 @@
 	    height: 6px;
 	    border-radius: 1.8px;
 	    background-color: #ffffff;
-	    top: 9px;
+	    top: 9.4px;
 	    left: 0px;
 	}
 	.play-screen {
@@ -246,13 +269,13 @@
 		margin-left: 10px;
 	}
 	.play-sym {
-		width: 90px;
+		width: 70px;
 		position: absolute;
 		z-index: 10000;
 		left: 50%;
 		top: 50%;
-		margin-left: -45px;
-		margin-top: -45px;
+		margin-left: -35px;
+		margin-top: -35px;
 		cursor: pointer;
 	}
 	.btn-wrapper {
@@ -315,7 +338,7 @@
 				</div>
     	</div>
 		<div class="sidebar">
-			<!-- <div class="good"><span></span></div> -->
+			<div class="good"><span></span><p>4396</p></div>
 			<div class="share"><span id="videoshare"></span>
 				<ul>
 

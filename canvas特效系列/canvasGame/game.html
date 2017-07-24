@@ -77,11 +77,11 @@
           }
         }
       }
-      function Target(id, nowTime, x, y, width, time) {
+      function Target(id, nowTime, width, x, y, time) {
         this.id = id
-        this.x = x || random(0, canvasW)
-        this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH)
         this.width = width || random(targetOption.minWidth, targetOption.maxWidth)
+        this.x = x || random(0, canvasW - this.width)
+        this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH - this.width)
         this.time = time || random(targetOption.minTime, targetOption.maxTime)
         this.now = nowTime
         this.whScale = 1
@@ -90,21 +90,21 @@
               _self = this
           img.src = './images/sun.jpg'
           img.onload = function() {
-            this.whScale = img.height / img.width
+            _self.whScale = img.height / img.width
             if(item) {
               var isOk = true
               targetArray.forEach(function(obj, index) {
                   var x = obj.x - item.x,
                       y = obj.y - item.y,
                       dis = Math.sqrt(x*x + y*y)
-                  if(dis < item.width / 2 + obj.width / 2) {
+                  if(dis < item.width / 2 + obj.width / 2 + 20) {
                     isOk = false
                   }
               })
               if(isOk) {
                 targetArray.push(item)
                 ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
-              } 
+              }
             }
           }
         }
@@ -122,6 +122,7 @@
           i++
           j++
           if(i % 100 === 0) {
+
             hinderArray.push(new Hinder())
           }
           if(j % 50 === 0) {
@@ -129,8 +130,6 @@
             var id = Math.random().toString().split('.')[1]
             var newTarget = new Target(id, nowTime)
             targetArray = targetArray.filter(function(item, index) {
-              console.log(item.time, item.now)
-              console.log(item.time + item.now ,nowTime);
               if(item.time + item.now < nowTime) item.clear()
               return item.time + item.now > nowTime
             })

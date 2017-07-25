@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      * {
+        margin: 0px;
+        padding: 0px;
+      }
+      #game {
+        position: absolute;
+        z-index: 1;
+      }
+      .hinder {
+        position: absolute;
+        z-index: 2;
+        left: 0px;
+        top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+    </div>
+  </body>
+  <script type="text/javascript" src="./js/requestAnimationFramePolyfill.js"></script>
+  <script type="text/javascript" src="./js/jquery.js"></script>
+  <script type="text/javascript">
+    $(function() {
+      var game = $('#game'),
+          canvasW = 0,
+          canvasH = 0,
+          defaultOption = {
+            _k: 0.7 //画布高占屏幕比例
+          },
+          isShot = false, //箭完成发射
+          hinderOPtion = {
+            startY: 0.4, //障碍绘制区域所在相对于画布的位置
+            endY: 0.6,
+            minWidth: 0.15, //与屏幕宽度比值
+            maxWidth: 0.2,
+            minSpeedX: 10,
+            maxSpeedX: 20
+          },
+          targetOption = {
+            startY: 0,
+            endY: 0.4,
+            minWidth: 20,
+            maxWidth: 100,
+            minTime: 3000,
+            maxTime: 5000,
+          },
+          arrowOption = {
+            speedX: 0,
+            speedY: 0
+          }
+          hinderArray = [],
+          targetArray = [],
+          arrowArray = [],
+          i = 0,//设定加载障碍频率
+          j = 0 //设定加载目标频率
+      function drawGame(defaultOption) {
+        canvasW = window.innerWidth
+        canvasH = window.innerHeight * defaultOption._k
+        game.width(canvasW).height(canvasH)
+      }
+      function Hinder(id, type, startY, width, speedX) {
+        this.id = id || ''
+        this.type = type || Math.random() > 0.5 ? 0 : 1 //从左侧还是右侧进入；0左侧，1右侧
+        this.x = this.type === 0 ? 0 : canvasW
+        this.y = startY || random(hinderOPtion.startY * canvasH, hinderOPtion.endY * canvasH)
+        this.width = width || random(hinderOPtion.minWidth * canvasW, hinderOPtion.maxWidth * canvasW)
+        this.speedX = speedX / 10 || random(hinderOPtion.minSpeedX, hinderOPtion.maxSpeedX) / 10
+        this.draw = function() {
+          var img = new Image(),
+              _self = this
+          img.src = './images/dadiao.gif'
+          img.id = _self.id
+          img.onload = function() {
+            if(_self.type) {
+              $(img).css({
+                'left': canvasW + _self.width
+              })
+            } else {
+              $(img).css({
+                'left': -_self.width,
+                'transform':'rotateY(180deg)',
+                '-ms-transform':'rotateY(180deg)', 	/* IE 9 */
+                '-moz-transform':'rotateY(180deg)', 	/* Firefox */
+                '-webkit-transform':'rotateY(180deg)', /* Safari 和 Chrome */
+                '-o-transform':'rotateY(180deg)'
+              })
+            }
+            $(img).css({
+              'transition-property': 'left',
+              '-moz-transition-property': 'left', /* Firefox 4 */
+              '-webkit-transition-property': 'left', /* Safari 和 Chrome */
+              '-o-transition-property': 'left', /* Opera */
+              'transition-timing-function': 'linear',
+              '-moz-transition-timing-function': 'linear', /* Firefox 4 */
+              '-webkit-transition-timing-function': 'linear', /* Safari 和 Chrome */
+              '-o-transition-timing-function': 'linear', /* Opera */
+              'transition-duration': _self.speedX + 's',
+              '-moz-transition-duration': _self.speedX + 's', /* Firefox 4 */
+              '-webkit-transition-duration': _self.speedX + 's', /* Safari 和 Chrome */
+              '-o-transition-duration': _self.speedX + 's', /* Opera */
+              'width':_self.width,
+              'top': _self.y,
+            }).addClass('hinder')
+            game.append(img)
+            setTimeout(function() {
+              if(_self.type) {
+                $(img).css({
+                  'left': -_self.width,
+                })
+              } else {
+                $(img).css({
+                  'left': canvasW,
+                })
+              }
+
+            //   $('.hinder').on('transitionend', function() {
+            //     hinderArray = hinderArray.filter(function(item) {
+            //       return item.id !== _self.id
+            //     })
+            //     $('.hinder').off('transitionend', "**")
+            //     $('#' + _self.id).remove()
+            //   })
+            }, 100)
+          }
+        }
+      }
+      function Target(id, nowTime, width, x, y, time) {
+        this.id = id
+        this.width = width || random(targetOption.minWidth, targetOption.maxWidth)
+        this.x = x || random(0, canvasW - this.width)
+        this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH - this.width)
+        this.time = time || random(targetOption.minTime, targetOption.maxTime)
+        this.now = nowTime
+        this.whScale = 1
+        this.draw = function(item) {
+          var img = new Image(),
+              _self = this
+          img.src = './images/sun.jpg'
+          img.onload = function() {
+            // ctx.clearRect(_self.x, _self.y, _self.width, _self.width * _self.whScale)
+            _self.whScale = img.height / img.width
+            if(item === 0) {
+              ctx.clearRect(_self.x, _self.y, _self.width, _self.width * _self.whScale)
+              ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
+            } else if(item && item !== 0) {
+              var isOk = true
+              targetArray.forEach(function(obj, index) {
+                  var x = obj.x - item.x,
+                      y = obj.y - item.y,
+                      dis = Math.sqrt(x*x + y*y)
+                  if(dis < item.width / 2 + obj.width / 2 + 20) {
+                    isOk = false
+                  }
+              })
+              if(isOk) {
+                targetArray.push(item)
+                ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
+              }
+            }
+          }
+        }
+        this.clear = function() {
+            ctx.clearRect(this.x, this.y, this.width, this.width * this.whScale)
+        }
+      }
+      function Arrow(id, tX, tY, speed, x, y){
+        this.id = id || ''
+        this.tX = tX || 0
+        this.tY = tY || 0
+        this.speed = speed || 5
+        this.sX = canvasW / 2
+        this.sY = canvasH
+        this.x = x || canvasW / 2
+        this.y = y || canvasH
+        // this.x = 0
+        // this.y = 0
+        var _k = (Math.abs(this.tY - this.sY)) / (Math.abs(this.tX - this.sX)),
+            speedX = this.speed / (Math.sqrt(_k * _k) + 1),
+            speedY = _k * speedX,
+            disX = this.tX > this.x
+            rotateAngle = Math.atan2(this.tX - this.sX, -(this.tY - this.sY))
+        this.draw = function() {
+          var img = new Image(),
+              _self = this
+          img.src = './images/arrow.jpeg'
+          img.onload = function() {
+            ctx.save()
+            // ctx.translate(_self.sX, _self.sY)
+            ctx.rotate(rotateAngle)
+            ctx.clearRect(_self.x, _self.y, img.width, img.height)
+            _self.x = disX > 0 ? _self.x + speedX : _self.x -speedX
+            _self.y = _self.y - speedY
+            ctx.drawImage(img, _self.x, _self.y, img.width, img.height)
+            ctx.restore()
+            if(_self.y < 0 - img.height || _self.x < 0 - img.width || _self.x >  canvasW + img.width) {
+              arrowArray = arrowArray.filter(function(item, index) {
+                return item.id !== _self.id
+              })
+              isShot = false
+            }
+          }
+        }
+      }
+      function random(min,max) {
+          return parseInt(Math.random()*(max - min) + min);
+      }
+      function eventLoop() {
+        var id = Math.random().toString().split('.')[1]
+        var newHinder = new Hinder(id)
+        newHinder.draw()
+        hinderArray.forEach(function(item, index) {
+          if($('#' + item.id).css('left') === '980px') {
+            $('#' + item.id).remove()
+            hinderArray.splice(index, 1)
+          }
+
+        })
+        hinderArray.push(newHinder)
+        setTimeout(eventLoop, 1000)
+      }
+      function init() {
+        drawGame(defaultOption)
+        eventLoop()
+
+      }
+      init()
+    })
+  </script>
+</html>

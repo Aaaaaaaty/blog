@@ -27,6 +27,7 @@
           defaultOption = {
             _k: 0.7 //canvas高占屏幕比例
           },
+          isShot = false, //箭完成发射
           hinderOPtion = {
             startY: 0.4, //障碍绘制区域所在相对于canvas的位置
             endY: 0.6,
@@ -100,8 +101,12 @@
               _self = this
           img.src = './images/sun.jpg'
           img.onload = function() {
+            // ctx.clearRect(_self.x, _self.y, _self.width, _self.width * _self.whScale)
             _self.whScale = img.height / img.width
-            if(item) {
+            if(item === 0) {
+              ctx.clearRect(_self.x, _self.y, _self.width, _self.width * _self.whScale)
+              ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
+            } else if(item && item !== 0) {
               var isOk = true
               targetArray.forEach(function(obj, index) {
                   var x = obj.x - item.x,
@@ -131,23 +136,32 @@
         this.sY = canvasH
         this.x = x || canvasW / 2
         this.y = y || canvasH
+        // this.x = 0
+        // this.y = 0
         var _k = (Math.abs(this.tY - this.sY)) / (Math.abs(this.tX - this.sX)),
             speedX = this.speed / (Math.sqrt(_k * _k) + 1),
-            speedY = _k * speedX
+            speedY = _k * speedX,
+            disX = this.tX > this.x
+            rotateAngle = Math.atan2(this.tX - this.sX, -(this.tY - this.sY))
         this.draw = function() {
           var img = new Image(),
               _self = this
           img.src = './images/arrow.jpeg'
           img.onload = function() {
+            ctx.save()
+            // ctx.translate(_self.sX, _self.sY)
+            ctx.rotate(rotateAngle)
             ctx.clearRect(_self.x, _self.y, img.width, img.height)
-            _self.x = _self.tX > _self.x ? _self.x + speedX : _self.x -speedX
+            _self.x = disX > 0 ? _self.x + speedX : _self.x -speedX
             _self.y = _self.y - speedY
-            if(_self.y< 0 - img.height) {
+            ctx.drawImage(img, _self.x, _self.y, img.width, img.height)
+            ctx.restore()
+            if(_self.y < 0 - img.height || _self.x < 0 - img.width || _self.x >  canvasW + img.width) {
               arrowArray = arrowArray.filter(function(item, index) {
                 return item.id !== _self.id
               })
+              isShot = false
             }
-            ctx.drawImage(img,_self.x, _self.y, img.width, img.height)
           }
         }
       }
@@ -174,6 +188,9 @@
             })
             newTarget.draw(newTarget)
           }
+          targetArray.forEach(function(item, index) {
+            item.draw(0)//防止重叠 被擦掉目标物, 传入0表示重复渲染本目标物
+          })
           hinderArray.forEach(function(item, index) {
             item.draw()
           })
@@ -182,16 +199,27 @@
         hinderArray.push(new Hinder(Math.random().toString().split('.')[1]))
         hinderLoop()
         $('#canvas').click(function(e) {
-          var id = Math.random().toString().split('.')[1]
-          var arrow = new Arrow(id, e.clientX, e.clientY)
-          arrowArray.push(arrow)
-          function arrowShot() {
-            arrowArray.forEach(function(item, index) {
-              item.draw(id)
-            })
-            window.requestAnimationFrame(arrowShot)
+          if(!isShot) {
+            isShot = true
+            var id = Math.random().toString().split('.')[1]
+            var arrow = new Arrow(id, e.clientX, e.clientY)
+            arrowArray.push(arrow)
+            function arrowShot() {
+              var timer
+              arrowArray.forEach(function(item, index) {
+                item.draw(id)
+              })
+              if(!isShot) {
+                clearTimeout(timer)
+                isShot = false
+              } else {
+                var timer = setTimeout(arrowShot, 10)
+              }
+
+            }
+            arrowShot()
           }
-          arrowShot()
+
         })
       }
       init()

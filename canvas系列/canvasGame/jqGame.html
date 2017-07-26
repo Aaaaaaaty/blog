@@ -11,8 +11,15 @@
       #game {
         position: absolute;
         z-index: 1;
+        background-color: #ccc;
       }
       .hinder {
+        position: absolute;
+        z-index: 2;
+        left: 0px;
+        top: 0px;
+      }
+      .target {
         position: absolute;
         z-index: 2;
         left: 0px;
@@ -31,6 +38,7 @@
       var game = $('#game'),
           canvasW = 0,
           canvasH = 0,
+          score = 0,
           defaultOption = {
             _k: 0.7 //画布高占屏幕比例
           },
@@ -40,14 +48,14 @@
             endY: 0.6,
             minWidth: 0.15, //与屏幕宽度比值
             maxWidth: 0.2,
-            minSpeedX: 10,
-            maxSpeedX: 20
+            minSpeedX: 35,
+            maxSpeedX: 40
           },
           targetOption = {
             startY: 0,
             endY: 0.4,
-            minWidth: 20,
-            maxWidth: 100,
+            minWidth: 0.1,
+            maxWidth: 0.3,
             minTime: 3000,
             maxTime: 5000,
           },
@@ -72,6 +80,7 @@
         this.y = startY || random(hinderOPtion.startY * canvasH, hinderOPtion.endY * canvasH)
         this.width = width || random(hinderOPtion.minWidth * canvasW, hinderOPtion.maxWidth * canvasW)
         this.speedX = speedX / 10 || random(hinderOPtion.minSpeedX, hinderOPtion.maxSpeedX) / 10
+        this.shot = false
         this.draw = function() {
           var img = new Image(),
               _self = this
@@ -112,62 +121,71 @@
             setTimeout(function() {
               if(_self.type) {
                 $(img).css({
-                  'left': -_self.width,
+                  'left': - _self.width,
                 })
               } else {
                 $(img).css({
                   'left': canvasW,
                 })
               }
-
-            //   $('.hinder').on('transitionend', function() {
-            //     hinderArray = hinderArray.filter(function(item) {
-            //       return item.id !== _self.id
-            //     })
-            //     $('.hinder').off('transitionend', "**")
-            //     $('#' + _self.id).remove()
-            //   })
+              _self.shot = true
             }, 100)
+          }
+        }
+        this.angle = function() {
+          var left = parseInt($('#' + this.id).css('left'))
+          if(left > canvasW) left = canvasW
+          if(left < 0) left = 0
+          var anglemax = Math.atan2( canvasH - this.y, left - canvasW / 2)
+          var anglemmin = Math.atan2( canvasH - this.y ,left + this.width - canvasW / 2 )
+          function angleCal(angle) {
+            return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
+          }
+          var angleMax = angleCal(anglemax)
+          var angleMmin = angleCal(anglemmin)
+          return {
+            max: angleMax,
+            min: angleMmin
           }
         }
       }
       function Target(id, nowTime, width, x, y, time) {
         this.id = id
-        this.width = width || random(targetOption.minWidth, targetOption.maxWidth)
+        this.width = width || random(targetOption.minWidth * canvasW, targetOption.maxWidth * canvasW)
         this.x = x || random(0, canvasW - this.width)
         this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH - this.width)
         this.time = time || random(targetOption.minTime, targetOption.maxTime)
         this.now = nowTime
-        this.whScale = 1
         this.draw = function(item) {
           var img = new Image(),
               _self = this
-          img.src = './images/sun.jpg'
+          img.src = './images/sun.png'
+          img.id = _self.id
           img.onload = function() {
-            // ctx.clearRect(_self.x, _self.y, _self.width, _self.width * _self.whScale)
-            _self.whScale = img.height / img.width
-            if(item === 0) {
-              ctx.clearRect(_self.x, _self.y, _self.width, _self.width * _self.whScale)
-              ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
-            } else if(item && item !== 0) {
+            if(item) {
               var isOk = true
               targetArray.forEach(function(obj, index) {
                   var x = obj.x - item.x,
                       y = obj.y - item.y,
                       dis = Math.sqrt(x*x + y*y)
-                  if(dis < item.width / 2 + obj.width / 2 + 20) {
+                  if(dis < item.width / 2 + obj.width / 2 + 30) {
                     isOk = false
                   }
               })
               if(isOk) {
                 targetArray.push(item)
-                ctx.drawImage(img, _self.x, _self.y, _self.width, _self.width * _self.whScale)
+                $(img).addClass('target').css({
+                  left: _self.x,
+                  top: _self.y,
+                  width: _self.width
+                })
+                game.append(img)
               }
             }
           }
         }
         this.clear = function() {
-            ctx.clearRect(this.x, this.y, this.width, this.width * this.whScale)
+            $('#' + this.id).remove()
         }
       }
       function Arrow(id, tX, tY, speed, x, y){
@@ -211,24 +229,57 @@
       function random(min,max) {
           return parseInt(Math.random()*(max - min) + min);
       }
-      function eventLoop() {
+      function eventLoopHinder() {
         var id = Math.random().toString().split('.')[1]
         var newHinder = new Hinder(id)
         newHinder.draw()
-        hinderArray.forEach(function(item, index) {
-          if($('#' + item.id).css('left') === '980px') {
-            $('#' + item.id).remove()
-            hinderArray.splice(index, 1)
-          }
-
-        })
         hinderArray.push(newHinder)
-        setTimeout(eventLoop, 1000)
+        setTimeout(eventLoopHinder, 1000)
+      }
+      function clearHinder() {
+        hinderArray.forEach(function(item, index) {
+          if(item.shot) {
+            if($('#' + item.id).css('left') == canvasW + 'px' || $('#' + item.id).css('left') == -item.width + 'px') {
+              $('#' + item.id).remove()
+              hinderArray.splice(index, 1)
+            }
+          }
+        })
+        setTimeout(clearHinder, 1000)
+      }
+      function eventLoopTarget() {
+        j++
+        if(j % 3 === 0) {
+          var id = Math.random().toString().split('.')[1]
+          var nowTime = new Date().getTime()
+          var newTarget = new Target(id, nowTime)
+          targetArray = targetArray.filter(function(item, index) {
+            if(item.time + item.now < nowTime) item.clear()
+            return item.time + item.now > nowTime
+          })
+          newTarget.draw(newTarget)
+        }
+        setTimeout(eventLoopTarget, 300)
+      }
+      function touchEvent() {
+        $('body').click(function(e) {
+          var angle = Math.atan2(canvasH - e.clientY, e.clientX - canvasW / 2) / Math.PI * 180
+          var touchAngle = angle < 0 ? angle - 90 : angle
+          hinderArray.forEach(function(item, index) {
+            var angleObj = item.angle()
+            if(touchAngle > angleObj.min && touchAngle < angleObj.max) {
+              $('#' + item.id).remove()
+              hinderArray.splice(index, 1)
+            }
+          })
+        })
       }
       function init() {
         drawGame(defaultOption)
-        eventLoop()
-
+        eventLoopHinder()
+        clearHinder()
+        eventLoopTarget()
+        touchEvent()
       }
       init()
     })

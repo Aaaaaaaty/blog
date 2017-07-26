@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
     <title></title>
     <style media="screen">
       * {
@@ -9,9 +10,8 @@
         padding: 0px;
       }
       #game {
-        position: absolute;
+        position: relative;
         z-index: 1;
-        background-color: #ccc;
       }
       .hinder {
         position: absolute;
@@ -25,11 +25,30 @@
         left: 0px;
         top: 0px;
       }
+      .gong {
+        position: absolute;
+        z-index: 2;
+        left: 50%;
+        bottom: 0px;
+      }
+      .arrow {
+        position: absolute;
+        z-index: 200;
+        left: 50%;
+        top: 0px;
+      }
+      p {
+        position: absolute;
+        z-index: 1000;
+        left: 50%;
+        top: 50%;
+      }
     </style>
   </head>
   <body>
     <div id="game">
     </div>
+    <p></p>
   </body>
   <script type="text/javascript" src="./js/requestAnimationFramePolyfill.js"></script>
   <script type="text/javascript" src="./js/jquery.js"></script>
@@ -39,8 +58,11 @@
           canvasW = 0,
           canvasH = 0,
           score = 0,
+          gongWidth = 0,
           defaultOption = {
-            _k: 0.7 //画布高占屏幕比例
+            _k: 0.7, //画布高占屏幕比例
+            _g: 0.4, //弓箭占屏幕比例
+            _a: 201 / 1630 //箭占弓的比例
           },
           isShot = false, //箭完成发射
           hinderOPtion = {
@@ -62,7 +84,7 @@
           arrowOption = {
             speedX: 0,
             speedY: 0
-          }
+          },
           hinderArray = [],
           targetArray = [],
           arrowArray = [],
@@ -72,6 +94,21 @@
         canvasW = window.innerWidth
         canvasH = window.innerHeight * defaultOption._k
         game.width(canvasW).height(canvasH)
+        $('body').css({
+          'background': 'url("./images/bg.png")',
+          'overflow': 'hidden'
+        })
+        var newGong = new Image()
+        newGong.src = './images/gong.png'
+        newGong.id = 'gong'
+        newGong.onload = function() {
+          gongWidth = canvasW * defaultOption._g
+          $(newGong).css({
+            'width': gongWidth,
+            'margin-left': -canvasW * defaultOption._g / 2
+          }).addClass('gong')
+          game.append(newGong)
+        }
       }
       function Hinder(id, type, startY, width, speedX) {
         this.id = id || ''
@@ -137,12 +174,12 @@
           if(left > canvasW) left = canvasW
           if(left < 0) left = 0
           var anglemax = Math.atan2( canvasH - this.y, left - canvasW / 2)
-          var anglemmin = Math.atan2( canvasH - this.y ,left + this.width - canvasW / 2 )
+          var anglemin = Math.atan2( canvasH - this.y ,left + this.width - canvasW / 2 )
           function angleCal(angle) {
             return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
           }
           var angleMax = angleCal(anglemax)
-          var angleMmin = angleCal(anglemmin)
+          var angleMmin = angleCal(anglemin)
           return {
             max: angleMax,
             min: angleMmin
@@ -262,17 +299,117 @@
         setTimeout(eventLoopTarget, 300)
       }
       function touchEvent() {
-        $('body').click(function(e) {
-          var angle = Math.atan2(canvasH - e.clientY, e.clientX - canvasW / 2) / Math.PI * 180
-          var touchAngle = angle < 0 ? angle - 90 : angle
-          hinderArray.forEach(function(item, index) {
-            var angleObj = item.angle()
-            if(touchAngle > angleObj.min && touchAngle < angleObj.max) {
-              $('#' + item.id).remove()
-              hinderArray.splice(index, 1)
-            }
+          var x, y, time
+          game.on('touchstart',function(e) {
+              var _touch = e.originalEvent.targetTouches[0]
+              time = new Date().getTime()
+              x = _touch.clientX
+              y = _touch.clientY
           })
-        })
+          game.on('touchend',function(e) {
+            $('#arrow').remove()
+              if(new Date().getTime() - time < 200) {
+                var touchAngle = Math.atan2(canvasH - y, x - canvasW / 2) / Math.PI * 180,
+                    isFail = false,
+                    gongAngle = 90 - touchAngle,
+                    rotateObj = {
+                                  'transform':'rotateZ('+ gongAngle +'deg)',
+                                  '-ms-transform':'rotateZ('+ gongAngle +'deg)',  /* IE 9 */
+                                  '-moz-transform':'rotateZ('+ gongAngle +'deg)',   /* Firefox */
+                                  '-webkit-transform':'rotateZ('+ gongAngle +'deg)', /* Safari 和 Chrome */
+                                  '-o-transform':'rotateZ('+ gongAngle +'deg)'
+                                }
+                $('#gong').css(rotateObj)
+                var newArrow = new Image()
+                newArrow.src = './images/arrow.png'
+                newArrow.id = 'arrow'
+                newArrow.onload = function() {
+                  var speed = 0.1,
+                      scale = newArrow.height / newArrow.width,
+                      width = gongWidth * defaultOption._a
+                  $(newArrow).css({
+                    'width': width,
+                    'top': canvasH - width * scale,
+                    'margin-left': -gongWidth * defaultOption._a / 2,
+                    'transition-property': 'all',
+                    '-moz-transition-property': 'all', /* Firefox 4 */
+                    '-webkit-transition-property': 'all', /* Safari 和 Chrome */
+                    '-o-transition-property': 'all', /* Opera */
+                    'transition-timing-function': 'linear',
+                    '-moz-transition-timing-function': 'linear', /* Firefox 4 */
+                    '-webkit-transition-timing-function': 'linear', /* Safari 和 Chrome */
+                    '-o-transition-timing-function': 'linear', /* Opera */
+                    'transition-duration': speed + 's',
+                    '-moz-transition-duration': speed + 's', /* Firefox 4 */
+                    '-webkit-transition-duration': speed + 's', /* Safari 和 Chrome */
+                    '-o-transition-duration': speed + 's', /* Opera */
+                  }).css(rotateObj).addClass('arrow')
+                  game.append(newArrow)
+                  hinderArray.forEach(function(item, index) {
+                    var angleObj = item.angle()
+                    var left = parseInt($('#' + item.id).css('left'))
+                    if(touchAngle > angleObj.min && touchAngle < angleObj.max) {
+                      var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
+                      var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left
+                      $('#arrow').css({
+                        left: arrowLeft + canvasW / 2,
+                        top: canvasH - bottom - newArrow.height / 2,
+                        margin: 0
+                      })
+                      var newImg = new Image()
+                      newImg.src = './images/dadiao-shot.png'
+                      newImg.onload = function() {
+                        $(newImg).addClass('hinder').css({
+                          left: left,
+                          top: item.y,
+                          width: item.width,
+                        })
+                        if(!item.type) {
+                          $(newImg).css({
+                            'transform':'rotateY(180deg)',
+                            '-ms-transform':'rotateY(180deg)',  /* IE 9 */
+                            '-moz-transform':'rotateY(180deg)',   /* Firefox */
+                            '-webkit-transform':'rotateY(180deg)', /* Safari 和 Chrome */
+                            '-o-transform':'rotateY(180deg)'
+                          })
+                        }   
+                        game.append(newImg)
+                        $('#' + item.id).remove()
+                        $(newImg).fadeOut('normal', function(){
+                          $(this).remove()
+                        })
+                        $('#arrow').fadeOut()
+                        
+                      }
+                      hinderArray.splice(index, 1)
+                      isFail = true
+                    }
+                  })
+                  if(!isFail) {
+                    targetArray.forEach(function(item, index) {
+                      var disX = item.x - x
+                      var disY = item.y - y
+                      var dis = Math.sqrt(disX * disX + disY * disY)
+                      if(dis < item.width) {
+                        var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
+                        var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left
+                        $('#arrow').css({
+                          left: arrowLeft + canvasW / 2,
+                          top: canvasH - bottom - newArrow.height / 2,
+                          margin: 0
+                        })
+                        $('#' + item.id).attr('src', './images/sun-shot.png').fadeOut(1000, function() {
+                          $(this).remove()
+                        })
+                        $('#arrow').fadeOut()
+                        targetArray.splice(index, 1)
+                      }
+                    })
+                  }
+                }
+                
+              }
+          })
       }
       function init() {
         drawGame(defaultOption)

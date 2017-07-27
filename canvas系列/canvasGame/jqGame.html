@@ -48,7 +48,6 @@
   <body>
     <div id="game">
     </div>
-    <p></p>
   </body>
   <script type="text/javascript" src="./js/requestAnimationFramePolyfill.js"></script>
   <script type="text/javascript" src="./js/jquery.js"></script>
@@ -59,6 +58,8 @@
           canvasH = 0,
           score = 0,
           gongWidth = 0,
+          gongHeight = 0,
+          targetTimer = 0,
           defaultOption = {
             _k: 0.7, //画布高占屏幕比例
             _g: 0.4, //弓箭占屏幕比例
@@ -66,7 +67,7 @@
           },
           isShot = false, //箭完成发射
           hinderOPtion = {
-            startY: 0.4, //障碍绘制区域所在相对于画布的位置
+            startY: 0.4, //障碍绘制区域所在相对于画布的位置弓·
             endY: 0.6,
             minWidth: 0.15, //与屏幕宽度比值
             maxWidth: 0.2,
@@ -77,6 +78,7 @@
             startY: 0,
             endY: 0.4,
             minWidth: 0.1,
+            midWidth: 0.2,
             maxWidth: 0.3,
             minTime: 3000,
             maxTime: 5000,
@@ -103,6 +105,7 @@
         newGong.id = 'gong'
         newGong.onload = function() {
           gongWidth = canvasW * defaultOption._g
+          gongHeight = gongWidth * newGong.height / newGong.width
           $(newGong).css({
             'width': gongWidth,
             'margin-left': -canvasW * defaultOption._g / 2
@@ -173,8 +176,8 @@
           var left = parseInt($('#' + this.id).css('left'))
           if(left > canvasW) left = canvasW
           if(left < 0) left = 0
-          var anglemax = Math.atan2( canvasH - this.y, left - canvasW / 2)
-          var anglemin = Math.atan2( canvasH - this.y ,left + this.width - canvasW / 2 )
+          var anglemax = Math.atan2( canvasH - this.y - gongHeight / 2, left - canvasW / 2)
+          var anglemin = Math.atan2( canvasH - this.y - gongHeight / 2, left + this.width - canvasW / 2 )
           function angleCal(angle) {
             return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
           }
@@ -186,9 +189,9 @@
           }
         }
       }
-      function Target(id, nowTime, width, x, y, time) {
+      function Target(id, nowTime, width, scroe, x, y, time) {
         this.id = id
-        this.width = width || random(targetOption.minWidth * canvasW, targetOption.maxWidth * canvasW)
+        this.width = width * canvasW || random(targetOption.minWidth * canvasW, targetOption.maxWidth * canvasW)
         this.x = x || random(0, canvasW - this.width)
         this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH - this.width)
         this.time = time || random(targetOption.minTime, targetOption.maxTime)
@@ -205,61 +208,34 @@
                   var x = obj.x - item.x,
                       y = obj.y - item.y,
                       dis = Math.sqrt(x*x + y*y)
-                  if(dis < item.width / 2 + obj.width / 2 + 30) {
+                  if(dis < item.width / 2 + obj.width / 2 + 50) {
                     isOk = false
                   }
               })
               if(isOk) {
-                targetArray.push(item)
                 $(img).addClass('target').css({
                   left: _self.x,
                   top: _self.y,
                   width: _self.width
-                })
+                }).attr('data-time', _self.now)
                 game.append(img)
+                targetArray.push(item)
               }
             }
           }
         }
-        this.clear = function() {
-            $('#' + this.id).remove()
-        }
-      }
-      function Arrow(id, tX, tY, speed, x, y){
-        this.id = id || ''
-        this.tX = tX || 0
-        this.tY = tY || 0
-        this.speed = speed || 5
-        this.sX = canvasW / 2
-        this.sY = canvasH
-        this.x = x || canvasW / 2
-        this.y = y || canvasH
-        // this.x = 0
-        // this.y = 0
-        var _k = (Math.abs(this.tY - this.sY)) / (Math.abs(this.tX - this.sX)),
-            speedX = this.speed / (Math.sqrt(_k * _k) + 1),
-            speedY = _k * speedX,
-            disX = this.tX > this.x
-            rotateAngle = Math.atan2(this.tX - this.sX, -(this.tY - this.sY))
-        this.draw = function() {
-          var img = new Image(),
-              _self = this
-          img.src = './images/arrow.jpeg'
-          img.onload = function() {
-            ctx.save()
-            // ctx.translate(_self.sX, _self.sY)
-            ctx.rotate(rotateAngle)
-            ctx.clearRect(_self.x, _self.y, img.width, img.height)
-            _self.x = disX > 0 ? _self.x + speedX : _self.x -speedX
-            _self.y = _self.y - speedY
-            ctx.drawImage(img, _self.x, _self.y, img.width, img.height)
-            ctx.restore()
-            if(_self.y < 0 - img.height || _self.x < 0 - img.width || _self.x >  canvasW + img.width) {
-              arrowArray = arrowArray.filter(function(item, index) {
-                return item.id !== _self.id
-              })
-              isShot = false
-            }
+        this.angle = function() {
+          var left = parseInt($('#' + this.id).css('left'))
+          var anglemax = Math.atan2( canvasH - this.y - gongHeight / 2 - this.width / 2, left - canvasW / 2)
+          var anglemin = Math.atan2( canvasH - this.y - gongHeight / 2 - this.width / 2, left + this.width - canvasW / 2 )
+          function angleCal(angle) {
+            return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
+          }
+          var angleMax = angleCal(anglemax)
+          var angleMmin = angleCal(anglemin)
+          return {
+            max: angleMax,
+            min: angleMmin
           }
         }
       }
@@ -285,18 +261,35 @@
         setTimeout(clearHinder, 1000)
       }
       function eventLoopTarget() {
-        j++
-        if(j % 3 === 0) {
-          var id = Math.random().toString().split('.')[1]
-          var nowTime = new Date().getTime()
-          var newTarget = new Target(id, nowTime)
-          targetArray = targetArray.filter(function(item, index) {
-            if(item.time + item.now < nowTime) item.clear()
-            return item.time + item.now > nowTime
-          })
+          j++
+          var id = j
+              nowTime = new Date().getTime(),
+              widthRandom = Math.random(),
+              width,
+              score,
+          if(widthRandom > 0.66) {
+            width = 0.4
+            score = 30
+          } else if(widthRandom < 0.66 && widthRandom > 0.33) {
+            width = 0.3
+            score = 50
+          } else {
+            width = 0.2
+            score = 100
+          }
+          var newTarget = new Target(id, nowTime, width)
           newTarget.draw(newTarget)
-        }
-        setTimeout(eventLoopTarget, 300)
+          setTimeout(eventLoopTarget, 100)
+      }
+      function clearTarget() {
+        var nowTime = new Date().getTime()
+        targetArray.forEach(function(item, index) {
+          if(item.time + item.now < nowTime) {
+            $('#' + item.id).remove()
+            targetArray.splice(index, 1)
+          }
+        })
+        targetTimer = setTimeout(clearTarget, 500)
       }
       function touchEvent() {
           var x, y, time
@@ -307,9 +300,9 @@
               y = _touch.clientY
           })
           game.on('touchend',function(e) {
-            $('#arrow').remove()
+            $('.arrow').remove()
               if(new Date().getTime() - time < 200) {
-                var touchAngle = Math.atan2(canvasH - y, x - canvasW / 2) / Math.PI * 180,
+                var touchAngle = Math.atan2(canvasH - y - gongHeight / 2, x - canvasW / 2) / Math.PI * 180,
                     isFail = false,
                     gongAngle = 90 - touchAngle,
                     rotateObj = {
@@ -379,31 +372,34 @@
                           $(this).remove()
                         })
                         $('#arrow').fadeOut()
-                        
                       }
                       hinderArray.splice(index, 1)
                       isFail = true
                     }
                   })
                   if(!isFail) {
+                    clearTimeout(targetTimer)
                     targetArray.forEach(function(item, index) {
-                      var disX = item.x - x
-                      var disY = item.y - y
-                      var dis = Math.sqrt(disX * disX + disY * disY)
-                      if(dis < item.width) {
-                        var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
-                        var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left
-                        $('#arrow').css({
-                          left: arrowLeft + canvasW / 2,
-                          top: canvasH - bottom - newArrow.height / 2,
-                          margin: 0
-                        })
+                      var angleObj = item.angle()
+                      var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
+                      var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left\
+                      if(!(touchAngle < angleObj.min) && !(touchAngle > angleObj.max)) {
                         $('#' + item.id).attr('src', './images/sun-shot.png').fadeOut(1000, function() {
                           $(this).remove()
+                          targetArray = targetArray.filter(function(obj, index) {
+                            return item.id != obj.id
+                          })
                         })
+                        setTimeout(clearTarget)
+                      } 
+                      $('#arrow').css({
+                        left: (arrowLeft + canvasW / 2 - $(newArrow).width()),
+                        top: (canvasH - bottom - newArrow.height / 2),
+                        margin: 0
+                      })
+                      setTimeout(function() {
                         $('#arrow').fadeOut()
-                        targetArray.splice(index, 1)
-                      }
+                      }, 100)
                     })
                   }
                 }
@@ -416,9 +412,16 @@
         eventLoopHinder()
         clearHinder()
         eventLoopTarget()
+        clearTarget()
         touchEvent()
       }
       init()
     })
   </script>
 </html>
+
+
+
+
+
+

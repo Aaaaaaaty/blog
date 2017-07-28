@@ -12,6 +12,7 @@
       #game {
         position: relative;
         z-index: 1;
+        overflow: hidden;
       }
       .hinder {
         position: absolute;
@@ -21,7 +22,7 @@
       }
       .target {
         position: absolute;
-        z-index: 2;
+        z-index: 10;
         left: 0px;
         top: 0px;
       }
@@ -31,22 +32,47 @@
         left: 50%;
         bottom: 0px;
       }
-      .arrow {
+      #talk {
         position: absolute;
         z-index: 200;
+        left: 0px;
+        top: 0px;
+      }
+      .score {
+        position: absolute;
+        z-index: 100;
+        left: 0px;
+        top: 0px;
+      }
+      .arrow {
+        position: absolute;
+        z-index: 20;
         left: 50%;
         top: 0px;
       }
-      p {
+      #totalScore {
         position: absolute;
-        z-index: 1000;
-        left: 50%;
-        top: 50%;
+        bottom: 0px;
+        left: 0px;
+        color: #004866;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      #cold {
+        position: absolute;
+        bottom: 3%;
+        left: -19%;
+        z-index: 30;
+        display: none;
       }
     </style>
   </head>
   <body>
-    <div id="game">
+    <div id="shot-game">
+      <div id="game">
+      <div id="totalScore">得分 :0</div>
+      <img id="cold" src="./images/hanbing.png" alt="">
+    </div>
     </div>
   </body>
   <script type="text/javascript" src="./js/requestAnimationFramePolyfill.js"></script>
@@ -61,11 +87,14 @@
           gongHeight = 0,
           targetTimer = 0,
           defaultOption = {
-            _k: 0.7, //画布高占屏幕比例
+            _k: 1, //画布高占屏幕比例
             _g: 0.4, //弓箭占屏幕比例
-            _a: 201 / 1630 //箭占弓的比例
+            _a: 201 / 1630, //箭占弓的比例
+            _s: 0.2 //分数占屏幕比例
           },
           isShot = false, //箭完成发射
+          lastId = 0, //计算分数前一个id
+          isCold = false,
           hinderOPtion = {
             startY: 0.4, //障碍绘制区域所在相对于画布的位置弓·
             endY: 0.6,
@@ -95,23 +124,34 @@
       function drawGame(defaultOption) {
         canvasW = window.innerWidth
         canvasH = window.innerHeight * defaultOption._k
-        game.width(canvasW).height(canvasH)
-        $('body').css({
-          'background': 'url("./images/bg.png")',
-          'overflow': 'hidden'
-        })
-        var newGong = new Image()
-        newGong.src = './images/gong.png'
-        newGong.id = 'gong'
-        newGong.onload = function() {
-          gongWidth = canvasW * defaultOption._g
-          gongHeight = gongWidth * newGong.height / newGong.width
-          $(newGong).css({
-            'width': gongWidth,
-            'margin-left': -canvasW * defaultOption._g / 2
-          }).addClass('gong')
-          game.append(newGong)
-        }
+          game.width(canvasW).height(canvasH)
+          $('body').css({
+            'background': 'url("./images/bg.png")',
+            'background-size': 'cover',
+            'overflow': 'hidden'
+          })
+          $('#footer').width(canvasW)
+          var newGong = new Image()
+          newGong.src = './images/gong.png'
+          newGong.id = 'gong'
+          newGong.onload = function() {
+            gongWidth = canvasW * defaultOption._g
+            gongHeight = gongWidth * newGong.height / newGong.width
+            $(newGong).css({
+              'width': gongWidth,
+              'margin-left': -canvasW * defaultOption._g / 2
+            }).addClass('gong')
+            game.append(newGong)
+            
+          }
+          eventLoop()
+      }
+      function eventLoop() {
+        eventLoopHinder()
+        clearHinder()
+        eventLoopTarget()
+        clearTarget()
+        touchEvent()
       }
       function Hinder(id, type, startY, width, speedX) {
         this.id = id || ''
@@ -121,6 +161,7 @@
         this.width = width || random(hinderOPtion.minWidth * canvasW, hinderOPtion.maxWidth * canvasW)
         this.speedX = speedX / 10 || random(hinderOPtion.minSpeedX, hinderOPtion.maxSpeedX) / 10
         this.shot = false
+        this.score = -30
         this.draw = function() {
           var img = new Image(),
               _self = this
@@ -189,13 +230,14 @@
           }
         }
       }
-      function Target(id, nowTime, width, scroe, x, y, time) {
+      function Target(id, nowTime, width, score, x, y, time) {
         this.id = id
         this.width = width * canvasW || random(targetOption.minWidth * canvasW, targetOption.maxWidth * canvasW)
         this.x = x || random(0, canvasW - this.width)
         this.y = y || random(targetOption.startY * canvasH, targetOption.endY * canvasH - this.width)
         this.time = time || random(targetOption.minTime, targetOption.maxTime)
         this.now = nowTime
+        this.score = score
         this.draw = function(item) {
           var img = new Image(),
               _self = this
@@ -265,19 +307,19 @@
           var id = j
               nowTime = new Date().getTime(),
               widthRandom = Math.random(),
-              width,
-              score,
+              width = 0,
+              scoreTarget = 0
           if(widthRandom > 0.66) {
             width = 0.4
-            score = 30
+            scoreTarget = 30
           } else if(widthRandom < 0.66 && widthRandom > 0.33) {
             width = 0.3
-            score = 50
+            scoreTarget = 50
           } else {
             width = 0.2
-            score = 100
+            scoreTarget = 100
           }
-          var newTarget = new Target(id, nowTime, width)
+          var newTarget = new Target(id, nowTime, width, scoreTarget)
           newTarget.draw(newTarget)
           setTimeout(eventLoopTarget, 100)
       }
@@ -290,6 +332,50 @@
           }
         })
         targetTimer = setTimeout(clearTarget, 500)
+      }
+      function changeScore(id, sc, x, y) {
+        if(id !== lastId) {
+          $('.score').remove()
+          $('#talk').remove()
+          lastId = id
+          if(score < 300 && score + sc > 300) {
+            $('#cold').show().width(canvasW * 0.76).fadeOut(1500)
+          }
+          score += sc
+          if(score > 300) {
+            isCold = true
+            $('#gong').attr('src', './images/gong-cold.png')
+          } else {
+            isCold = false
+            $('#gong').attr('src', './images/gong.png')
+          }
+          var img = new Image()
+          img.src = './images/score.png'
+          img.id = 'talk'
+          img.onload = function() {
+            if(sc > 0) {
+              sc = '+' + sc
+            }
+            var scoreDiv = '<div class="score">' + sc + '</div>'
+            game.append(img).append(scoreDiv)
+            $('#talk').css({
+              width: canvasW * defaultOption._s,
+              left: x,
+              top: y
+            })
+            $('.score').css({
+              'left': x + $('#talk').width() / 4,
+              'top': y + $('#talk').width() / 4,
+              'font-size': $('#talk').width() / 4,
+              'font-weight': 'bold',
+              'margin-left': '-3px'
+            })
+            setTimeout(function() {
+              $('#talk, .score').fadeOut()
+            }, 100)
+            $('#totalScore').html('得分 :' + score)
+          }
+        }   
       }
       function touchEvent() {
           var x, y, time
@@ -314,7 +400,11 @@
                                 }
                 $('#gong').css(rotateObj)
                 var newArrow = new Image()
-                newArrow.src = './images/arrow.png'
+                if(isCold) {
+                  newArrow.src = './images/arrow-cold.png'
+                } else {
+                  newArrow.src = './images/arrow.png'
+                }
                 newArrow.id = 'arrow'
                 newArrow.onload = function() {
                   var speed = 0.1,
@@ -350,7 +440,11 @@
                         margin: 0
                       })
                       var newImg = new Image()
-                      newImg.src = './images/dadiao-shot.png'
+                      if(isCold) {
+                        newImg.src = './images/dadiao-shot-cold.png'
+                      } else {
+                        newImg.src = './images/dadiao-shot.png'
+                      }
                       newImg.onload = function() {
                         $(newImg).addClass('hinder').css({
                           left: left,
@@ -371,7 +465,10 @@
                         $(newImg).fadeOut('normal', function(){
                           $(this).remove()
                         })
-                        $('#arrow').fadeOut()
+                        setTimeout(function() {
+                          changeScore(item.id, item.score, left, item.y) 
+                          $('#arrow').fadeOut()
+                        }, 100)
                       }
                       hinderArray.splice(index, 1)
                       isFail = true
@@ -384,13 +481,26 @@
                       var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
                       var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left\
                       if(!(touchAngle < angleObj.min) && !(touchAngle > angleObj.max)) {
-                        $('#' + item.id).attr('src', './images/sun-shot.png').fadeOut(1000, function() {
+                        var url = ''
+                        if(isCold) {
+                          url = './images/sun-shot-cold.png'
+                        } else {
+                          url = './images/sun-shot.png'
+                        }
+                        $('#' + item.id).attr('src', url).fadeOut(1000, function() {
                           $(this).remove()
                           targetArray = targetArray.filter(function(obj, index) {
                             return item.id != obj.id
                           })
                         })
-                        setTimeout(clearTarget)
+                        setTimeout(function() {
+                          if(isCold) {
+                            changeScore(item.id, item.score + 20, x, y)
+                          } else {
+                            changeScore(item.id, item.score, x, y)
+                          }
+                          clearTarget()
+                        }, 100)
                       } 
                       $('#arrow').css({
                         left: (arrowLeft + canvasW / 2 - $(newArrow).width()),
@@ -409,11 +519,6 @@
       }
       function init() {
         drawGame(defaultOption)
-        eventLoopHinder()
-        clearHinder()
-        eventLoopTarget()
-        clearTarget()
-        touchEvent()
       }
       init()
     })

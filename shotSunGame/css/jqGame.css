@@ -1,0 +1,60 @@
+ * {
+  margin: 0px;
+  padding: 0px;
+}
+#game {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+.hinder {
+  position: absolute;
+  z-index: 2;
+  left: 0px;
+  top: 0px;
+}
+.target {
+  position: absolute;
+  z-index: 10;
+  left: 0px;
+  top: 0px;
+}
+.gong {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  bottom: 0px;
+}
+#talk {
+  position: absolute;
+  z-index: 200;
+  left: 0px;
+  top: 0px;
+}
+.score {
+  position: absolute;
+  z-index: 100;
+  left: 0px;
+  top: 0px;
+}
+.arrow {
+  position: absolute;
+  z-index: 20;
+  left: 50%;
+  top: 0px;
+}
+#totalScore {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  color: #004866;
+  font-size: 16px;
+  font-weight: bold;
+}
+#cold {
+  position: absolute;
+  bottom: 3%;
+  left: -19%;
+  z-index: 30;
+  display: none;
+}

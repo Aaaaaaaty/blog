@@ -82,72 +82,72 @@ $(function() {
         this.speedX = speedX / 10 || random(hinderOPtion.minSpeedX, hinderOPtion.maxSpeedX) / 10
         this.shot = false
         this.score = -30
-        this.draw = function() {
-          var img = new Image(),
-              _self = this
-          img.src = './images/dadiao.gif'
-          img.id = _self.id
-          img.onload = function() {
+      }
+      Hinder.prototype.draw = function() {
+        var img = new Image(),
+            _self = this
+        img.src = './images/dadiao.gif'
+        img.id = _self.id
+        img.onload = function() {
+          if(_self.type) {
+            $(img).css({
+              'left': canvasW + _self.width
+            })
+          } else {
+            $(img).css({
+              'left': -_self.width,
+              'transform':'rotateY(180deg)',
+              '-ms-transform':'rotateY(180deg)',  /* IE 9 */
+              '-moz-transform':'rotateY(180deg)',   /* Firefox */
+              '-webkit-transform':'rotateY(180deg)', /* Safari 和 Chrome */
+              '-o-transform':'rotateY(180deg)'
+            })
+          }
+          $(img).css({
+            'transition-property': 'left',
+            '-moz-transition-property': 'left', /* Firefox 4 */
+            '-webkit-transition-property': 'left', /* Safari 和 Chrome */
+            '-o-transition-property': 'left', /* Opera */
+            'transition-timing-function': 'linear',
+            '-moz-transition-timing-function': 'linear', /* Firefox 4 */
+            '-webkit-transition-timing-function': 'linear', /* Safari 和 Chrome */
+            '-o-transition-timing-function': 'linear', /* Opera */
+            'transition-duration': _self.speedX + 's',
+            '-moz-transition-duration': _self.speedX + 's', /* Firefox 4 */
+            '-webkit-transition-duration': _self.speedX + 's', /* Safari 和 Chrome */
+            '-o-transition-duration': _self.speedX + 's', /* Opera */
+            'width':_self.width,
+            'top': _self.y,
+          }).addClass('hinder')
+          game.append(img)
+          setTimeout(function() {
             if(_self.type) {
               $(img).css({
-                'left': canvasW + _self.width
+                'left': - _self.width,
               })
             } else {
               $(img).css({
-                'left': -_self.width,
-                'transform':'rotateY(180deg)',
-                '-ms-transform':'rotateY(180deg)', 	/* IE 9 */
-                '-moz-transform':'rotateY(180deg)', 	/* Firefox */
-                '-webkit-transform':'rotateY(180deg)', /* Safari 和 Chrome */
-                '-o-transform':'rotateY(180deg)'
+                'left': canvasW,
               })
             }
-            $(img).css({
-              'transition-property': 'left',
-              '-moz-transition-property': 'left', /* Firefox 4 */
-              '-webkit-transition-property': 'left', /* Safari 和 Chrome */
-              '-o-transition-property': 'left', /* Opera */
-              'transition-timing-function': 'linear',
-              '-moz-transition-timing-function': 'linear', /* Firefox 4 */
-              '-webkit-transition-timing-function': 'linear', /* Safari 和 Chrome */
-              '-o-transition-timing-function': 'linear', /* Opera */
-              'transition-duration': _self.speedX + 's',
-              '-moz-transition-duration': _self.speedX + 's', /* Firefox 4 */
-              '-webkit-transition-duration': _self.speedX + 's', /* Safari 和 Chrome */
-              '-o-transition-duration': _self.speedX + 's', /* Opera */
-              'width':_self.width,
-              'top': _self.y,
-            }).addClass('hinder')
-            game.append(img)
-            setTimeout(function() {
-              if(_self.type) {
-                $(img).css({
-                  'left': - _self.width,
-                })
-              } else {
-                $(img).css({
-                  'left': canvasW,
-                })
-              }
-              _self.shot = true
-            }, 100)
-          }
+            _self.shot = true
+          }, 100)
         }
-        this.angle = function() {
-          var left = parseInt($('#' + this.id).css('left'))
-          if(left > canvasW) left = canvasW
-          if(left < 0) left = 0
-          var anglemax = Math.atan2( canvasH - this.y - gongHeight / 2, left - canvasW / 2)
-          var anglemin = Math.atan2( canvasH - this.y - gongHeight / 2, left + this.width - canvasW / 2 )
-          function angleCal(angle) {
-            return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
-          }
-          var angleMax = angleCal(anglemax)
-          var angleMmin = angleCal(anglemin)
-          return {
-            max: angleMax,
-            min: angleMmin
-          }
+      }
+      Hinder.prototype.angle = function() {
+        var left = parseInt($('#' + this.id).css('left'))
+        if(left > canvasW) left = canvasW
+        if(left < 0) left = 0
+        var anglemax = Math.atan2( canvasH - this.y - gongHeight / 2, left - canvasW / 2)
+        var anglemin = Math.atan2( canvasH - this.y - gongHeight / 2, left + this.width - canvasW / 2 )
+        function angleCal(angle) {
+          return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
+        }
+        var angleMax = angleCal(anglemax)
+        var angleMmin = angleCal(anglemin)
+        return {
+          max: angleMax,
+          min: angleMmin
         }
       }
       function Target(id, nowTime, width, score, x, y, time) {
@@ -158,47 +158,47 @@ $(function() {
         this.time = time || random(targetOption.minTime, targetOption.maxTime)
         this.now = nowTime
         this.score = score
-        this.draw = function(item) {
-          var img = new Image(),
-              _self = this
-          img.src = './images/sun.png'
-          img.id = _self.id
-          img.onload = function() {
-            if(item) {
-              var isOk = true
-              targetArray.forEach(function(obj, index) {
-                  var x = obj.x - item.x,
-                      y = obj.y - item.y,
-                      dis = Math.sqrt(x*x + y*y)
-                  if(dis < item.width / 2 + obj.width / 2 + 50) {
-                    isOk = false
-                  }
-              })
-              if(isOk) {
-                $(img).addClass('target').css({
-                  left: _self.x,
-                  top: _self.y,
-                  width: _self.width
-                }).attr('data-time', _self.now)
-                game.append(img)
-                targetArray.push(item)
-              }
+      }
+      Target.prototype.draw = function(item) {
+        var img = new Image(),
+            _self = this
+        img.src = './images/sun.png'
+        img.id = _self.id
+        img.onload = function() {
+          if(item) {
+            var isOk = true
+            targetArray.forEach(function(obj, index) {
+                var x = obj.x - item.x,
+                    y = obj.y - item.y,
+                    dis = Math.sqrt(x*x + y*y)
+                if(dis < item.width / 2 + obj.width / 2 + 50) {
+                  isOk = false
+                }
+            })
+            if(isOk) {
+              $(img).addClass('target').css({
+                left: _self.x,
+                top: _self.y,
+                width: _self.width
+              }).attr('data-time', _self.now)
+              game.append(img)
+              targetArray.push(item)
             }
           }
         }
-        this.angle = function() {
-          var left = parseInt($('#' + this.id).css('left'))
-          var anglemax = Math.atan2( canvasH - this.y - gongHeight / 2 - this.width / 2, left - canvasW / 2)
-          var anglemin = Math.atan2( canvasH - this.y - gongHeight / 2 - this.width / 2, left + this.width - canvasW / 2 )
-          function angleCal(angle) {
-            return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
-          }
-          var angleMax = angleCal(anglemax)
-          var angleMmin = angleCal(anglemin)
-          return {
-            max: angleMax,
-            min: angleMmin
-          }
+      }
+      Target.prototype.angle = function() {
+        var left = parseInt($('#' + this.id).css('left'))
+        var anglemax = Math.atan2( canvasH - this.y - gongHeight / 2 - this.width / 2, left - canvasW / 2)
+        var anglemin = Math.atan2( canvasH - this.y - gongHeight / 2 - this.width / 2, left + this.width - canvasW / 2 )
+        function angleCal(angle) {
+          return (angle / Math.PI * 180) < 0 ? angle / Math.PI * 180 - 90 : angle / Math.PI * 180
+        }
+        var angleMax = angleCal(anglemax)
+        var angleMmin = angleCal(anglemin)
+        return {
+          max: angleMax,
+          min: angleMmin
         }
       }
       function random(min,max) {
@@ -304,137 +304,139 @@ $(function() {
               time = new Date().getTime()
               x = _touch.clientX
               y = _touch.clientY
-          })
-          game.on('touchend',function(e) {
+          }).on('touchend',function(e) {
             $('.arrow').remove()
-              if(new Date().getTime() - time < 200) {
-                var touchAngle = Math.atan2(canvasH - y - gongHeight / 2, x - canvasW / 2) / Math.PI * 180,
-                    isFail = false,
-                    gongAngle = 90 - touchAngle,
-                    rotateObj = {
-                                  'transform':'rotateZ('+ gongAngle +'deg)',
-                                  '-ms-transform':'rotateZ('+ gongAngle +'deg)',  /* IE 9 */
-                                  '-moz-transform':'rotateZ('+ gongAngle +'deg)',   /* Firefox */
-                                  '-webkit-transform':'rotateZ('+ gongAngle +'deg)', /* Safari 和 Chrome */
-                                  '-o-transform':'rotateZ('+ gongAngle +'deg)'
-                                }
-                $('#gong').css(rotateObj)
-                var newArrow = new Image()
-                if(isCold) {
-                  newArrow.src = './images/arrow-cold.png'
-                } else {
-                  newArrow.src = './images/arrow.png'
-                }
-                newArrow.id = 'arrow'
-                newArrow.onload = function() {
-                  var speed = 0.1,
-                      scale = newArrow.height / newArrow.width,
-                      width = gongWidth * defaultOption._a
-                  $(newArrow).css({
-                    'width': width,
-                    'top': canvasH - width * scale,
-                    'margin-left': -gongWidth * defaultOption._a / 2,
-                    'transition-property': 'all',
-                    '-moz-transition-property': 'all', /* Firefox 4 */
-                    '-webkit-transition-property': 'all', /* Safari 和 Chrome */
-                    '-o-transition-property': 'all', /* Opera */
-                    'transition-timing-function': 'linear',
-                    '-moz-transition-timing-function': 'linear', /* Firefox 4 */
-                    '-webkit-transition-timing-function': 'linear', /* Safari 和 Chrome */
-                    '-o-transition-timing-function': 'linear', /* Opera */
-                    'transition-duration': speed + 's',
-                    '-moz-transition-duration': speed + 's', /* Firefox 4 */
-                    '-webkit-transition-duration': speed + 's', /* Safari 和 Chrome */
-                    '-o-transition-duration': speed + 's', /* Opera */
-                  }).css(rotateObj).addClass('arrow')
-                  game.append(newArrow)
-                  hinderArray.forEach(function(item, index) {
-                    var angleObj = item.angle()
-                    var left = parseInt($('#' + item.id).css('left'))
-                    if(touchAngle > angleObj.min && touchAngle < angleObj.max) {
-                      var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
-                      var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left
-                      $('#arrow').css({
-                        left: arrowLeft + canvasW / 2,
-                        top: canvasH - bottom - newArrow.height / 2,
-                        margin: 0
-                      })
-                      var newImg = new Image()
-                      if(isCold) {
-                        newImg.src = './images/dadiao-shot-cold.png'
-                      } else {
-                        newImg.src = './images/dadiao-shot.png'
-                      }
-                      newImg.onload = function() {
-                        $(newImg).addClass('hinder').css({
-                          left: left,
-                          top: item.y,
-                          width: item.width,
-                        })
-                        if(!item.type) {
-                          $(newImg).css({
-                            'transform':'rotateY(180deg)',
-                            '-ms-transform':'rotateY(180deg)',  /* IE 9 */
-                            '-moz-transform':'rotateY(180deg)',   /* Firefox */
-                            '-webkit-transform':'rotateY(180deg)', /* Safari 和 Chrome */
-                            '-o-transform':'rotateY(180deg)'
-                          })
-                        }   
-                        game.append(newImg)
-                        $('#' + item.id).remove()
-                        $(newImg).fadeOut('normal', function(){
-                          $(this).remove()
-                        })
-                        setTimeout(function() {
-                          changeScore(item.id, item.score, left, item.y) 
-                          $('#arrow').fadeOut()
-                        }, 100)
-                      }
-                      hinderArray.splice(index, 1)
-                      isFail = true
+            var hinderTimes = 0,
+                targetTimes = 0
+            if(new Date().getTime() - time < 200) {
+              var touchAngle = Math.atan2(canvasH - y - gongHeight / 2, x - canvasW / 2) / Math.PI * 180,
+                  isFail = false,
+                  gongAngle = 90 - touchAngle,
+                  rotateObj = {
+                                'transform':'rotateZ('+ gongAngle +'deg)',
+                                '-ms-transform':'rotateZ('+ gongAngle +'deg)',  /* IE 9 */
+                                '-moz-transform':'rotateZ('+ gongAngle +'deg)',   /* Firefox */
+                                '-webkit-transform':'rotateZ('+ gongAngle +'deg)', /* Safari 和 Chrome */
+                                '-o-transform':'rotateZ('+ gongAngle +'deg)'
+                              }
+              $('#gong').css(rotateObj)
+              var newArrow = new Image()
+              if(isCold) {
+                newArrow.src = './images/arrow-cold.png'
+              } else {
+                newArrow.src = './images/arrow.png'
+              }
+              newArrow.id = 'arrow'
+              newArrow.onload = function() {
+                var speed = 0.1,
+                    scale = newArrow.height / newArrow.width,
+                    width = gongWidth * defaultOption._a
+                $(newArrow).css({
+                  'width': width,
+                  'top': canvasH - width * scale,
+                  'margin-left': -gongWidth * defaultOption._a / 2,
+                  'transition-property': 'all',
+                  '-moz-transition-property': 'all', /* Firefox 4 */
+                  '-webkit-transition-property': 'all', /* Safari 和 Chrome */
+                  '-o-transition-property': 'all', /* Opera */
+                  'transition-timing-function': 'linear',
+                  '-moz-transition-timing-function': 'linear', /* Firefox 4 */
+                  '-webkit-transition-timing-function': 'linear', /* Safari 和 Chrome */
+                  '-o-transition-timing-function': 'linear', /* Opera */
+                  'transition-duration': speed + 's',
+                  '-moz-transition-duration': speed + 's', /* Firefox 4 */
+                  '-webkit-transition-duration': speed + 's', /* Safari 和 Chrome */
+                  '-o-transition-duration': speed + 's', /* Opera */
+                }).css(rotateObj).addClass('arrow')
+                game.append(newArrow)
+                hinderArray.forEach(function(item, index) {
+                  var angleObj = item.angle()
+                  var left = parseInt($('#' + item.id).css('left'))
+                  if(touchAngle > angleObj.min && touchAngle < angleObj.max && hinderTimes === 0) {
+                    hinderTimes++
+                    var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
+                    var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left
+                    $('#arrow').css({
+                      left: arrowLeft + canvasW / 2,
+                      top: canvasH - bottom - newArrow.height / 2,
+                      margin: 0
+                    })
+                    var newImg = new Image()
+                    if(isCold) {
+                      newImg.src = './images/dadiao-shot-cold.png'
+                    } else {
+                      newImg.src = './images/dadiao-shot.png'
                     }
-                  })
-                  if(!isFail) {
-                    clearTimeout(targetTimer)
-                    targetArray.forEach(function(item, index) {
-                      var angleObj = item.angle()
-                      var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
-                      var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left\
-                      if(!(touchAngle < angleObj.min) && !(touchAngle > angleObj.max)) {
-                        var url = ''
-                        if(isCold) {
-                          url = './images/sun-shot-cold.png'
-                        } else {
-                          url = './images/sun-shot.png'
-                        }
-                        $('#' + item.id).attr('src', url).fadeOut(1000, function() {
-                          $(this).remove()
-                          targetArray = targetArray.filter(function(obj, index) {
-                            return item.id != obj.id
-                          })
+                    newImg.onload = function() {
+                      $(newImg).addClass('hinder').css({
+                        left: left,
+                        top: item.y,
+                        width: item.width,
+                      })
+                      if(!item.type) {
+                        $(newImg).css({
+                          'transform':'rotateY(180deg)',
+                          '-ms-transform':'rotateY(180deg)',  /* IE 9 */
+                          '-moz-transform':'rotateY(180deg)',   /* Firefox */
+                          '-webkit-transform':'rotateY(180deg)', /* Safari 和 Chrome */
+                          '-o-transform':'rotateY(180deg)'
                         })
-                        setTimeout(function() {
-                          if(isCold) {
-                            changeScore(item.id, item.score + 20, x, y)
-                          } else {
-                            changeScore(item.id, item.score, x, y)
-                          }
-                          clearTarget()
-                        }, 100)
-                      } 
-                      $('#arrow').css({
-                        left: (arrowLeft + canvasW / 2 - $(newArrow).width()),
-                        top: (canvasH - bottom - newArrow.height / 2),
-                        margin: 0
+                      }   
+                      game.append(newImg)
+                      $('#' + item.id).remove()
+                      $(newImg).fadeOut('normal', function(){
+                        $(this).remove()
                       })
                       setTimeout(function() {
+                        changeScore(item.id, item.score, left, item.y) 
                         $('#arrow').fadeOut()
                       }, 100)
-                    })
+                    }
+                    hinderArray.splice(index, 1)
+                    isFail = true
                   }
+                })
+                if(!isFail) {
+                  clearTimeout(targetTimer)
+                  targetArray.forEach(function(item, index) {
+                    var angleObj = item.angle()
+                    var bottom = canvasH - item.y - $(newArrow).width() * scale / 2
+                    var arrowLeft = bottom / (canvasH - y) * (x - canvasW / 2) //根据tan值算出具体left\
+                    if(!(touchAngle < angleObj.min) && !(touchAngle > angleObj.max) && targetTimes === 0) {
+                      targetTimes++
+                      var url = ''
+                      if(isCold) {
+                        url = './images/sun-shot-cold.png'
+                      } else {
+                        url = './images/sun-shot.png'
+                      }
+                      $('#' + item.id).attr('src', url).fadeOut(1000, function() {
+                        $(this).remove()
+                        targetArray = targetArray.filter(function(obj, index) {
+                          return item.id != obj.id
+                        })
+                      })
+                      setTimeout(function() {
+                        if(isCold) {
+                          changeScore(item.id, item.score + 20, x, y)
+                        } else {
+                          changeScore(item.id, item.score, x, y)
+                        }
+                        clearTarget()
+                      }, 100)
+                    } 
+                    $('#arrow').css({
+                      left: (arrowLeft + canvasW / 2 - $(newArrow).width()),
+                      top: (canvasH - bottom - newArrow.height / 2),
+                      margin: 0
+                    })
+                    setTimeout(function() {
+                      $('#arrow').fadeOut()
+                    }, 100)
+                  })
                 }
-                
               }
+            }
           })
       }
       function init() {

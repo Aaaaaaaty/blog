@@ -1,23 +1,37 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
 	<title></title>
 	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
 		#container {
 			background-color: #ccc;
 		    width: 200px;
-		    height: 300px;
-		    overflow-y: auto;
+		    margin-top: 100px;
+		    margin-left: 100px;
 		}
 		.item {
 			width: 200px;
 			height: 60px;
 		}
+		#border {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			margin-top: 160px;
+		    margin-left: 100px;
+		    width: 300px;
+		    height: 180px;
+		    border: 1px solid red;
+		}
 	</style>
 </head>
 <body>
 	<div id="container"></div>
+	<div id="border"></div>
 </body>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
@@ -40,11 +54,11 @@
 			}
 		}
 	}
-	var divFactroy = objectPoolFactory(function() {
+	var divFactroy = objectPoolFactory(function() { //对象池中为空，生成新的dom节点
 		var div = document.createElement('div')
 		$(div).css({
 			'background-color': color()
-		}).addClass('item').html()
+		}).addClass('item')
 		// divFactroy.recover(div)
 		return div
 	})
@@ -56,10 +70,6 @@
 	appendChild(divFactroy.create(), 'container')
 	appendChild(divFactroy.create(), 'container')
 	appendChild(divFactroy.create(), 'container')
-	appendChild(divFactroy.create(), 'container')
-	appendChild(divFactroy.create(), 'container')
-	appendChild(divFactroy.create(), 'container')
-	appendChild(divFactroy.create(), 'container')
-	appendChild(divFactroy.create(), 'container')
+
 </script>
 </html>

@@ -16,7 +16,7 @@ $(function() {
       lastId = 0, //计算分数前一个id
       isCold = false,
       hinderOPtion = {
-        startY: 0.4, //障碍绘制区域所在相对于画布的位置弓·
+        startY: 0.4, //障碍绘制区域所在相对于画布的位置弓
         endY: 0.6,
         minWidth: 0.15, //与屏幕宽度比值
         maxWidth: 0.2,

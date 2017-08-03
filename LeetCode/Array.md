@@ -21,3 +21,47 @@ function calMax(arr) {
 }
 console.log(calMax([1,2,3,4])) //4
 ```
+### 566. Reshape the Matrix
+
+```
+//v1
+var matrixReshape = function(nums, r, c) {
+    var arr = []
+	var result = []
+    nums.forEach(function(item, index) {
+    	item.forEach(function(obj, index) {
+    		arr.push(obj)
+    	})
+    })
+    if(r * c !== arr.length) {
+    	return nums
+    } else {
+    	for(var i = 0; i < r; i++) {
+    		result[i] = [] 
+    		for(var j = 0; j < c; j++) {
+    			result[i].push(arr[(i) * c + j])
+    		}
+    	}
+    }
+    return result
+}
+//v2
+var matrixReshape = function(nums, r, c) {
+	var m = nums.length,
+		n = nums[0].length,
+		result = []
+    if(r * c !== m * n) {
+    	return nums
+    } else {
+    	for(var j = 0; j < r; j++){
+    		result[j] = []
+    	}
+    	for(var i = 0; i < r * c; i++) {
+    		result[parseInt(i / c)].push((nums[parseInt(i / n)][(i) % n]))
+    	}
+    }
+    return result
+}
+console.log(matrixReshape([[1,2], [3,4], [5,6]], 2, 3))
+
+```

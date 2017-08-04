@@ -1,24 +1,13 @@
 /**
- * @param {number[][]} nums
- * @param {number} r
- * @param {number} c
- * @return {number[][]}
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
  */
-var matrixReshape = function(nums, r, c) {
-	var m = nums.length,
-		n = nums[0].length,
-		result = []
-    if(r * c !== m * n) {
-    	return nums
-    } else {
-
-    	for(var j = 0; j < r; j++){
-    		result[j] = []
-    	}
-    	for(var i = 0; i < r * c; i++) {
-    		result[parseInt(i / c)].push((nums[parseInt(i / n)][(i) % n]))
-    	}
-    }
-    return result
+var moveZeroes = function(nums) {
+    nums.forEach(function(item, index) {
+        if(item === 0) {
+            nums.splice(index, 1)
+            nums.push(item)
+        }
+    })
 }
-console.log(matrixReshape([[1,2], [3,4], [5,6]], 2, 3))
+console.log(moveZeroes([0, 1, 0, 3, 0,1, 12, 0,0]))

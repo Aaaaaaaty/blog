@@ -1,7 +1,8 @@
 ## 不定期更新中————
 
 ## Js基础
- - 2017.06.13—[基于canvas实现的一个截图小 demo](https://github.com/Aaaaaaaty/Blog/issues/5)
+ - 2017.06.01—[Javascript之bind](https://github.com/Aaaaaaaty/Blog/issues/1)
+ - 2017.06.13—[基于canvas实现的一个截图小demo](https://github.com/Aaaaaaaty/Blog/issues/5)
  - 2017.06.19—[从Console中看看jQuery的原型链](https://github.com/Aaaaaaaty/Blog/issues/7)
  - 2017.07.20—[从零实现一个自定义html5播放器](https://github.com/Aaaaaaaty/Blog/issues/9)
  - 2017.08.02—[基于jQuery的一个“射日”小游戏](https://github.com/Aaaaaaaty/Blog/issues/11)

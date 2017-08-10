@@ -6,6 +6,7 @@
  - 2017.07.20—[从零实现一个自定义html5播放器](https://github.com/Aaaaaaaty/Blog/issues/9)
  - 2017.08.02—[基于jQuery的一个“射日”小游戏](https://github.com/Aaaaaaaty/Blog/issues/11)
  - 2017.08.04—[基于canvas实现波浪式绘制图片](https://github.com/Aaaaaaaty/Blog/issues/12)
+ - 2017.08.10—[从HTML5与PromiseA+规范来看事件循环](https://github.com/Aaaaaaaty/Blog/issues/13)
 
 ## 框架
  - 2017.05.15—[基于Vue、Nodejs、Socket.io的聊天应用](https://github.com/Aaaaaaaty/Blog/issues/2)

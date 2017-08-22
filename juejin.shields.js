@@ -3,7 +3,7 @@ var http = require('http')
 var cheerio = require('cheerio')
 var superagent = require('superagent')
 const fs = require('fs')
-const { spawn } = require('child_process')
+const { spawn, exec } = require('child_process')
 
 var juejinUrl = 'https://user-storage-api-ms.juejin.im/v1/getUserInfo'
 var query = {
@@ -37,10 +37,11 @@ function changeReadMe(like, read) {
 		body = body.replace(regRead, 'https://img.shields.io/badge/掘金-'+ (read / 1000).toFixed(1)+'k阅读-blue.svg')
 		fs.writeFile(fileName, body, (err) => {
 		  	if (err) throw err;
+		  	var updateRan = 'update' + Number(Math.random().toString().split('.')[1]).toFixed(3)
 		  	console.log('The file '+ fileName +' has been saved!')
 		  	spawn('git', ['add', '-A'])
-		  	spawn('git', ['commit', '-m', 'update'])
-		  	// spawn('git', ['add', '-A'])
+		  	spawn('git', ['commit', '-m'+updateRan])
+		  	// spawn('git', ['push'])
 		});
 	})
 }

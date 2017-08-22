@@ -2,7 +2,7 @@ const http = require('http')
 const cheerio = require('cheerio')
 const superagent = require('superagent')
 const fs = require('fs')
-const { spawnSync, exec } = require('child_process')
+const { spawnSync } = require('child_process')
 
 var juejinUrl = process.argv[2]
 superagent.get(juejinUrl)
@@ -38,7 +38,6 @@ function changeReadMe(like, read) {
 }
 
 function gitPush(updateRan) {
-	console.log(1)
 	spawnSync('git', ['add', '-A'])
   	spawnSync('git', ['commit', '-m'+updateRan])
   	spawnSync('git', ['push'])

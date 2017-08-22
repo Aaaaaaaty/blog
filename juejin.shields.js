@@ -3,7 +3,7 @@ var http = require('http')
 var cheerio = require('cheerio')
 var superagent = require('superagent')
 const fs = require('fs')
-const { exec } = require('child_process')
+const { spawn } = require('child_process')
 
 var juejinUrl = 'https://user-storage-api-ms.juejin.im/v1/getUserInfo'
 var query = {
@@ -38,12 +38,9 @@ function changeReadMe(like, read) {
 		fs.writeFile(fileName, body, (err) => {
 		  	if (err) throw err;
 		  	console.log('The file '+ fileName +' has been saved!')
-		  	exec('git add -A', (error) => {
-			  if (error) {
-			    console.error(`exec error: ${error}`);
-			    return;
-			  }
-			});
+		  	spawn('git', ['add', '-A'])
+		  	spawn('git', ['commit', '-m', 'update'])
+		  	// spawn('git', ['add', '-A'])
 		});
 	})
 }

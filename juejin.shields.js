@@ -1,24 +1,17 @@
-//https://img.shields.io/badge/掘金-600-red.svg
-var http = require('http')
-var cheerio = require('cheerio')
-var superagent = require('superagent')
+const http = require('http')
+const cheerio = require('cheerio')
+const superagent = require('superagent')
 const fs = require('fs')
 const { spawnSync, exec } = require('child_process')
 
-var juejinUrl = 'https://user-storage-api-ms.juejin.im/v1/getUserInfo'
-var query = {
-	src:'web',
-	uid:'57e371072e958a00541ddcaf',
-	token:'eyJhY2Nlc3NfdG9rZW4iOiJ6WDZVMnk3QUVuQXZaT0YzIiwicmVmcmVzaF90b2tlbiI6Ik9UeGpLalgyZk93bHB1V0MiLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfQ==',
-	device_id:'1499997315233',
-	current_uid:'57e371072e958a00541ddcaf'
-}
+var juejinUrl = process.argv[2]
 superagent.get(juejinUrl)
-	.query(query)
 	.end((err, obj) => {
 		var msg = obj.body.d
 		var totalCollectionsCount = msg.totalCollectionsCount //喜欢数
 		var totalViewsCount = msg.totalViewsCount //阅读数
+		console.log('实时喜欢数：' + totalCollectionsCount)
+		console.log('实时阅读数：' + totalViewsCount)
 		changeReadMe(totalCollectionsCount, totalViewsCount)
 	})
 
@@ -38,11 +31,16 @@ function changeReadMe(like, read) {
 		fs.writeFile(fileName, body, (err) => {
 		  	if (err) throw err;
 		  	var updateRan = 'update' + Number(Math.random().toString().split('.')[1])
-		  	console.log('The file '+ fileName +' has been saved!')
-		  	spawnSync('git', ['add', '-A'])
-		  	spawnSync('git', ['commit', '-m'+updateRan])
-		  	spawnSync('git', ['push'])
+		  	console.log('文件：'+ fileName +' 已经更新')
+		  	process.argv[3] && gitPush(updateRan)
 		});
 	})
+}
+
+function gitPush(updateRan) {
+	console.log(1)
+	spawnSync('git', ['add', '-A'])
+  	spawnSync('git', ['commit', '-m'+updateRan])
+  	spawnSync('git', ['push'])
 }
 

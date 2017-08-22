@@ -41,5 +41,6 @@ function gitPush(updateRan) {
 	spawnSync('git', ['add', '-A'])
   	spawnSync('git', ['commit', '-m'+updateRan])
   	spawnSync('git', ['push'])
+  	console.log('数据已同步到github')
 }
 

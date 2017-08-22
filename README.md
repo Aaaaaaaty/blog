@@ -7,6 +7,7 @@
   
 ## 不定期更新中————
 ### 2017.8
+ - [自动生成一组掘金的「小盾牌」](https://github.com/Aaaaaaaty/Blog/issues/15)[Node]
  - [从[] == ![]看隐式强制转换机制](https://github.com/Aaaaaaaty/Blog/issues/14)[JS]
  - [从HTML5与PromiseA+规范来看事件循环](https://github.com/Aaaaaaaty/Blog/issues/13)[JS]
  - [基于canvas实现波浪式绘制图片](https://github.com/Aaaaaaaty/Blog/issues/12)[Canvas]

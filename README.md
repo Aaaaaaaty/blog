@@ -28,6 +28,3 @@
  - [基于react的影院购票应用](https://github.com/Aaaaaaaty/Blog/issues/3)[React]
  - [基于Vue、Nodejs、Socket.io的聊天应用](https://github.com/Aaaaaaaty/Blog/issues/2)[Vue、Node]
 
- 
-
-

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+<script>
+	
+	var a,b,c,d,e,fs
+	setTimeout(function() {
+	  a = new Date().getTime()
+	    Promise.resolve().then(function() {
+	      b = new Date().getTime()
+	    })
+	}, 0);
+	setTimeout(function() {
+	  c = new Date().getTime()
+	    Promise.resolve().then(function() {
+	      d = new Date().getTime()
+	    })
+	}, 0);
+
+	setTimeout(() => {
+		console.log(a,b,c,d)
+	}, 200)
+</script>
+</html>

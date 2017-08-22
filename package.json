@@ -1,0 +1,22 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "juejin.shields.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aaaaaaaty/Blog.git"
+  },
+  "author": "An",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aaaaaaaty/Blog/issues"
+  },
+  "homepage": "https://github.com/Aaaaaaaty/Blog",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "superagent": "^3.6.0"
+  }
+}

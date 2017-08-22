@@ -41,7 +41,7 @@ function changeReadMe(like, read) {
 		  	console.log('The file '+ fileName +' has been saved!')
 		  	spawnSync('git', ['add', '-A'])
 		  	spawnSync('git', ['commit', '-m'+updateRan])
-		  	// spawnSync('git', ['push'])
+		  	spawnSync('git', ['push'])
 		});
 	})
 }

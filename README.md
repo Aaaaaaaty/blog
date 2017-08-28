@@ -6,7 +6,7 @@
   </p>
   
 ## 不定期更新中————
-![toutu](https://user-images.githubusercontent.com/15126694/29757214-ab6a386a-8bdc-11e7-91b8-4de459639fee.jpeg)
+![toutu.jpeg](http://upload-images.jianshu.io/upload_images/2094574-80ad43dc4fcfdfbf.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 ### JavaScript小众系列开始更新啦

@@ -1,11 +1,13 @@
 <h3 align="center">一只🐟的笔记</h3>
 
 <p align="center">
-   <a href=""><img id="like" src="https://img.shields.io/badge/掘金-1.7k喜欢-blue.svg" alt="Build Status"></a>
-   <a href=""><img id="read" src="https://img.shields.io/badge/掘金-38.4k阅读-blue.svg" alt="Build Status"></a>
+   <a href=""><img id="like" src="https://img.shields.io/badge/掘金-1.8k喜欢-blue.svg" alt="Build Status"></a>
+   <a href=""><img id="read" src="https://img.shields.io/badge/掘金-39.6k阅读-blue.svg" alt="Build Status"></a>
   </p>
   
 ## 不定期更新中————
+![toutu](https://user-images.githubusercontent.com/15126694/29757214-ab6a386a-8bdc-11e7-91b8-4de459639fee.jpeg)
+
 
 ### JavaScript小众系列开始更新啦
    ——何时完结不确定，写多少看我会多少！这是已经更新的地址：
@@ -37,4 +39,3 @@
 ### 2017.5
  - [基于react的影院购票应用](https://github.com/Aaaaaaaty/Blog/issues/3)[React]
  - [基于Vue、Nodejs、Socket.io的聊天应用](https://github.com/Aaaaaaaty/Blog/issues/2)[Vue、Node]
-

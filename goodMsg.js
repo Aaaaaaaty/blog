@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 const fs = require('fs')
-
 var run= function (obj) {
 	let str = ''
 	obj.forEach((item, index) => {
@@ -25,7 +24,6 @@ var run= function (obj) {
 				} else {
 					body = body.replace(/\n/, `\n - [${name}](${address})\n`)
 				}
-				
 				fs.writeFile(fileName, body, (err) => {
 				  	if (err) throw err;
 				  	console.log('文件：'+ fileName.slice(2) +' 已经更新')

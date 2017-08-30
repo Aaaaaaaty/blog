@@ -5,9 +5,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bin": {
-    "msg": "./goodMsg.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/Aaaaaaaty/Blog.git"

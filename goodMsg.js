@@ -5,7 +5,7 @@ var run= function (obj) {
 	let name = obj[0]
 	let address = obj[1]
 	if(name && address) {
-		const fileName = './goodMsg.md'
+		const fileName = './msg.md'
 	  	const readAble = fs.createReadStream(fileName)
 		var body = ''
 		readAble.on('data', (chunk) => {

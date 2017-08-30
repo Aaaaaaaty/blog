@@ -1,0 +1,235 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'link' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.2
+4 verbose linkPkg /Users/WangJie/Desktop/workspace/Blog
+5 silly gentlyRm /usr/local/lib/node_modules/blog is being purged
+6 verbose gentlyRm don't care about contents; nuking /usr/local/lib/node_modules/blog
+7 silly vacuum-fs purging /usr/local/lib/node_modules/blog
+8 silly vacuum-fs quitting because other entries in /usr/local/lib/node_modules
+9 verbose link build target /usr/local/lib/node_modules/blog
+10 silly loadCurrentTree Starting
+11 silly install loadCurrentTree
+12 silly install readLocalPackageData
+13 silly install normalizeTree
+14 silly loadCurrentTree Finishing
+15 silly loadIdealTree Starting
+16 silly install loadIdealTree
+17 silly cloneCurrentTree Starting
+18 silly install cloneCurrentTreeToIdealTree
+19 silly cloneCurrentTree Finishing
+20 silly loadShrinkwrap Starting
+21 silly install loadShrinkwrap
+22 silly loadShrinkwrap Finishing
+23 silly loadAllDepsIntoIdealTree Starting
+24 silly install loadAllDepsIntoIdealTree
+25 silly fetchNamedPackageData @types/node
+26 silly mapToRegistry name @types/node
+27 silly mapToRegistry scope (from package name) @types
+28 verbose mapToRegistry no registry URL found in name for scope @types
+29 silly mapToRegistry using default registry
+30 silly mapToRegistry registry https://registry.npmjs.org/
+31 silly mapToRegistry data Result {
+31 silly mapToRegistry   raw: '@types/node',
+31 silly mapToRegistry   scope: '@types',
+31 silly mapToRegistry   escapedName: '@types%2fnode',
+31 silly mapToRegistry   name: '@types/node',
+31 silly mapToRegistry   rawSpec: '',
+31 silly mapToRegistry   spec: 'latest',
+31 silly mapToRegistry   type: 'tag' }
+32 silly mapToRegistry uri https://registry.npmjs.org/@types%2fnode
+33 verbose request uri https://registry.npmjs.org/@types%2fnode
+34 verbose request no auth needed
+35 info attempt registry request try #1 at 16:45:04
+36 verbose request id 43bb06bc98b1af05
+37 verbose etag W/"59a5dd71-342a3"
+38 verbose lastModified Tue, 29 Aug 2017 21:32:33 GMT
+39 http request GET https://registry.npmjs.org/@types%2fnode
+40 http 304 https://registry.npmjs.org/@types%2fnode
+41 verbose headers { server: 'nginx/1.10.3',
+41 verbose headers   'last-modified': 'Tue, 29 Aug 2017 21:32:33 GMT',
+41 verbose headers   etag: '"59a5dd71-342a3"',
+41 verbose headers   'cache-control': 'max-age=0',
+41 verbose headers   'accept-ranges': 'bytes',
+41 verbose headers   date: 'Wed, 30 Aug 2017 08:45:05 GMT',
+41 verbose headers   via: '1.1 varnish',
+41 verbose headers   connection: 'keep-alive',
+41 verbose headers   'x-served-by': 'cache-nrt6128-NRT',
+41 verbose headers   'x-cache': 'MISS',
+41 verbose headers   'x-cache-hits': '0',
+41 verbose headers   'x-timer': 'S1504082705.825854,VS0,VE517' }
+42 silly get cb [ 304,
+42 silly get   { server: 'nginx/1.10.3',
+42 silly get     'last-modified': 'Tue, 29 Aug 2017 21:32:33 GMT',
+42 silly get     etag: '"59a5dd71-342a3"',
+42 silly get     'cache-control': 'max-age=0',
+42 silly get     'accept-ranges': 'bytes',
+42 silly get     date: 'Wed, 30 Aug 2017 08:45:05 GMT',
+42 silly get     via: '1.1 varnish',
+42 silly get     connection: 'keep-alive',
+42 silly get     'x-served-by': 'cache-nrt6128-NRT',
+42 silly get     'x-cache': 'MISS',
+42 silly get     'x-cache-hits': '0',
+42 silly get     'x-timer': 'S1504082705.825854,VS0,VE517' } ]
+43 verbose etag https://registry.npmjs.org/@types%2fnode from cache
+44 verbose get saving @types/node to /Users/WangJie/.npm/registry.npmjs.org/_40types_252fnode/.cache.json
+45 verbose correctMkdir /Users/WangJie/.npm correctMkdir not in flight; initializing
+46 silly resolveWithNewModule @types/node@6.0.88 checking installable status
+47 silly cache add args [ '@types/node@^6.0.46', null ]
+48 verbose cache add spec @types/node@^6.0.46
+49 silly cache add parsed spec Result {
+49 silly cache add   raw: '@types/node@^6.0.46',
+49 silly cache add   scope: '@types',
+49 silly cache add   escapedName: '@types%2fnode',
+49 silly cache add   name: '@types/node',
+49 silly cache add   rawSpec: '^6.0.46',
+49 silly cache add   spec: '>=6.0.46 <7.0.0',
+49 silly cache add   type: 'range' }
+50 silly addNamed @types/node@>=6.0.46 <7.0.0
+51 verbose addNamed ">=6.0.46 <7.0.0" is a valid semver range for @types/node
+52 silly addNameRange { name: '@types/node', range: '>=6.0.46 <7.0.0', hasData: false }
+53 silly mapToRegistry name @types/node
+54 silly mapToRegistry scope (from package name) @types
+55 verbose mapToRegistry no registry URL found in name for scope @types
+56 silly mapToRegistry using default registry
+57 silly mapToRegistry registry https://registry.npmjs.org/
+58 silly mapToRegistry data Result {
+58 silly mapToRegistry   raw: '@types/node',
+58 silly mapToRegistry   scope: '@types',
+58 silly mapToRegistry   escapedName: '@types%2fnode',
+58 silly mapToRegistry   name: '@types/node',
+58 silly mapToRegistry   rawSpec: '',
+58 silly mapToRegistry   spec: 'latest',
+58 silly mapToRegistry   type: 'tag' }
+59 silly mapToRegistry uri https://registry.npmjs.org/@types%2fnode
+60 verbose addNameRange registry:https://registry.npmjs.org/@types%2fnode not in flight; fetching
+61 verbose get https://registry.npmjs.org/@types%2fnode not expired, no request
+62 silly addNameRange number 2 { name: '@types/node', range: '>=6.0.46 <7.0.0', hasData: true }
+63 silly addNameRange versions [ '@types/node',
+63 silly addNameRange   [ '4.0.15-alpha',
+63 silly addNameRange     '4.0.16-alpha',
+63 silly addNameRange     '4.0.21-alpha',
+63 silly addNameRange     '4.0.22-alpha',
+63 silly addNameRange     '4.0.23-alpha',
+63 silly addNameRange     '4.0.24-alpha',
+63 silly addNameRange     '4.0.25-alpha',
+63 silly addNameRange     '4.0.26-alpha',
+63 silly addNameRange     '4.0.27-alpha',
+63 silly addNameRange     '4.0.28-alpha',
+63 silly addNameRange     '4.0.29',
+63 silly addNameRange     '4.0.30',
+63 silly addNameRange     '6.0.31',
+63 silly addNameRange     '6.0.32',
+63 silly addNameRange     '6.0.33',
+63 silly addNameRange     '6.0.34',
+63 silly addNameRange     '6.0.35',
+63 silly addNameRange     '6.0.36',
+63 silly addNameRange     '6.0.37',
+63 silly addNameRange     '6.0.38',
+63 silly addNameRange     '6.0.39',
+63 silly addNameRange     '6.0.40',
+63 silly addNameRange     '6.0.41',
+63 silly addNameRange     '6.0.42',
+63 silly addNameRange     '6.0.43',
+63 silly addNameRange     '6.0.44',
+63 silly addNameRange     '6.0.45',
+63 silly addNameRange     '6.0.46',
+63 silly addNameRange     '6.0.47',
+63 silly addNameRange     '6.0.48',
+63 silly addNameRange     '6.0.49',
+63 silly addNameRange     '6.0.50',
+63 silly addNameRange     '6.0.51',
+63 silly addNameRange     '0.0.0',
+63 silly addNameRange     '0.0.1',
+63 silly addNameRange     '0.0.2',
+63 silly addNameRange     '0.0.3',
+63 silly addNameRange     '6.0.52',
+63 silly addNameRange     '6.0.53',
+63 silly addNameRange     '6.0.54',
+63 silly addNameRange     '6.0.55',
+63 silly addNameRange     '6.0.56',
+63 silly addNameRange     '6.0.57',
+63 silly addNameRange     '6.0.58',
+63 silly addNameRange     '6.0.59',
+63 silly addNameRange     '4.2.0',
+63 silly addNameRange     '0.12.0',
+63 silly addNameRange     '7.0.0',
+63 silly addNameRange     '6.0.60',
+63 silly addNameRange     '7.0.1',
+63 silly addNameRange     '6.0.61',
+63 silly addNameRange     '7.0.2',
+63 silly addNameRange     '7.0.3',
+63 silly addNameRange     '7.0.4',
+63 silly addNameRange     '4.2.1',
+63 silly addNameRange     '6.0.62',
+63 silly addNameRange     '7.0.5',
+63 silly addNameRange     '6.0.63',
+63 silly addNameRange     '4.2.2',
+63 silly addNameRange     '0.12.1',
+63 silly addNameRange     '4.2.3',
+63 silly addNameRange     '6.0.64',
+63 silly addNameRange     '7.0.6',
+63 silly addNameRange     '6.0.65',
+63 silly addNameRange     '7.0.7',
+63 silly addNameRange     '7.0.8',
+63 silly addNameRange     '4.2.4',
+63 silly addNameRange     '0.12.2',
+63 silly addNameRange     '6.0.66',
+63 silly addNameRange     '7.0.9',
+63 silly addNameRange     '7.0.10',
+63 silly addNameRange     '7.0.11',
+63 silly addNameRange     '6.0.67',
+63 silly addNameRange     '6.0.68',
+63 silly addNameRange     '7.0.12',
+63 silly addNameRange     '4.2.5',
+63 silly addNameRange     '0.12.3',
+63 silly addNameRange     '6.0.69',
+63 silly addNameRange     '0.12.4',
+63 silly addNameRange     '4.2.6',
+63 silly addNameRange     '6.0.70',
+63 silly addNameRange     '7.0.13',
+63 silly addNameRange     '7.0.14',
+63 silly addNameRange     '6.0.71',
+63 silly addNameRange     '7.0.15',
+63 silly addNameRange     '4.2.7',
+63 silly addNameRange     '6.0.72',
+63 silly addNameRange     '7.0.16',
+63 silly addNameRange     '7.0.17',
+63 silly addNameRange     '7.0.18',
+63 silly addNameRange     '4.2.8',
+63 silly addNameRange     '6.0.73',
+63 silly addNameRange     '7.0.19',
+63 silly addNameRange     '7.0.20',
+63 silly addNameRange     '7.0.21',
+63 silly addNameRange     '7.0.22',
+63 silly addNameRange     '6.0.74',
+63 silly addNameRange     '7.0.23',
+63 silly addNameRange     '7.0.24',
+63 silly addNameRange     '6.0.75',
+63 silly addNameRange     ... 77 more items ] ]
+64 silly addNamed @types/node@6.0.88
+65 verbose addNamed "6.0.88" is a plain semver version for @types/node
+66 silly rollbackFailedOptional Starting
+67 silly rollbackFailedOptional Finishing
+68 silly runTopLevelLifecycles Finishing
+69 silly install printInstalled
+70 verbose stack Error: Invalid name: "@types/node"
+70 verbose stack     at ensureValidName (/usr/local/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/fixer.js:302:15)
+70 verbose stack     at Object.fixNameField (/usr/local/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/fixer.js:206:5)
+70 verbose stack     at /usr/local/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:29:38
+70 verbose stack     at Array.forEach (native)
+70 verbose stack     at normalize (/usr/local/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:28:15)
+70 verbose stack     at final (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:349:5)
+70 verbose stack     at then (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:124:5)
+70 verbose stack     at ReadFileContext.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/read-package-json/read-json.js:295:20)
+70 verbose stack     at ReadFileContext.callback (/usr/local/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:78:16)
+70 verbose stack     at FSReqWrap.readFileAfterOpen [as oncomplete] (fs.js:366:13)
+71 verbose cwd /Users/WangJie/Desktop/workspace/Blog
+72 error Darwin 16.3.0
+73 error argv "/usr/local/bin/node" "/usr/local/bin/npm" "link"
+74 error node v6.10.2
+75 error npm  v3.10.10
+76 error Invalid name: "@types/node"
+77 error If you need help, you may report this error at:
+77 error     <https://github.com/npm/npm/issues>
+78 verbose exit [ 1, true ]

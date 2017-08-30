@@ -16,7 +16,11 @@ var run= function (obj) {
 				console.log('已分享过本篇文章！')
 				return null
 			} else {
+<<<<<<< HEAD
 				body += ` - [${name}](${address})`
+=======
+				body += `[${name}](${address})`
+>>>>>>> 137b99dd72166cc1cedf102c2a2b800d2d40748e
 				body += '\n'
 				fs.writeFile(fileName, body, (err) => {
 				  	if (err) throw err;

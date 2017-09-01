@@ -4,7 +4,8 @@ const superagent = require('superagent')
 const fs = require('fs')
 const { spawnSync } = require('child_process')
 
-var juejinUrl = process.argv[2]
+var baseUrl = 'https://user-storage-api-ms.juejin.im/v1/getUserInfo?src=web&uid=57e371072e958a00541ddcaf&token=eyJhY2Nlc3NfdG9rZW4iOiJ6WDZVMnk3QUVuQXZaT0YzIiwicmVmcmVzaF90b2tlbiI6Ik9UeGpLalgyZk93bHB1V0MiLCJ0b2tlbl90eXBlIjoibWFjIiwiZXhwaXJlX2luIjoyNTkyMDAwfQ%3D%3D&device_id=1499997315233&current_uid=57e371072e958a00541ddcaf'
+var juejinUrl = baseUrl || process.argv[2]
 superagent.get(juejinUrl)
 	.end((err, obj) => {
 		var msg = obj.body.d

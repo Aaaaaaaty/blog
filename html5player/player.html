@@ -14,9 +14,9 @@
 	.playerPop *,body{padding:0;margin:0;}
 	.playerPop li{list-style: none;}
 	#videoSource {
-		background-color: #383838; 
+		background-color: #000000; 
 	}
-	.playerPop{width: 100%; height: 100%; position: absolute; z-index: 100; left: 0px; top:0;}
+	.playerPop{width: 800px; height: 500px; position: absolute; z-index: 100; left: 0px; top:0;}
 	.playerPop .inset{width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
 	.playerPop .playerTit{ line-height: 25px;  color:#dedede; padding-left: 9px; font-size: 0; line-height: 0 }
 	.playerPop .playerTit span{display: inline-block;height:25px;font:400 12px/24px "Microsoft Yahei"; vertical-align: top;}
@@ -28,71 +28,6 @@
 	.playerPop .close.dis{opacity:0.15; cursor: default; }
 	.playerPop .close.dis:hover{background-position: 0 -150px;}
 	.playerPop .playerbody{width: 100%; height: 100%;}
-	.playerPop .sidebar{position: absolute; top: 70px; right: 4px; z-index: 10;}
-	.playerPop .good,.playerPop .share{width: 42px; height: 42px; margin-bottom: 3px; position: relative;line-height: 42px; text-align: center; cursor: pointer;}
-	.playerPop .share > span{display: inline-block; background: url(images/playerIcons.png) 0 -220px no-repeat;vertical-align: middle; width: 100%; height: 100%;cursor: pointer; }
-	.playerPop .good span {
-	    display: inline-block;
-	    background: url(./images/zan.png);
-	    width: 19px;
-	    height: 19px;
-	    position: absolute;
-	    left: 50%;
-	    margin-left: -9.5px;
-	    top: 4px;
-	}
-	.playerPop .good p {
-		position: absolute;
-	    color: white;
-	    bottom: -12px;
-	    font-size: 14px;
-	    font-weight: 700;
-	    width: 100%;
-	}
-	.playerPop .good {
-		background-color: #17b188;
-		position: relative;
-	}
-	.good:hover{
-		background-color: #0ece98;
-	}
-	.playerPop .share > span{background-position: 0 -170px}
-	.playerPop .share > span:hover{background-position: -50px -170px}
-	.playerPop .share ul{top: 43px;right: 0; position: absolute; width: 100%;display: none;}
-	.playerPop .share li{margin-bottom: 1px; width: 100%; height: 42px; position: relative; background-color: rgba(0,0,0,0.6)}
-	.playerPop .share li >b{border-radius: 100px; display: inline-block;background: url(images/playerIcons.png) 0 0 no-repeat;vertical-align: middle; width: 23px; height: 23px; }
-	.playerPop .share .wx b{background-position: 0 0;}
-	.playerPop .share .wx:hover b{background-position: -50px 0;}
-	.playerPop .share .wb b{background-position: 0 -30px;}
-	.playerPop .share .wb:hover b{background-position: -50px -30px;}
-	.playerPop .share .qq b{background-position: 0 -60px;}
-	.playerPop .share .qq:hover b{background-position: -50px -60px;}
-	.playerPop .share .qz b{background-position: 0 -90px;}
-	.playerPop .share .qz:hover b{background-position: -50px -90px;}
-	.playerPop .share .top{height: 22px; line-height: 17px;}
-	.playerPop .share .top b{ background-position: 0 -120px; border-radius: 0; width: 15px;height: 8px; opacity: 0.65}
-	.playerPop .share .top:hover b{opacity: 1;}
-	.playerPop .share .wx .qr{position: absolute; right: 44px; top:0;background: #FFF; width: 126px; height: 126px;padding-top: 5px;box-sizing:border-box;display: none; }
-	.playerPop .share .wx .qr img{vertical-align: top; width: 116px; height: 116px;}
-	.playerPop .share .show{display: block !important;}
-	.playerPop .share .hide{display: none !important;}
-	.playerPop .share #fz span{
-        display: inline-block;
-	    vertical-align: middle;
-	    width: 24px;
-	    height: 29px;
-	    color: #fff;
-	    font-size: 12px;
-	    line-height: 14px;
-	    color: #D0D0D0;
-	}
-	/*.playerPop .good::before{content: ""; position: absolute; left: 0; top:0; right:0;bottom:0;background: rgba(0,255,180,0.6)}
-	.playerPop .good:hover::before{background: rgba(0,255,180,0.75)}
-	.playerPop .good span{opacity: 0.9; width: 24px; height: 24px;}
-	.playerPop .share{}
-	.playerPop .share::before{content: ""; position: absolute; left: 0; top:0; right:0;bottom:0;background: rgba(11,212,255,0.6)}
-	.playerPop .share:hover::before{background: rgba(11,212,255,0.75)}
-	.playerPop .share span{opacity: 0.9; width: 24px; height: 24px;}*/
 	.player-control {
 		height: 25px;
 		width: 100%;
@@ -101,7 +36,6 @@
 		bottom: 0;
 		background-color: #2A2A2A;
 		font-size: 12px;
-		color: #;
 	}
 	.play-btn {
 		width: 55px;
@@ -117,7 +51,7 @@
 	}
 	.play-process-all {
 	    height: 3px;
-	    background-color: #737373;
+	    background-color: #515151;
 	    position: relative;
 	    top: 11px;
 	    left: 0px;
@@ -127,19 +61,26 @@
 	    width: 9px;
 	    height: 3px;
 	    border-radius: 1.5px;
-	    background-color: #478CDF;
+	    background-color: #ff8921;
 	    top: 11px;
 	    left: 0px;
 	}
 	.play-process-btn {
 		display: block;
 	    position: absolute;
-	    width: 9px;
-	    height: 6px;
-	    border-radius: 1.8px;
-	    background-color: #ffffff;
-	    top: 9.4px;
+	    width: 15px;
+	    height: 9px;
+	    top: 8.4px;
 	    left: 0px;
+	}
+	.play-process-btn-hover {
+		display: block;
+	    position: absolute;
+	    width: 15px;
+	    height: 9px;
+	    top: 8.4px;
+	    left: 0px;
+	    display: none;
 	}
 	.play-msg {
 		position: absolute;
@@ -156,7 +97,7 @@
 	    text-align: center;
 	    height: 25px;
 	    line-height: 24px;
-	    color: #fff;
+	    color: #686868;
 	}
 	.play-sound {
 		display: block;
@@ -168,6 +109,7 @@
 		width: 20px;
 	    height: 25px;
 	    float: left;
+	    position: relative;
 	}
 	.play-sound-wrapper {
 	    height: 25px;
@@ -180,26 +122,29 @@
 	    background-color: #737373;
 	    margin-top: 0px;
 	    position: relative;
-	    top: 11px;
+	    top: 10px;
 	}
 	.play-sound-drag {
 		position: absolute;
 	    width: 9px;
 	    height: 3px;
 	    border-radius: 1.5px;
-	    background-color: #478CDF;
-	    top: 11px;
+	    background-color: #ff8921;
+	    top: 10px;
 	    left: 0px;
 	}
 	.play-sound-btn {
 		display: block;
 	    position: absolute;
-	    width: 9px;
-	    height: 6px;
-	    border-radius: 1.8px;
-	    background-color: #ffffff;
-	    top: 9.4px;
+	    top: 7.1px;
 	    left: 0px;
+	}
+	.play-sound-btn-hover {
+		display: block;
+	    position: absolute;
+	    top: 7.1px;
+	    left: 0px;
+	    display: none;
 	}
 	.play-screen {
 		position: absolute;
@@ -210,17 +155,20 @@
 	}
 	.play-start{
 	    display: inline-block;
-	    width: 9px;
-	    height: 11px;
-	    background: url(./images/icon.png) no-repeat 0px -22px;
 	    margin-left: 13px;
 	    margin-top: 7px;
+	    position: absolute;
+	}
+	.play-start-hover {
+		position: absolute;
+		margin-left: 13px;
+	    margin-top: 7px;
+	    display: none;
 	}
 	.play-pause {
 		display: inline-block;
 	    width: 9px;
 	    height: 11px;
-	    background: url(./images/icon.png) no-repeat 0px -10px;
 	    margin-left: 13px;
 	    margin-top: 7px;
 	}
@@ -230,58 +178,93 @@
 	}
 	.play-stop {
 		display: inline-block;
-	    width: 9px;
-	    height: 10px;
-	    background: url(./images/icon.png) no-repeat 0px 0px;
 	    margin-left: 6px;
-	    margin-top: 8px;
+	    margin-top: 7px;
+	    position: absolute;
+	}
+	.play-stop-hover {
+		margin-left: 6px;
+	    margin-top: 7px;
+	    position: absolute;
+	    display: none;
 	}
 	.play-sound-on {
 		display: inline-block;
-	    width: 9px;
-	    height: 10px;
-	    background: url(./images/icon.png) no-repeat 0px -34px;
 	    margin-top: 6px;
 		margin-left: 2px;
+		position: absolute;
+	}
+	.play-sound-on-hover {
+		display: inline-block;
+	    margin-top: 6px;
+		margin-left: 2px;
+		position: absolute;
+		display: none;
 	}
 	.play-sound-off {
 	    display: inline-block;
-	    width: 11px;
-	    height: 9px;
-	    background: url(./images/icon.png) no-repeat 0px -47px;
 	    margin-top: 7px;
     	margin-left: 2px;
+    	position: absolute;
+	}
+	.play-sound-off-hover {
+	    display: inline-block;
+	    margin-top: 7px;
+    	margin-left: 2px;
+    	position: absolute;
+    	display: none;
 	}
 	.play-screen-not-full {
 		display: inline-block;
-	    width: 11px;
-	    height: 11px;
-	    background: url(./images/icon.png) no-repeat 0px -57px;
-	    margin-top: 5px;
+	    margin-top: 6px;
 		margin-left: 10px;
+		position: absolute;
+	}
+	.play-screen-not-full-hover {
+		display: inline-block;
+	    margin-top: 6px;
+		margin-left: 10px;
+		position: absolute;
+		display: none;
 	}
 	.play-screen-full {
 		display: inline-block;
-	    width: 11px;
-	    height: 11px;
-	    background: url(./images/icon.png) no-repeat 0px -69px;
 	    margin-top: 5px;
 		margin-left: 10px;
+		position: absolute;
+	}
+	.play-screen-full-hover {
+		display: inline-block;
+	    margin-top: 5px;
+		margin-left: 10px;
+		position: absolute;
+		display: none;
+	}
+	.start-wrapper-btn {
+		position: absolute;
+		left: 1%;
+    	top: 83%;
+    	width: 70px;
+    	height: 50px;	
 	}
 	.play-sym {
 		width: 70px;
 		position: absolute;
 		z-index: 10000;
-		left: 50%;
-		top: 50%;
-		margin-left: -35px;
-		margin-top: -35px;
 		cursor: pointer;
+	}
+	.play-sym-hover {
+		width: 70px;
+		position: absolute;
+		z-index: 10000;
+		cursor: pointer;
+		display: none;
 	}
 	.btn-wrapper {
 		width: 50%;
 		height: 100%;
 		float: left;
+		position: relative;
 	}
 	.play-sym-wrapper {
 		position: absolute;
@@ -299,15 +282,16 @@
 	<div class="inset">
 		<div class="playerbody" id="video">
         	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="http://gslb.miaopai.com/stream/B~dRdhKMQeI6cuE5aqoGYoVaqbu0YNVn.mp4" ></video>
-        		<input id="sourceUrl" type="text">
 				<div class="player-control">
 					<div class="play-btn ">
 						<div class="play-btn-wrapper">
 							<div class="btn-wrapper btn-wrapper-start">
-								<span id="play-start" class="play-start"></span>
+								<img id="play-start" class="play-start" src="./images/play_btn.png">
+								<img id="play-start-hover" class="play-start-hover" src="./images/play_btn_hover.png">
 							</div>
 							<div class="btn-wrapper btn-wrapper-stop">
-								<span class="play-stop"></span>
+								<img class="play-stop" src="./images/stop.png">
+								<img class="play-stop-hover" src="./images/stop_hover.png">
 							</div>
 						</div>
 					</div>
@@ -315,76 +299,37 @@
 						<div class="play-process-all"></div>
 						<div class="play-process-drag"></div>
 						<div class="play-process-before"></div>
-						<span class="play-process-btn"></span>
+						<img class="play-process-btn" src="./images/process.png">
+						<img class="play-process-btn-hover" src="./images/process_hover.png" alt="">
 					</div>
 					<div class="play-msg ">
 						<span class="play-time">
-							<span class="play-current-time">00:00</span>/<span class="play-all-time"></span>
+							<span class="play-current-time">00:00</span> l <span class="play-all-time"></span>
 						</span>
 						<span class="play-sound">
 							<div class="play-sound-switch">
-								<span id="sound-switch" class="play-sound-on"></span>	
+								<img id="sound-switch" class="play-sound-on" src="./images/sound_on.png">
+								<img id="sound-switch-hover" class="play-sound-on-hover" src="./images/sound_on_hover.png">		
 							</div>
 							<div class="play-sound-wrapper">
 								<div class="play-sound-all"></div>
 								<div class="play-sound-drag"></div>
-								<span class="play-sound-btn"></span>
+								<img class="play-sound-btn" src="./images/sound.png">
+								<img class="play-sound-btn-hover" src="./images/sound_hover.png">
 							</div>
 						</span>
 						<span class="play-screen">
-							<span id="screen-full-swtich" class="play-screen-not-full"></span>
+							<img id="screen-full-swtich" class="play-screen-not-full" src="./images/screen_on.png">
+							<img id="screen-full-swtich-hover" class="play-screen-not-full-hover" src="./images/screen_on_hover.png">
 						</span>
 					</div>
 				</div>
     	</div>
-		<div class="sidebar">
-			<div class="good"><span></span><p>4396</p></div>
-			<div class="share"><span id="videoshare"></span>
-				<ul>
-
-					<li class="wx"><b></b><div class="qr"><img src="images/qr.png" alt=""></div></li>
-					<li class="wb"><b></b></li>
-					<li class="qq"><b></b></li>
-					<li class="qz"><b></b></li>
-					<li id="fz" class="fz"><span>复制链接</span></li>
-					<li class="top"><b></b></li>
-				</ul>
-			</div>
-		</div>
-
 	</div>
+	<div class="start-wrapper-btn"></div>
 </div>
 
 <script src="./jquery.min.js"></script>
-
-<script>
-	var videoshare = document.querySelector(".sidebar .share");
-	var showShareList = document.getElementById("videoshare");
-	var shareList = videoshare.querySelector("ul");
-	var hideShareList = videoshare.querySelector(".top");
-	var wxshare = videoshare.querySelector(".wx");
-	var wxqr = videoshare.querySelector(".qr");
-
-	showShareList.addEventListener("click",function(){
-		//shareList.classList.remove("hide")
-		shareList.classList.add("show")
-	},false)
-	hideShareList.addEventListener("click",function(){
-		//shareList.classList.add("hide")
-		shareList.classList.remove("show")
-	},false)
-	wxshare.addEventListener("click",function(){
-		var classlist = wxqr.classList;
-		if(!classlist.contains("show")){
-			classlist.add("show");
-		}else{
-			classlist.remove("show");
-		}
-	},false)
-</script>
 <script src="./player.js"></script>
-<script>
-	
-</script>
 </body>
 </html>

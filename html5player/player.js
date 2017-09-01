@@ -13,7 +13,6 @@ function videoPlayer() {
 			soundValue = 0,
 			currentProcess,
 			dragProcessEl = $('.play-process-drag'),
-			dragTarget = $('.play-process-btn'),
 			soundTarget = $('.play-sound-btn'), //音量高低条按钮
 			soundProcess = $('.play-sound-drag'), //音量高低条
 			dragTarget = $('.play-process-btn'), //播放进度条按钮
@@ -21,7 +20,7 @@ function videoPlayer() {
 			playStartBtn = $('.btn-wrapper-start'), //播放按钮
 			soundSwitchBtn = $('#sound-switch'), //音频开关
 			playStopBtn = $('.btn-wrapper-stop'), //停止按钮
-			fullScreenBtn = $('#screen-full-swtich'),//全屏开关
+			fullScreenBtn = $('.play-screen-not-full'),//全屏开关
 			processWidth = $('.play-process').width()
 		$(window).resize(function() {
 			processWidth = $('.play-process').width()
@@ -32,11 +31,12 @@ function videoPlayer() {
 			dragTarget.css({
 				left: currentProcess
 			})
+			$('.play-process-btn-hover').css({left:currentProcess})
 			if(isFullScreen) {
 				if(!document.webkitIsFullScreen) {
 					console.log('document.webkitIsFullScreen')
 					isFullScreen = false 
-					fullScreenBtn.removeClass('play-screen-full').addClass('play-screen-not-full')
+					fullScreenBtn.attr('src', './images/screen_on.png')
 				}
 			}
 		})
@@ -98,10 +98,14 @@ function videoPlayer() {
 					dragTarget.css({
 						left: dragDis - 5
 					})
+					$('.play-process-btn-hover').css({
+						left: dragDis - 5
+					})
 					dragProcess.css({
 						width: dragDis
 					})
-					playStartBtn.find('span').removeClass('play-start').addClass('play-pause')
+					$('.play-start').attr('src', './images/pause.png')
+					$('.play-start-hover').attr('src', './images/pause_hover.png')
 					videoSource.pause()
 					$('.play-sym').hide()
 					clearTimeout(timer)
@@ -109,7 +113,7 @@ function videoPlayer() {
 				if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
 					isSound = true
 					isSoundOn = true
-					var clientWidth = $('body').width()
+					var clientWidth = $('.playerPop').width()
 					soundDis = 110 - (clientWidth - startX) - 20 // 110为进度条右侧总长，20为播放按钮占用长度
 					soundProcess.css({
 						width: soundDis
@@ -117,11 +121,14 @@ function videoPlayer() {
 					soundTarget.css({
 						left: soundDis
 					})
-					soundSwitchBtn.removeClass('play-sound-off').addClass('play-sound-on')
+					$('.play-sound-btn-hover').css({
+						left: soundDis
+					})
+					soundSwitchBtn.attr('src', './images/sound_on.png')
 					videoSource.volume = soundDis / soundMaxLength
 					if(videoSource.volume < 0.05) {
 						videoSource.volume = 0
-						soundSwitchBtn.removeClass('play-sound-on').addClass('play-sound-off')
+						soundSwitchBtn.attr('src', './images/sound_off.png')
 					}
 					soundValue = videoSource.volume
 				}
@@ -137,6 +144,9 @@ function videoPlayer() {
 							left = 0
 						}
 						dragTarget.css({
+							left: left - 5
+						})
+						$('.play-process-btn-hover').css({
 							left: left - 5
 						})
 						dragProcess.css({
@@ -155,13 +165,16 @@ function videoPlayer() {
 						soundTarget.css({
 							left: left - 5
 						})
+						$('.play-sound-btn-hover').css({
+							left: left - 5
+						})
 						soundProcess.css({
 							width: left - 5
 						})
 						videoSource.volume = left / soundMaxLength
 						if(videoSource.volume < 0.05) {
 							videoSource.volume = 0
-							soundSwitchBtn.removeClass('play-sound-on').addClass('play-sound-off')
+							soundSwitchBtn.attr('src', './images/sound_off.png')
 						}
 						soundValue = videoSource.volume
 					}
@@ -190,11 +203,15 @@ function videoPlayer() {
 				dragTarget.css({
 					left: currentProcess
 				})
+				$('.play-process-btn-hover').css({
+					left: currentProcess
+				})
 				if(currentTime < duration) {
 					timer = setTimeout(drawProcess, 10)
 				} else {
 					$('.play-sym').show()
-	                playStartBtn.find('span').removeClass('play-pause').addClass('play-start')
+	                $('.play-start').attr('src', './images/play_btn.png')
+					$('.play-start-hover').attr('src', './images/play_btn_hover.png')
 	                isRePlay = true
 	                isPlay = false
 	                clearTimeout(timer)
@@ -209,11 +226,15 @@ function videoPlayer() {
 			soundTarget.css({
 				left: soundDis
 			})
+			$('.play-sound-btn-hover').css({
+				left: soundDis
+			})
 		}
 		var fullScreen = function() {
 			if(isFullScreen) {
 				isFullScreen = false
-				fullScreenBtn.removeClass('play-screen-full').addClass('play-screen-not-full')
+				fullScreenBtn.attr('src', './images/screen_on.png')
+				$('.play-screen-not-full-hover').attr('src', './images/screen_on_hover.png')
 				if (document.exitFullscreen) {  
 				    document.exitFullscreen();  
 				}  
@@ -228,7 +249,8 @@ function videoPlayer() {
 				}
 			} else {
 				isFullScreen = true
-				fullScreenBtn.removeClass('play-screen-not-full').addClass('play-screen-full')
+				fullScreenBtn.attr('src', './images/screen_off.png')
+				$('.play-screen-not-full-hover').attr('src', './images/screen_off_hover.png')
 				var docElm = document.documentElement;
 				//W3C  
 				if (docElm.requestFullscreen) {  
@@ -248,30 +270,52 @@ function videoPlayer() {
 				}
 			}
 		}
-			playStartBtn.click(function() {
+		$('.playerPop').hover(function() {
+			$('.play-sym-hover').fadeIn()
+		}, function() {
+			$('.play-sym-hover').fadeOut()
+		})
+		$('.play-process ').hover(function(){
+			$('.play-process-btn-hover').fadeIn()
+		}, function() {
+			$('.play-process-btn-hover').fadeOut()
+		})
+		$('.play-sound-wrapper').hover(function() {
+			$('.play-sound-btn-hover').fadeIn()
+		}, function() {
+			$('.play-sound-btn-hover').fadeOut()
+		})
+		playStartBtn.click(function() {
 			if(isPlay) {
 				videoSource.pause()
 				$('.play-sym').show()
-				$(this).find('span').removeClass('play-pause').addClass('play-start')
+				$('#play-start-hover').attr('src', './images/play_btn_hover.png')
+				$('#play-start').attr('src', './images/play_btn.png')
 				isPlay = false
 			} else {
 				videoSource.play()
 				$('.play-sym').hide()
-				$(this).find('span').removeClass('play-start').addClass('play-pause')
+				$('#play-start-hover').attr('src', './images/pause_hover.png')
+				$('#play-start').attr('src', './images/pause.png')
 				isPlay = true
 				drawProcess()
 			}
-			
 		})
-		soundSwitchBtn.click(function() {
+		playStartBtn.hover(function() {
+			$('#play-start-hover').fadeIn()
+		}, function() {
+			$('#play-start-hover').fadeOut()
+		})
+		$('.play-sound-switch').click(function() {
 			if(isSoundOn) {
-				$(this).removeClass('play-sound-on').addClass('play-sound-off')
+				soundSwitchBtn.attr('src', './images/sound_off.png')
 				isSoundOn = false
 				videoSource.volume = 0
 				$('.play-sound-btn').css({left: 0})
+				$('.play-sound-btn-hover').css({left: 0})
 				$('.play-sound-drag').width(0)
 			} else {
-				$(this).removeClass('play-sound-off').addClass('play-sound-on')
+				soundSwitchBtn.attr('src', './images/sound_on.png')
 				videoSource.volume = soundValue
 				soundChangeProcess(soundValue)
 				isSoundOn = true
@@ -282,13 +326,29 @@ function videoPlayer() {
 			videoSource.pause()
 			$('.play-sym').show()
 			dragTarget.css({left: 0})
+			$('.play-process-btn-hover').css({left:0})
 			dragProcess.width(0)
 			isPlay = false
-			playStartBtn.find('span').removeClass('play-pause').addClass('play-start')
+			$('.play-start').attr('src', './images/play_btn.png')
+			$('.play-start-hover').attr('src', './images/play_btn_hover.png')
 		})
-
-		fullScreenBtn.click(function() {
+		playStopBtn.hover(function() {
+			$('.play-stop-hover').fadeIn()
+		}, function() {
+			$('.play-stop-hover').fadeOut()
+		})
+		$('.play-screen').click(function() {
 			fullScreen()
+		}).hover(function() {
+			if(isFullScreen) {
+				console.log(1)
+				$('.play-screen-not-full-hover').attr('src', './images/screen_off_hover.png').fadeIn()
+			} else {
+				console.log(2)
+				$('.play-screen-not-full-hover').attr('src', './images/screen_on_hover.png').fadeIn()
+			}
+		}, function() {
+			$('.play-screen-not-full-hover').fadeOut()
 		})
 		$(window).keypress(function(event) {
 			event.preventDefault()
@@ -299,15 +359,16 @@ function videoPlayer() {
 			}
 		})
 		$('.play-sym-wrapper').remove()
-		$('body').append('<img class="play-sym" src="./images/play.png">')
-		$('#videoSource, .play-sym').click(function() {
+		$('.start-wrapper-btn').append('<img class="play-sym" src="./images/start.png"><img class="play-sym-hover" src="./images/start_hover.png">')
+		$('#videoSource, .start-wrapper-btn').click(function() {
 			clearTimeout(playTimer)
 			playTimer = setTimeout(function() {
 				if(isPlay) {
 					isPlay = false
 					videoSource.pause()
 					$('.play-sym').show()
-					playStartBtn.find('span').removeClass('play-pause').addClass('play-start')
+					$('.play-start').attr('src', './images/play_btn.png')
+					$('.play-start-hover').attr('src', './images/play_btn_hover.png')
 					clearTimeout(timer)
 				} else {
 					if(isRePlay) {
@@ -317,12 +378,14 @@ function videoPlayer() {
 		                dragTarget.css({
 		                    left: 0
 		                })
+		                $('.play-process-btn-hover').css({left:0})
 		            }
 					isPlay = true
 					videoSource.play()
 					$('.play-sym').hide()
 					drawProcess()
-					playStartBtn.find('span').removeClass('play-start').addClass('play-pause')
+					$('.play-start').attr('src', './images/pause.png')
+					$('.play-start-hover').attr('src', './images/pause_hover.png')
 				}
 			}, 300)
 			

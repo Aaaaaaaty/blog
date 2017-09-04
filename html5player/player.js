@@ -4,12 +4,13 @@ function videoPlayer() {
 			playTimer,
 			duration = videoSource.duration || 0,
 			currentTime, 
-			isPlay = false, //是否开始播放
+			isPlay = true, //是否开始播放
 			isDrag = false, //是否拖拽进度条
 			isSound = false, //是否拖拽音量区域
 			isSoundOn = true, //是否开启声音
 			isFullScreen = false,
 			isRePlay = false,
+			isClick = 0, //仅限第一次点击
 			soundValue = 0,
 			currentProcess,
 			dragProcessEl = $('.play-process-drag'),
@@ -22,6 +23,7 @@ function videoPlayer() {
 			playStopBtn = $('.btn-wrapper-stop'), //停止按钮
 			fullScreenBtn = $('.play-screen-not-full'),//全屏开关
 			processWidth = $('.play-process').width()
+		videoSource.play()
 		$(window).resize(function() {
 			processWidth = $('.play-process').width()
 			currentProcess = currentTime / duration * (processWidth - 5)//5为拖拽条小图标的宽度的一半
@@ -247,6 +249,13 @@ function videoPlayer() {
 				else if (document.msExitFullscreen) {
 				      document.msExitFullscreen();
 				}
+				$('.playerPop').css({
+					width: 800,
+					height: 500
+				})
+				$('.start-wrapper-btn').css({
+					bottom: '6%'
+				})
 			} else {
 				isFullScreen = true
 				fullScreenBtn.attr('src', './images/screen_off.png')
@@ -268,12 +277,45 @@ function videoPlayer() {
 				else if (elem.msRequestFullscreen) {
 				  elem.msRequestFullscreen();
 				}
+				$('.playerPop').css({
+					width: '100%',
+					height: '100%'
+				})
+				$('.start-wrapper-btn').css({
+					bottom: '3%'
+				})
 			}
 		}
 		$('.playerPop').hover(function() {
-			$('.play-sym-hover').fadeIn()
+			$('.player-control').css({
+				bottom: 0
+			})
+			if(isClick) {
+				console.log(2)
+				$('.play-sym-hover').fadeIn()
+				
+				$('.play-sym').css({
+					top: 0
+				})
+				$('.play-sym-hover').css({
+					top: 0
+				})
+			}
+			
 		}, function() {
-			$('.play-sym-hover').fadeOut()
+			$('.player-control').css({
+				bottom: -25
+			})
+			if(isClick) {
+				console.log(3)
+				$('.play-sym-hover').fadeOut()
+				$('.play-sym').css({
+					top: 27
+				})
+				$('.play-sym-hover').css({
+					top: 27
+				})
+			}
 		})
 		$('.play-process ').hover(function(){
 			$('.play-process-btn-hover').fadeIn()
@@ -366,9 +408,31 @@ function videoPlayer() {
 				if(isPlay) {
 					isPlay = false
 					videoSource.pause()
-					$('.play-sym').show()
 					$('.play-start').attr('src', './images/play_btn.png')
 					$('.play-start-hover').attr('src', './images/play_btn_hover.png')
+					isClick ++
+					$('.play-sym').fadeIn().css({
+						'top': 0,
+						'transition': 'all 0s',
+						'-moz-transition': 'all 0s',	/* Firefox 4 */
+						'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+						'-o-transition': 'all 0s',
+					})
+					$('.play-sym-hover').fadeIn().css({
+						'top': 0,
+						'transition': 'all 0s',
+						'-moz-transition': 'all 0s',	/* Firefox 4 */
+						'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+						'-o-transition': 'all 0s',
+					})
+					setTimeout(function() {
+						$('.play-sym, .play-sym-hover').css({
+							'transition': 'all 0.5s',
+							'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+							'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+							'-o-transition': 'all 0.5s',
+						})
+					}, 500)
 					clearTimeout(timer)
 				} else {
 					if(isRePlay) {
@@ -386,15 +450,9 @@ function videoPlayer() {
 					drawProcess()
 					$('.play-start').attr('src', './images/pause.png')
 					$('.play-start-hover').attr('src', './images/pause_hover.png')
+					$('.start-wrapper-btn').fadeOut()
 				}
 			}, 300)
-			
-		})
-		$('#videoSource').dblclick(function() {
-			clearTimeout(playTimer)
-			if(isFullScreen) {
-				fullScreen()
-			}
 		})
 		$('#fz').click(function(e) {
 			$('#sourceUrl').val($('#videoSource').attr('src')).select()
@@ -408,10 +466,12 @@ function ifState() {
 	var state = videoSource.readyState
 	if(state === 4) {
 		videoPlayer()
+		$(videoSource).show()
 	} else {
 		$('.play-sym-wrapper').remove()
-		$('body').append('<div class="play-sym-wrapper"><img class="play-sym" src="./images/loading.gif"></div>')
-		setTimeout(ifState, 10)
+		$('.playerPop').append('<div class="play-sym-wrapper"><img class="play-sym-wanmei" src="./images/loading.gif"></div>')
+		$(videoSource).hide()
+		setTimeout(ifState, 1000)
 	}
 }
 setTimeout(ifState, 10)

@@ -15,8 +15,9 @@
 	.playerPop li{list-style: none;}
 	#videoSource {
 		background-color: #000000; 
+		cursor: pointer;
 	}
-	.playerPop{width: 800px; height: 500px; position: absolute; z-index: 100; left: 0px; top:0;}
+	.playerPop{width: 800px; height: 500px; position: absolute; z-index: 100; left: 0px; top:0;background-color: black;overflow: hidden;}
 	.playerPop .inset{width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
 	.playerPop .playerTit{ line-height: 25px;  color:#dedede; padding-left: 9px; font-size: 0; line-height: 0 }
 	.playerPop .playerTit span{display: inline-block;height:25px;font:400 12px/24px "Microsoft Yahei"; vertical-align: top;}
@@ -33,9 +34,13 @@
 		width: 100%;
 		position: absolute;
 		z-index: 101;
-		bottom: 0;
+		bottom: -25px;
 		background-color: #2A2A2A;
 		font-size: 12px;
+		transition: all 0.5s;
+		-moz-transition: all 0.5s;	/* Firefox 4 */
+		-webkit-transition: all 0.5s;	/* Safari 和 Chrome */
+		-o-transition: all 0.5s;
 	}
 	.play-btn {
 		width: 55px;
@@ -243,22 +248,42 @@
 	.start-wrapper-btn {
 		position: absolute;
 		left: 1%;
-    	top: 83%;
+    	bottom: 6%;
     	width: 70px;
     	height: 50px;	
 	}
 	.play-sym {
-		width: 70px;
+		width: 60px;
 		position: absolute;
 		z-index: 10000;
 		cursor: pointer;
+		top: 27px;
+		display: none;
+		transition: all 0.5s;
+		-moz-transition: all 0.5s;	/* Firefox 4 */
+		-webkit-transition: all 0.5s;	/* Safari 和 Chrome */
+		-o-transition: all 0.5s;
 	}
 	.play-sym-hover {
-		width: 70px;
+		width: 60px;
 		position: absolute;
+		top: 27px;
 		z-index: 10000;
 		cursor: pointer;
 		display: none;
+		transition: all 0.5s;
+		-moz-transition: all 0.5s;	/* Firefox 4 */
+		-webkit-transition: all 0.5s;	/* Safari 和 Chrome */
+		-o-transition: all 0.5s;
+	}
+	.play-sym-wanmei {
+		width: 190px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -50px;
+		margin-left: -95px;
+
 	}
 	.btn-wrapper {
 		width: 50%;
@@ -266,13 +291,13 @@
 		float: left;
 		position: relative;
 	}
-	.play-sym-wrapper {
+	/*.play-sym-wrapper {
 		position: absolute;
 		z-index: 1000;
 		width: 100%;
 		height: 100%;
 		background-color: #383838;
-	}
+	}*/
 </style>
 
 </head>
@@ -281,7 +306,7 @@
 <div class="playerPop">
 	<div class="inset">
 		<div class="playerbody" id="video">
-        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="http://gslb.miaopai.com/stream/B~dRdhKMQeI6cuE5aqoGYoVaqbu0YNVn.mp4" ></video>
+        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="https://wsqncdn.miaopai.com/stream/O0o5sD-t6q22SzZLEuFhmJrFhBe4Khxy.mp4?ssig=47ef3b5c51a43e52c0e03a29ebcc25f8&time_stamp=1504508450821" ></video>
 				<div class="player-control">
 					<div class="play-btn ">
 						<div class="play-btn-wrapper">

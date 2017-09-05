@@ -17,7 +17,10 @@
 		background-color: #000000; 
 		cursor: pointer;
 	}
-	.playerPop{width: 800px; height: 500px; position: absolute; z-index: 100; left: 0px; top:0;background-color: black;overflow: hidden;}
+	.video-wrapper {
+		position: absolute;
+	}
+	.playerPop{width: 800px; height: 500px; position: absolute; z-index: 100; left: 0px; top:0;background-color: black;overflow: hidden;cursor: pointer;}
 	.playerPop .inset{width: 100%; height: 100%;position: relative; top:0px ; left: 0px; box-sizing:border-box;}
 	.playerPop .playerTit{ line-height: 25px;  color:#dedede; padding-left: 9px; font-size: 0; line-height: 0 }
 	.playerPop .playerTit span{display: inline-block;height:25px;font:400 12px/24px "Microsoft Yahei"; vertical-align: top;}
@@ -73,19 +76,20 @@
 	.play-process-btn {
 		display: block;
 	    position: absolute;
-	    width: 15px;
-	    height: 9px;
-	    top: 8.4px;
+	    width: 14px;
+	    height: 8px;
+	    top: 7px;
 	    left: 0px;
+	    background-color: #dbdbdb;
+	    border-radius: 3px;
+	    border: 0.5px solid black;
+	    transition: all 0.5s;
+		-moz-transition: all 0.5s;	/* Firefox 4 */
+		-webkit-transition: all 0.5s;	/* Safari 和 Chrome */
+		-o-transition: all 0.5s;
 	}
 	.play-process-btn-hover {
-		display: block;
-	    position: absolute;
-	    width: 15px;
-	    height: 9px;
-	    top: 8.4px;
-	    left: 0px;
-	    display: none;
+		background-color: #ff8921;
 	}
 	.play-msg {
 		position: absolute;
@@ -143,6 +147,11 @@
 	    position: absolute;
 	    top: 7.1px;
 	    left: 0px;
+	    width: 10px;
+	    height: 7px;
+	    border-radius: 3px;
+	    background-color: #dbdbdb;
+	    border: 0.5px solid black;
 	}
 	.play-sound-btn-hover {
 		display: block;
@@ -291,68 +300,109 @@
 		float: left;
 		position: relative;
 	}
-	/*.play-sym-wrapper {
+	.close-video {
 		position: absolute;
-		z-index: 1000;
-		width: 100%;
-		height: 100%;
-		background-color: #383838;
-	}*/
+		left: 800px;
+		top: 0px;
+		width: 58px;
+		height: 58px;
+	}
+	.close-img {
+		position: absolute;
+	}
+	.close-video-normal-hover {
+		display: none;
+	}
+	.animate {
+		animation:carAnimation 1s linear infinite;
+		-webkit-animation:carAnimation 1s linear infinite; /*Safari and Chrome*/
+		-moz-animation: carAnimation 1s linear infinite;	/* Firefox 4 */
+		-o-animation: carAnimation 1s linear infinite;
+	}
+	@keyframes carAnimation 
+	{ 
+		0% {transform: rotate(0deg);}      
+		100% {transform: rotate(360deg); }    
+	} 
+
+
+	@-webkit-keyframes carAnimation 
+	{ 
+		0% {transform: rotate(0deg);} 
+		100% {transform: rotate(360deg); } 
+	} 
+
+
+	@-moz-keyframes carAnimation 
+	{ 
+		0% {transform: rotate(0deg);} 
+		100% {transform: rotate(360deg); }  
+	} 
+	@-o-keyframes carAnimation 
+	{ 
+		0% {transform: rotate(0deg);} 
+		100% {transform: rotate(360deg); } 
+	} 
 </style>
 
 </head>
 
 <body>
-<div class="playerPop">
-	<div class="inset">
-		<div class="playerbody" id="video">
-        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="https://wsqncdn.miaopai.com/stream/O0o5sD-t6q22SzZLEuFhmJrFhBe4Khxy.mp4?ssig=47ef3b5c51a43e52c0e03a29ebcc25f8&time_stamp=1504508450821" ></video>
-				<div class="player-control">
-					<div class="play-btn ">
-						<div class="play-btn-wrapper">
-							<div class="btn-wrapper btn-wrapper-start">
-								<img id="play-start" class="play-start" src="./images/play_btn.png">
-								<img id="play-start-hover" class="play-start-hover" src="./images/play_btn_hover.png">
-							</div>
-							<div class="btn-wrapper btn-wrapper-stop">
-								<img class="play-stop" src="./images/stop.png">
-								<img class="play-stop-hover" src="./images/stop_hover.png">
+<div class="video-wrapper">
+	<div class="playerPop">
+		<div class="inset">
+			<div class="playerbody" id="video">
+	        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="https://wsqncdn.miaopai.com/stream/O0o5sD-t6q22SzZLEuFhmJrFhBe4Khxy.mp4?ssig=47ef3b5c51a43e52c0e03a29ebcc25f8&time_stamp=1504508450821" ></video>
+					<div class="player-control">
+						<div class="play-btn ">
+							<div class="play-btn-wrapper">
+								<div class="btn-wrapper btn-wrapper-start">
+									<img id="play-start" class="play-start" src="./images/pause.png">
+									<img id="play-start-hover" class="play-start-hover" src="./images/pause_hover.png">
+								</div>
+								<div class="btn-wrapper btn-wrapper-stop">
+									<img class="play-stop" src="./images/stop.png">
+									<img class="play-stop-hover" src="./images/stop_hover.png">
+								</div>
 							</div>
 						</div>
+						<div class="play-process">
+							<div class="play-process-all"></div>
+							<div class="play-process-drag"></div>
+							<div class="play-process-before"></div>
+							<div class="play-process-btn" src="./images/process.png"></div>
+						</div>
+						<div class="play-msg ">
+							<span class="play-time">
+								<span class="play-current-time">00:00</span> l <span class="play-all-time"></span>
+							</span>
+							<span class="play-sound">
+								<div class="play-sound-switch">
+									<img id="sound-switch" class="play-sound-on" src="./images/sound_on.png">
+									<img id="sound-switch-hover" class="play-sound-on-hover" src="./images/sound_on_hover.png">		
+								</div>
+								<div class="play-sound-wrapper">
+									<div class="play-sound-all"></div>
+									<div class="play-sound-drag"></div>
+									<div class="play-sound-btn"></div>
+								</div>
+							</span>
+							<span class="play-screen">
+								<img id="screen-full-swtich" class="play-screen-not-full" src="./images/screen_on.png">
+								<img id="screen-full-swtich-hover" class="play-screen-not-full-hover" src="./images/screen_on_hover.png">
+							</span>
+						</div>
 					</div>
-					<div class="play-process">
-						<div class="play-process-all"></div>
-						<div class="play-process-drag"></div>
-						<div class="play-process-before"></div>
-						<img class="play-process-btn" src="./images/process.png">
-						<img class="play-process-btn-hover" src="./images/process_hover.png" alt="">
-					</div>
-					<div class="play-msg ">
-						<span class="play-time">
-							<span class="play-current-time">00:00</span> l <span class="play-all-time"></span>
-						</span>
-						<span class="play-sound">
-							<div class="play-sound-switch">
-								<img id="sound-switch" class="play-sound-on" src="./images/sound_on.png">
-								<img id="sound-switch-hover" class="play-sound-on-hover" src="./images/sound_on_hover.png">		
-							</div>
-							<div class="play-sound-wrapper">
-								<div class="play-sound-all"></div>
-								<div class="play-sound-drag"></div>
-								<img class="play-sound-btn" src="./images/sound.png">
-								<img class="play-sound-btn-hover" src="./images/sound_hover.png">
-							</div>
-						</span>
-						<span class="play-screen">
-							<img id="screen-full-swtich" class="play-screen-not-full" src="./images/screen_on.png">
-							<img id="screen-full-swtich-hover" class="play-screen-not-full-hover" src="./images/screen_on_hover.png">
-						</span>
-					</div>
-				</div>
-    	</div>
+	    	</div>
+		</div>
+		<div class="start-wrapper-btn"></div>
 	</div>
-	<div class="start-wrapper-btn"></div>
+	<div class="close-video">
+		<img class="close-img close-video-normal" src="./images/close.jpg" alt="">
+		<img class="close-img close-video-normal-hover" src="./images/close_hover.jpg" alt="">
+	</div>
 </div>
+
 
 <script src="./jquery.min.js"></script>
 <script src="./player.js"></script>

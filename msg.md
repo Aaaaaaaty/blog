@@ -1,4 +1,7 @@
 ## 文章分享
+ - [如何选择开源许可证？](http://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html)
+ - [强力推荐！那些你不能错过的GitHub插件和工具](https://juejin.im/post/59ade28051882538fd72fa2c)
+ - [Node.js开发加密货币](http://bitcoin-on-nodejs.ebookchain.org/)
  - [基于Canvas数字图像处理](http://zcoding.github.io/pixel/)
  - [ReactNative实现热部署、差异化增量热更新](http://blog.csdn.net/u013718120/article/details/55096393)
  - [使用Deeplearn.js发挥机器学习的威力](https://juejin.im/entry/59a39d1e518825244d2050cb?utm_source=gold_browser_extension)

@@ -33,7 +33,7 @@ function videoPlayer() {
 			dragTarget.css({
 				left: currentProcess
 			})
-			$('.play-process-btn-hover').css({left:currentProcess})
+			// $('.play-process-btn-hover').css({left:currentProcess})
 			if(isFullScreen) {
 				if(!document.webkitIsFullScreen) {
 					console.log('document.webkitIsFullScreen')
@@ -91,8 +91,20 @@ function videoPlayer() {
 			soundValue = videoSource.volume = 0.2
 			soundChangeProcess(soundValue)
 				
-			$('body').mousedown(function(e) {
+			$('.player-control').mousedown(function(e) {
 				startX = e.clientX
+				$('.play-process-btn').css({
+					'transition': 'all 0s',
+					'-moz-transition': 'all 0s',	/* Firefox 4 */
+					'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+					'-o-transition': 'all 0s',
+				})
+				$('.play-sound-btn').css({
+					'transition': 'all 0s',
+					'-moz-transition': 'all 0s',	/* Firefox 4 */
+					'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+					'-o-transition': 'all 0s',
+				})
 				if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
 					isDrag = true
 					isPlay = false
@@ -100,16 +112,17 @@ function videoPlayer() {
 					dragTarget.css({
 						left: dragDis - 5
 					})
-					$('.play-process-btn-hover').css({
-						left: dragDis - 5
-					})
+					// $('.play-process-btn-hover').css({
+					// 	left: dragDis - 5
+					// })
 					dragProcess.css({
 						width: dragDis
 					})
 					$('.play-start').attr('src', './images/pause.png')
 					$('.play-start-hover').attr('src', './images/pause_hover.png')
-					videoSource.pause()
+					// videoSource.pause()
 					$('.play-sym').hide()
+					$('.play-sym-hover').hide()
 					clearTimeout(timer)
 				}
 				if($(e.target).hasClass('play-sound-wrapper') || $(e.target).parent().hasClass('play-sound-wrapper')) {
@@ -136,7 +149,7 @@ function videoPlayer() {
 				}
 			}).mousemove(function(e) {
 				moveX = e.clientX
-					disX = moveX - startX
+				disX = moveX - startX
 				if(isDrag) {
 					if($(e.target).hasClass('play-process') || $(e.target).parent().hasClass('play-process')) {
 						var left = dragDis + disX
@@ -148,9 +161,9 @@ function videoPlayer() {
 						dragTarget.css({
 							left: left - 5
 						})
-						$('.play-process-btn-hover').css({
-							left: left - 5
-						})
+						// $('.play-process-btn-hover').css({
+						// 	left: left - 5
+						// })
 						dragProcess.css({
 							width: left
 						})
@@ -195,6 +208,12 @@ function videoPlayer() {
 			})
 		}
 		var drawProcess = function() {
+			$('.play-process-btn').css({
+				'transition': 'all 0s',
+				'-moz-transition': 'all 0s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0s',
+			})
 			if(!isDrag) {
 				currentTime = videoSource.currentTime
 				$('.play-current-time').html(changeSecond(currentTime))
@@ -205,9 +224,9 @@ function videoPlayer() {
 				dragTarget.css({
 					left: currentProcess
 				})
-				$('.play-process-btn-hover').css({
-					left: currentProcess
-				})
+				// $('.play-process-btn-hover').css({
+				// 	left: currentProcess
+				// })
 				if(currentTime < duration) {
 					timer = setTimeout(drawProcess, 10)
 				} else {
@@ -286,28 +305,42 @@ function videoPlayer() {
 				})
 			}
 		}
+		$('.start-wrapper-btn').hover(function() {
+			$('.player-control').css({
+				bottom: 0
+			})
+		}, function() {
+			$('.player-control').css({
+				bottom: -25
+			})
+		})
 		$('.playerPop').hover(function() {
 			$('.player-control').css({
 				bottom: 0
 			})
-			if(isClick) {
-				console.log(2)
+			if(isClick && !isPlay) {
 				$('.play-sym-hover').fadeIn()
 				
-				$('.play-sym').css({
-					top: 0
-				})
-				$('.play-sym-hover').css({
-					top: 0
+				$('.play-sym, .play-sym-hover').css({
+					'top': 0,
+					'transition': 'all 0s',
+					'-moz-transition': 'all 0s',	/* Firefox 4 */
+					'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+					'-o-transition': 'all 0s',
 				})
 			}
-			
+			$('.play-sym, .play-sym-hover').css({
+				'top': 0,
+				'transition': 'all 0.5s',
+				'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0.5s',
+			})
 		}, function() {
 			$('.player-control').css({
 				bottom: -25
 			})
 			if(isClick) {
-				console.log(3)
 				$('.play-sym-hover').fadeOut()
 				$('.play-sym').css({
 					top: 27
@@ -317,15 +350,46 @@ function videoPlayer() {
 				})
 			}
 		})
-		$('.play-process ').hover(function(){
-			$('.play-process-btn-hover').fadeIn()
+		$('.close-video').hover(function() {
+			$('.close-video-normal-hover').fadeIn()
 		}, function() {
-			$('.play-process-btn-hover').fadeOut()
+			$('.close-video-normal-hover').fadeOut()
+		}).click(function() {
+			$('.video-wrapper').hide()
+		})
+		$('.play-process ').hover(function(){
+			$('.play-process-btn').css({
+				'transition': 'all 0.5s',
+				'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0.5s',
+				'background-color': '#ff8921'
+			})
+		}, function() {
+			$('.play-process-btn').css({
+				'transition': 'all 0.5s',
+				'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0.5s',
+				'background-color': '#ffffff'
+			})
 		})
 		$('.play-sound-wrapper').hover(function() {
-			$('.play-sound-btn-hover').fadeIn()
+			$('.play-sound-btn').css({
+				'transition': 'all 0.5s',
+				'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0.5s',
+				'background-color': '#ff8921'
+			})
 		}, function() {
-			$('.play-sound-btn-hover').fadeOut()
+			$('.play-sound-btn').css({
+				'transition': 'all 0.5s',
+				'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0.5s',
+				'background-color': '#ff8921'
+			})
 		})
 		playStartBtn.click(function() {
 			if(isPlay) {
@@ -337,6 +401,7 @@ function videoPlayer() {
 			} else {
 				videoSource.play()
 				$('.play-sym').hide()
+				$('.play-sym-hover').hide()
 				$('#play-start-hover').attr('src', './images/pause_hover.png')
 				$('#play-start').attr('src', './images/pause.png')
 				isPlay = true
@@ -383,10 +448,8 @@ function videoPlayer() {
 			fullScreen()
 		}).hover(function() {
 			if(isFullScreen) {
-				console.log(1)
 				$('.play-screen-not-full-hover').attr('src', './images/screen_off_hover.png').fadeIn()
 			} else {
-				console.log(2)
 				$('.play-screen-not-full-hover').attr('src', './images/screen_on_hover.png').fadeIn()
 			}
 		}, function() {
@@ -396,15 +459,15 @@ function videoPlayer() {
 			event.preventDefault()
 			console.log('当前keycode被监听event.keyCode', event.keyCode)
 			if(event.keyCode === 27 && isFullScreen === true) {
-				console.log(1)
 				fullScreen()
 			}
 		})
 		$('.play-sym-wrapper').remove()
 		$('.start-wrapper-btn').append('<img class="play-sym" src="./images/start.png"><img class="play-sym-hover" src="./images/start_hover.png">')
 		$('#videoSource, .start-wrapper-btn').click(function() {
-			clearTimeout(playTimer)
-			playTimer = setTimeout(function() {
+			// clearTimeout(playTimer)
+			// playTimer = setTimeout(function() {
+				console.log(123)
 				if(isPlay) {
 					isPlay = false
 					videoSource.pause()
@@ -425,14 +488,14 @@ function videoPlayer() {
 						'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
 						'-o-transition': 'all 0s',
 					})
-					setTimeout(function() {
-						$('.play-sym, .play-sym-hover').css({
-							'transition': 'all 0.5s',
-							'-moz-transition': 'all 0.5s',	/* Firefox 4 */
-							'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
-							'-o-transition': 'all 0.5s',
-						})
-					}, 500)
+					// setTimeout(function() {
+					$('.play-sym, .play-sym-hover').css({
+						'transition': 'all 0.5s',
+						'-moz-transition': 'all 0.5s',	/* Firefox 4 */
+						'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
+						'-o-transition': 'all 0.5s',
+					})
+					// }, 500)
 					clearTimeout(timer)
 				} else {
 					if(isRePlay) {
@@ -442,17 +505,19 @@ function videoPlayer() {
 		                dragTarget.css({
 		                    left: 0
 		                })
-		                $('.play-process-btn-hover').css({left:0})
+		                // $('.play-process-btn-hover').css({left:0})
 		            }
 					isPlay = true
 					videoSource.play()
+					console.log(123345)
 					$('.play-sym').hide()
+					$('.play-sym-hover').hide()
 					drawProcess()
 					$('.play-start').attr('src', './images/pause.png')
 					$('.play-start-hover').attr('src', './images/pause_hover.png')
-					$('.start-wrapper-btn').fadeOut()
+					// $('.start-wrapper-btn').fadeOut()
 				}
-			}, 300)
+			// }, 300)
 		})
 		$('#fz').click(function(e) {
 			$('#sourceUrl').val($('#videoSource').attr('src')).select()
@@ -467,7 +532,24 @@ function ifState() {
 	if(state === 4) {
 		videoPlayer()
 		$(videoSource).show()
+		$('.play-start').attr('src', './images/pause.png').css({
+			    'margin-left': 13,
+    			'margin-top': 7,
+		}).removeClass('animate')
 	} else {
+		$('.playerbody').on('mouseover', function() {
+			$('.player-control').css({
+				bottom: 0
+			})
+		}).on('mouseleave', function() {
+			$('.player-control').css({
+				bottom: -25
+			})
+		})
+		$('.play-start').attr('src', './images/waiting.png').css({
+			    'margin-left': 7,
+    			'margin-top': 3,
+		}).addClass('animate')
 		$('.play-sym-wrapper').remove()
 		$('.playerPop').append('<div class="play-sym-wrapper"><img class="play-sym-wanmei" src="./images/loading.gif"></div>')
 		$(videoSource).hide()

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,user-scalable=yes">
 <meta name="format-detection" content="telephone=no" />
 <title id="title">无标题文档</title>
-<style type="text/css">
+<!-- <style type="text/css">
 	body{ overflow:hidden;background-color: #383838; }
 	.l {float: left;}
 	.r {float: right;}
@@ -343,68 +343,28 @@
 		0% {transform: rotate(0deg);} 
 		100% {transform: rotate(360deg); } 
 	} 
+</style> -->
+<style>
+	#video {
+		width: 800px;
+		height: 500px;
+		position: absolute;
+	}
 </style>
-
 </head>
 
 <body>
-<div class="video-wrapper">
-	<div class="playerPop">
-		<div class="inset">
-			<div class="playerbody" id="video">
-	        	<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src="https://wsqncdn.miaopai.com/stream/O0o5sD-t6q22SzZLEuFhmJrFhBe4Khxy.mp4?ssig=47ef3b5c51a43e52c0e03a29ebcc25f8&time_stamp=1504508450821" ></video>
-					<div class="player-control">
-						<div class="play-btn ">
-							<div class="play-btn-wrapper">
-								<div class="btn-wrapper btn-wrapper-start">
-									<img id="play-start" class="play-start" src="./images/pause.png">
-									<img id="play-start-hover" class="play-start-hover" src="./images/pause_hover.png">
-								</div>
-								<div class="btn-wrapper btn-wrapper-stop">
-									<img class="play-stop" src="./images/stop.png">
-									<img class="play-stop-hover" src="./images/stop_hover.png">
-								</div>
-							</div>
-						</div>
-						<div class="play-process">
-							<div class="play-process-all"></div>
-							<div class="play-process-drag"></div>
-							<div class="play-process-before"></div>
-							<div class="play-process-btn" src="./images/process.png"></div>
-						</div>
-						<div class="play-msg ">
-							<span class="play-time">
-								<span class="play-current-time">00:00</span> l <span class="play-all-time"></span>
-							</span>
-							<span class="play-sound">
-								<div class="play-sound-switch">
-									<img id="sound-switch" class="play-sound-on" src="./images/sound_on.png">
-									<img id="sound-switch-hover" class="play-sound-on-hover" src="./images/sound_on_hover.png">		
-								</div>
-								<div class="play-sound-wrapper">
-									<div class="play-sound-all"></div>
-									<div class="play-sound-drag"></div>
-									<div class="play-sound-btn"></div>
-								</div>
-							</span>
-							<span class="play-screen">
-								<img id="screen-full-swtich" class="play-screen-not-full" src="./images/screen_on.png">
-								<img id="screen-full-swtich-hover" class="play-screen-not-full-hover" src="./images/screen_on_hover.png">
-							</span>
-						</div>
-					</div>
-	    	</div>
-		</div>
-		<div class="start-wrapper-btn"></div>
-	</div>
-	<div class="close-video">
-		<img class="close-img close-video-normal" src="./images/close.jpg" alt="">
-		<img class="close-img close-video-normal-hover" src="./images/close_hover.jpg" alt="">
-	</div>
+<div id="video"></div>
+
 </div>
 
 
 <script src="./jquery.min.js"></script>
-<script src="./player.js"></script>
+<script src="./playerPolyfill.js"></script>
+<!-- <script src="./player.js"></script> -->
+<script>
+	playerPolyfill()
+	console.log(init)
+</script>
 </body>
 </html>

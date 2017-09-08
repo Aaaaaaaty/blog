@@ -1,4 +1,5 @@
-function videoPlayer() {
+(function() {
+	function videoPlay() {
 		var videoSource = document.getElementById('videoSource'),
 			timer,
 			playTimer,
@@ -23,7 +24,6 @@ function videoPlayer() {
 			playStopBtn = $('.btn-wrapper-stop'), //停止按钮
 			fullScreenBtn = $('.play-screen-not-full'),//全屏开关
 			processWidth = $('.play-process').width()
-		videoSource.play()
 		$(window).resize(function() {
 			processWidth = $('.play-process').width()
 			currentProcess = currentTime / duration * (processWidth - 5)//5为拖拽条小图标的宽度的一半
@@ -217,7 +217,7 @@ function videoPlayer() {
 			if(!isDrag) {
 				currentTime = videoSource.currentTime
 				$('.play-current-time').html(changeSecond(currentTime))
-				currentProcess = currentTime / duration * (processWidth - 5)//5为拖拽条小图标的宽度的一半
+				currentProcess = currentTime / duration * (processWidth - 10)//5为拖拽条小图标的宽度的一半
 				dragProcessEl.css({
 					width: currentProcess
 				})
@@ -305,15 +305,8 @@ function videoPlayer() {
 				})
 			}
 		}
-		$('.start-wrapper-btn').hover(function() {
-			$('.player-control').css({
-				bottom: 0
-			})
-		}, function() {
-			$('.player-control').css({
-				bottom: -25
-			})
-		})
+		videoSource.play()
+		drawProcess()
 		$('.playerPop').hover(function() {
 			$('.player-control').css({
 				bottom: 0
@@ -350,19 +343,12 @@ function videoPlayer() {
 				})
 			}
 		})
-		$('.close-video').hover(function() {
-			$('.close-video-normal-hover').fadeIn()
-		}, function() {
-			$('.close-video-normal-hover').fadeOut()
-		}).click(function() {
-			$('.video-wrapper').hide()
-		})
-		$('.play-process ').hover(function(){
+		$('.play-process').hover(function(){
 			$('.play-process-btn').css({
-				'transition': 'all 0.5s',
-				'-moz-transition': 'all 0.5s',	/* Firefox 4 */
-				'-webkit-transition': 'all 0.5s',	/* Safari 和 Chrome */
-				'-o-transition': 'all 0.5s',
+				'transition': 'all 0s',
+				'-moz-transition': 'all 0s',	/* Firefox 4 */
+				'-webkit-transition': 'all 0s',	/* Safari 和 Chrome */
+				'-o-transition': 'all 0s',
 				'background-color': '#ff8921'
 			})
 		}, function() {
@@ -395,6 +381,7 @@ function videoPlayer() {
 			if(isPlay) {
 				videoSource.pause()
 				$('.play-sym').show()
+				$('.play-sym-hover').fadeIn()
 				$('#play-start-hover').attr('src', './images/play_btn_hover.png')
 				$('#play-start').attr('src', './images/play_btn.png')
 				isPlay = false
@@ -432,6 +419,7 @@ function videoPlayer() {
 			videoSource.currentTime = 0
 			videoSource.pause()
 			$('.play-sym').show()
+			$('.play-sym-hover').fadeIn()
 			dragTarget.css({left: 0})
 			$('.play-process-btn-hover').css({left:0})
 			dragProcess.width(0)
@@ -467,7 +455,6 @@ function videoPlayer() {
 		$('#videoSource, .start-wrapper-btn').click(function() {
 			// clearTimeout(playTimer)
 			// playTimer = setTimeout(function() {
-				console.log(123)
 				if(isPlay) {
 					isPlay = false
 					videoSource.pause()
@@ -509,7 +496,6 @@ function videoPlayer() {
 		            }
 					isPlay = true
 					videoSource.play()
-					console.log(123345)
 					$('.play-sym').hide()
 					$('.play-sym-hover').hide()
 					drawProcess()
@@ -519,41 +505,67 @@ function videoPlayer() {
 				}
 			// }, 300)
 		})
-		$('#fz').click(function(e) {
-			$('#sourceUrl').val($('#videoSource').attr('src')).select()
-			document.execCommand("Copy")
-			$('#fz span').html('完成复制')
-		})
 		dragControl() 
 		videoSource.oncanplay =null;
-}
-function ifState() {
-	var state = videoSource.readyState
-	if(state === 4) {
-		videoPlayer()
-		$(videoSource).show()
-		$('.play-start').attr('src', './images/pause.png').css({
-			    'margin-left': 13,
-    			'margin-top': 7,
-		}).removeClass('animate')
-	} else {
-		$('.playerbody').on('mouseover', function() {
-			$('.player-control').css({
-				bottom: 0
-			})
-		}).on('mouseleave', function() {
-			$('.player-control').css({
-				bottom: -25
-			})
-		})
-		$('.play-start').attr('src', './images/waiting.png').css({
-			    'margin-left': 7,
-    			'margin-top': 3,
-		}).addClass('animate')
-		$('.play-sym-wrapper').remove()
-		$('.playerPop').append('<div class="play-sym-wrapper"><img class="play-sym-wanmei" src="./images/loading.gif"></div>')
-		$(videoSource).hide()
-		setTimeout(ifState, 1000)
 	}
-}
-setTimeout(ifState, 10)
+	function ifState() {
+		var state = videoSource.readyState
+		if(state === 4) {
+			clearTimeout(playTimer)
+			videoPlay()
+			$(videoSource).show()
+			$('.play-start').attr('src', './images/pause.png').css({
+				    'margin-left': 13,
+	    			'margin-top': 7,
+			}).removeClass('animate')
+		} else {
+			$('.playerbody').on('mouseover', function() {
+				$('.player-control').css({
+					bottom: 0
+				})
+			}).on('mouseleave', function() {
+				$('.player-control').css({
+					bottom: -25
+				})
+			})
+			$('.play-start').attr('src', './images/waiting.png').css({
+				    'margin-left': 7,
+	    			'margin-top': 3,
+			}).addClass('animate')
+			$('.play-sym-wrapper').remove()
+			$('.playerPop').append('<div class="play-sym-wrapper"><img class="play-sym-wanmei" src="./images/loading.gif"></div>')
+			$(videoSource).hide()
+			playTimer = setTimeout(ifState, 10)
+		}
+	}
+	function initDom(id, src) {
+		var str = ''
+		str += '<div class="video-wrapper"><div class="playerPop"><div class="inset"><div class="playerbody" id="video">'
+		str += '<video id="videoSource"  style="width:100%; height: calc(100% - 25px);" src='+ src +' ></video>'
+		str += '<div class="player-control"><div class="play-btn "><div class="play-btn-wrapper">'
+		str += '<div class="btn-wrapper btn-wrapper-start"><img id="play-start" class="play-start" src="./images/pause.png"><img id="play-start-hover" class="play-start-hover" src="./images/pause_hover.png">'
+		str += '</div><div class="btn-wrapper btn-wrapper-stop"><img class="play-stop" src="./images/stop.png"><img class="play-stop-hover" src="./images/stop_hover.png"></div>'
+		str += '</div></div><div class="play-process"><div class="play-process-all"></div><div class="play-process-drag"></div><div class="play-process-before"></div><div class="play-process-btn" src="./images/process.png"></div></div>'
+		str += '<div class="play-msg ">'
+		str += '<span class="play-time"><span class="play-current-time">00:00</span> l <span class="play-all-time"></span></span>'
+		str += '<span class="play-sound">'
+		str += '<div class="play-sound-switch"><img id="sound-switch" class="play-sound-on" src="./images/sound_on.png"><img id="sound-switch-hover" class="play-sound-on-hover" src="./images/sound_on_hover.png"></div>'
+		str += '<div class="play-sound-wrapper"><div class="play-sound-all"></div><div class="play-sound-drag"></div><div class="play-sound-btn"></div></div>'
+		str += '</span><span class="play-screen"><img id="screen-full-swtich" class="play-screen-not-full" src="./images/screen_on.png"><img id="screen-full-swtich-hover" class="play-screen-not-full-hover" src="./images/screen_on_hover.png"></span>'
+		str += '</div></div></div></div><div class="start-wrapper-btn"></div></div></div>'
+		// str += '<div class="close-video"><img class="close-img close-video-normal" src="./images/close.jpg" alt=""><img class="close-img close-video-normal-hover" src="./images/close_hover.jpg" alt=""></div></div>'
+		$('#' + id).append(str)
+	}
+	function initCss() {
+		var str = ''
+		str = '<style type="text/css">body{overflow:hidden;background-color:#383838}.l{float:left}.r{float:right}.playerPop *,body{margin:0;padding:0}.playerPop li{list-style:none}#videoSource{background-color:#000;cursor:pointer}.video-wrapper{position:absolute;width:100%;height:100%}.playerPop{position:absolute;top:0;left:0;z-index:100;overflow:hidden;width:100%;height:100%;background-color:#000;cursor:pointer}.playerPop .inset{position:relative;top:0;left:0;box-sizing:border-box;width:100%;height:100%}.playerPop .playerTit{padding-left:9px;color:#dedede;font-size:0;line-height:25px;line-height:0}.playerPop .playerTit span{display:inline-block;height:25px;vertical-align:top;font:400 12px/24px "Microsoft Yahei"}.playerPop .playerTit .txt{overflow:hidden;max-width:520px;text-overflow:ellipsis;white-space:nowrap;word-wrap:normal;word-break:normal}.playerPop .playerTit .look{margin-left:20px;color:#989898}.playerPop .playerTit .look::before{display:inline-block;margin-right:4px;width:14px;height:10px;background:url(images/playerIcons.png) -80px -151px no-repeat;content:"";vertical-align:middle}.playerPop .close{position:absolute;top:7px;right:7px;z-index:5;width:12px;height:12px;background:url(images/playerIcons.png) 0 -150px no-repeat;cursor:pointer}.playerPop .close:hover{background-position:-30px -150px}.playerPop .close.dis{opacity:.15;cursor:default}.playerPop .close.dis:hover{background-position:0 -150px}.playerPop .playerbody{width:100%;height:100%}.player-control{position:absolute;bottom:-25px;z-index:101;width:100%;height:25px;background-color:#2A2A2A;font-size:12px;-webkit-transition:all .5s;-moz-transition:all .5s;-o-transition:all .5s;transition:all .5s}.play-btn{position:absolute;left:0;width:55px;height:100%}.play-process{position:relative;margin-right:200px;margin-left:55px;height:100%}.play-process-all{position:relative;top:11px;left:0;height:3px;background-color:#515151}.play-process-drag{position:absolute;top:11px;left:0;width:9px;height:3px;border-radius:1.5px;background-color:#ff8921}.play-process-btn{position:absolute;top:7px;left:0;display:block;width:14px;height:8px;border:.5px solid #000;border-radius:3px;background-color:#dbdbdb;-webkit-transition:all .5s;-moz-transition:all .5s;-o-transition:all .5s;transition:all .5s}.play-process-btn-hover{background-color:#ff8921}.play-msg{position:absolute;top:0;right:0;width:200px;height:100%}.play-time{position:absolute;top:0;left:0;width:90px;height:25px;color:#686868;text-align:center;line-height:24px}.play-sound{position:relative;display:block;margin-left:90px;height:100%}.play-sound-switch{position:relative;float:left;width:20px;height:25px}.play-sound-wrapper{position:relative;float:left;width:60px;height:25px}.play-sound-all{position:relative;top:10px;margin-top:0;height:3px;background-color:#737373}.play-sound-drag{position:absolute;top:10px;left:0;width:9px;height:3px;border-radius:1.5px;background-color:#ff8921}.play-sound-btn{position:absolute;top:7.1px;left:0;display:block;width:10px;height:7px;border:.5px solid #000;border-radius:3px;background-color:#dbdbdb}.play-sound-btn-hover{position:absolute;top:7.1px;left:0;display:block;display:none}.play-screen{position:absolute;top:0;right:0;width:30px;height:25px}.play-start{position:absolute;display:inline-block;margin-top:7px;margin-left:13px}.play-start-hover{position:absolute;display:none;margin-top:7px;margin-left:13px}.play-pause{display:inline-block;margin-top:7px;margin-left:13px;width:9px;height:11px}.play-btn-wrapper{width:100%;height:25px}.play-stop{position:absolute;display:inline-block;margin-top:7px;margin-left:6px}.play-stop-hover{position:absolute;display:none;margin-top:7px;margin-left:6px}.play-sound-on{position:absolute;display:inline-block;margin-top:6px;margin-left:2px}.play-sound-on-hover{position:absolute;display:inline-block;display:none;margin-top:6px;margin-left:2px}.play-sound-off{position:absolute;display:inline-block;margin-top:7px;margin-left:2px}.play-sound-off-hover{position:absolute;display:inline-block;display:none;margin-top:7px;margin-left:2px}.play-screen-not-full{position:absolute;display:inline-block;margin-top:6px;margin-left:10px}.play-screen-not-full-hover{position:absolute;display:inline-block;display:none;margin-top:6px;margin-left:10px}.play-screen-full{position:absolute;display:inline-block;margin-top:5px;margin-left:10px}.play-screen-full-hover{position:absolute;display:inline-block;display:none;margin-top:5px;margin-left:10px}.start-wrapper-btn{position:absolute;bottom:6%;left:1%;width:70px;height:50px}.play-sym{position:absolute;top:27px;z-index:10000;display:none;width:60px;cursor:pointer;-webkit-transition:all .5s;-moz-transition:all .5s;-o-transition:all .5s;transition:all .5s}.play-sym-hover{position:absolute;top:27px;z-index:10000;display:none;width:60px;cursor:pointer;-webkit-transition:all .5s;-moz-transition:all .5s;-o-transition:all .5s;transition:all .5s}.play-sym-wanmei{position:absolute;top:50%;left:50%;margin-top:-50px;margin-left:-95px;width:190px}.btn-wrapper{position:relative;float:left;width:50%;height:100%}.close-video{position:absolute;top:0;left:800px;width:58px;height:58px}.close-img{position:absolute}.close-video-normal-hover{display:none}.animate{animation:carAnimation 1s linear infinite;-webkit-animation:carAnimation 1s linear infinite;-moz-animation:carAnimation 1s linear infinite;-o-animation:carAnimation 1s linear infinite}@keyframes carAnimation{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@-webkit-keyframes carAnimation{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@-moz-keyframes carAnimation{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}@-o-keyframes carAnimation{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style>'
+		$('head').append(str)
+	}
+	function init(id) {
+		var videoBigUrl = 'http://media.dl.wanmei.com/media/media/csgonewtrailerenglish.mp4'
+		initDom(id, videoBigUrl)
+		initCss()
+		ifState()
+	}
+	return init
+})()

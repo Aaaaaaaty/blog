@@ -1,4 +1,8 @@
 ## 文章分享
+ - [浏览器自动化测试初探-使用phantomjs与casperjs](http://imweb.io/topic/55e46d8d771670e207a16bdc?utm_source=tuicool)
+ - [如何进行前端自动化测试？](https://www.zhihu.com/question/29922082)
+ - [前端自动化测试探索](http://fex.baidu.com/blog/2015/07/front-end-test/#img=xxx.com&name=a)
+ - [王垠的博客](http://www.yinwang.org/)
  - [如何选择开源许可证？](http://www.ruanyifeng.com/blog/2011/05/how_to_choose_free_software_licenses.html)
  - [强力推荐！那些你不能错过的GitHub插件和工具](https://juejin.im/post/59ade28051882538fd72fa2c)
  - [Node.js开发加密货币](http://bitcoin-on-nodejs.ebookchain.org/)

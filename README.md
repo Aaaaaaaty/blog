@@ -1,8 +1,8 @@
 <h3 align="center">一只🐟的笔记</h3>
 
 <p align="center">
-   <a href=""><img id="like" src="https://img.shields.io/badge/掘金-1.8k喜欢-blue.svg" alt="Build Status"></a>
-   <a href=""><img id="read" src="https://img.shields.io/badge/掘金-40.4k阅读-blue.svg" alt="Build Status"></a>
+   <a href=""><img id="like" src="https://img.shields.io/badge/掘金-1.9k喜欢-blue.svg" alt="Build Status"></a>
+   <a href=""><img id="read" src="https://img.shields.io/badge/掘金-41.5k阅读-blue.svg" alt="Build Status"></a>
   </p>
   
 ## 不定期更新中————

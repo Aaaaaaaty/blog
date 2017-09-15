@@ -1,4 +1,5 @@
 ## 文章分享
+ - [利用nodejs+phantomjs+casperjs采集淘宝商品的价格](http://www.cnblogs.com/xinzhyu/p/4214669.html)
  - [node-canvas安装失败issues](https://github.com/Automattic/node-canvas/issues/225)
  - [浏览器自动化测试初探-使用phantomjs与casperjs](http://imweb.io/topic/55e46d8d771670e207a16bdc?utm_source=tuicool)
  - [如何进行前端自动化测试？](https://www.zhihu.com/question/29922082)

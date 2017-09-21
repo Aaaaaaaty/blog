@@ -17,7 +17,7 @@
 
 这个系列旨在对一些人们不常用遇到的知识点，以及可能常用到但不曾深入了解的部分做一个重新梳理，虽然可能有些部分看起来没有什么用，因为平时开发真的用不到！但个人认为糟粕也好精华也罢里面全部蕴藏着JS一些偏本质的东西或者说底层规范，如果能适当避开舒适区来看这些小细节，也许对自己也会有些帮助~文章更新在[我的博客](https://github.com/Aaaaaaaty/Blog)，欢迎不定期关注。
 ### 2017.9
- - [clear与BFC对浮动的影响](https://github.com/Aaaaaaaty/Blog/issues/20)[JS]
+ - [clear与BFC对浮动的影响](https://github.com/Aaaaaaaty/Blog/issues/20)[CSS]
  - [图解JavaScript的参数传递](https://github.com/Aaaaaaaty/Blog/issues/19)[JS]
 ### 2017.8
  - [V8中一个微妙的内存泄露方式](https://github.com/Aaaaaaaty/Blog/issues/17)[Node]

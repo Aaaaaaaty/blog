@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>路径替换工具</title>
+	<link rel="stylesheet" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+	<style>
+		.wrapper {
+			width: 800px;
+			margin: 0 auto;
+			position: relative;
+		}
+		.progress {
+			display: none;
+			position: fixed;
+			width: 300px;
+			left: 50%;
+			margin-left: -150px;
+			top: 300px;
+			z-index: 100;
+		}
+		.progressBg { 
+			position: fixed;
+			display: none;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.3);
+			z-index: 10;
+			color: white;
+		}
+		.progressBg div{
+			margin: 35% auto;
+		    text-align: center;
+		    font-size: 30px;
+		    margin-top: 350px;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="page-header">
+		    <h3>prTool</h3>
+		</div>
+		<form id="form">
+			<div class="diff">
+				<div class="form-group">
+					<label for="exampleInputFile">目标文件</label>
+					<input type="file" id="file" name="file">
+				</div>
+			</div>
+		</form>
+		<button id="submitBtn" type="submit" class="btn btn-default">提交</button>
+	</div>
+	<div class="progressBg"><div>等待结果...</div></div>
+	<div class="progress">
+	    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 100%"></div>
+	</div>
+	<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script>
+		var submitBtn = $('#submitBtn'),
+			file = $('#file'),
+			progress = $('.progress'),
+			bg = $('.progressBg')
+
+		submitBtn.on('click', ajaxForm)
+		function ajaxForm() {
+			if(file.val()) {
+				form = new FormData(document.getElementById("form"))
+				$.ajax({
+	                url:"/api",
+	                type:"post",
+	                port: 3044,
+	                data:form,
+	                processData:false,
+	                contentType:false,
+	                beforeSend:function() {
+	                	progress.show()
+	                	bg.show()
+	                },
+	                success:function(data){
+	                	if(data.status === 200) {
+	                		
+	                	} else {
+	                		console.error(data.msg)
+	                	}
+	                    
+	                },
+	                complete: function() {
+	                	progress.hide()
+	                	bg.hide()
+	                },
+	                error:function(e){
+	                	console.log('e', e)
+	                }
+	            })
+			} else {
+				alert('请上传文件')
+			}
+			
+		}
+	</script>
+</body>
+</html>

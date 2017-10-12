@@ -17,6 +17,7 @@
   "homepage": "https://github.com/Aaaaaaaty/Blog",
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
-    "superagent": "^3.6.0"
+    "superagent": "^3.6.0",
+    "multiparty": "^4.1.3"
   }
 }

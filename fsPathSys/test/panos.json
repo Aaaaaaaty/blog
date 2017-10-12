@@ -1,0 +1,12 @@
+[
+  {
+    "title": "En route pour le Puy de Sancy",
+    "details": "Equirectangular panorama built from 10 pictures, shot handheld.",
+    "owner": "Alexandre Duret-Lutz",
+    "overlay": "images/bg-layer.png",
+    "image": "./images/1076608820.jpg",
+    "audio": "audio/235428__allanz10d__calm-ocean-breeze-simulation.ogg",
+    "source": "http://bit.ly/1xk9Vk1",
+    "license": "Creative Commons"
+  }
+]

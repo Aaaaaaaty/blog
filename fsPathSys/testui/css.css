@@ -27,7 +27,9 @@
 	margin: 10px 0px;
 	width: 298px;
 	height: 298px;
-	background-image: url(./unload.png);
+	background-image: url(   ./unload.png);
+	background-image: url(   ../unload.png);
+	background-image: url( http://121212.qw/unload.png);
 	background-size: cover;
 	position: relative;
 	background-color: rgba(0,0,0, 0.4);

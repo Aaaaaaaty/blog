@@ -49,9 +49,8 @@ function resolveData(req, res, id) {
     let form = new multiparty.Form()
     form.parse(req, function (err, fields, files) {
         let filename = files['file'][0].originalFilename,
-            targetPath = __dirname + '/files/' + id
-
-         console.log(filename)
+        	targetUrl = fields['targetUrl'],
+            targetPath = __dirname + '/files/' + id + '.txt'
         if (filename) {
         	cons('文件解压缩')
             let inp = fs.createReadStream(files['file'][0].path),
@@ -59,6 +58,10 @@ function resolveData(req, res, id) {
         	inp.pipe(unzip).pipe(out)
             inp.on('end', () => {
             	cons('解压缩完成')
+            	cons('替换文件路径')
+            	setTimeout(() => {
+            		FS.fsPathRepeat(targetPath)
+            	}, 1000)
             })
             
             

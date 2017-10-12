@@ -1,6 +1,5 @@
-// const fs = require('fs')
+const fs = require('fs')
 function fsPathRepeat(path) {
-	console.log(path)
 	let dataKey = ['.js', '.css', '.html']
 	let data = [
 		{	
@@ -21,26 +20,37 @@ function fsPathRepeat(path) {
 		}
 	]
 	function fsPathSys(path, dataKey) { //遍历路径
-		fs.readdir(path, isDirectory)
-		function isDirectory(err, files) {
-			if(err) {
-				return err
-			} else {
-				files.forEach((item, index) => {
-					let nowPath = `${path}/${item}`
-					let stat = fs.statSync(nowPath)
-					if(!stat.isDirectory()) {
-						dataKey.forEach((obj, index) => {
-							if(~item.indexOf(obj)) {
-								replaceAddress(nowPath)
-							}
-						})
-					} else {		
-						fsPathSys(nowPath, dataKey)
-					}
-				})
+		let stat = fs.statSync(path)
+		if(stat.isDirectory()) {
+			fs.readdir(path, isDirectory)
+			function isDirectory(err, files) {
+				if(err) {
+					console.log(err)
+					return err
+				} else {
+					console.log(files)
+					files.forEach((item, index) => {
+						let nowPath = `${path}/${item}`
+						let stat = fs.statSync(nowPath)
+						if(!stat.isDirectory()) {
+							dataKey.forEach((obj, index) => {
+								if(~item.indexOf(obj)) {
+									console.log(123)
+									replaceAddress(nowPath)
+								}
+							})
+						} else {		
+							fsPathSys(nowPath, dataKey)
+						}
+					})
+				}
 			}
+		}else {
+			dataKey.forEach((obj, index) => {
+				replaceAddress(path)
+			})
 		}
+		
 	}
 
 	function replaceAddress(path) {
@@ -106,6 +116,6 @@ function fsPathRepeat(path) {
 		  	if (err) throw err;
 		})
 	}
-	// fsPathSys(path, dataKey)
+	fsPathSys(path, dataKey)
 }
 exports.fsPathRepeat = fsPathRepeat

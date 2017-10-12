@@ -49,6 +49,10 @@
 					<label for="exampleInputFile">目标文件</label>
 					<input type="file" id="file" name="file">
 				</div>
+				<div class="form-group">
+					<label for="exampleInputEmail1">文件绝对路径</label>
+					<input type="url" class="form-control" id="url" placeholder="Example: https://www.laohu.com/" name="targetUrl">
+				</div>
 			</div>
 		</form>
 		<button id="submitBtn" type="submit" class="btn btn-default">提交</button>
@@ -62,12 +66,13 @@
 	<script>
 		var submitBtn = $('#submitBtn'),
 			file = $('#file'),
+			url = $('#url'),
 			progress = $('.progress'),
 			bg = $('.progressBg')
 
 		submitBtn.on('click', ajaxForm)
 		function ajaxForm() {
-			if(file.val()) {
+			if(url.val() && file.val()) {
 				form = new FormData(document.getElementById("form"))
 				$.ajax({
 	                url:"/api",
@@ -97,7 +102,7 @@
 	                }
 	            })
 			} else {
-				alert('请上传文件')
+				alert('请填写完整数据')
 			}
 			
 		}

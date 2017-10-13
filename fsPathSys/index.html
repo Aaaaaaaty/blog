@@ -36,6 +36,9 @@
 		    font-size: 30px;
 		    margin-top: 350px;
 		}
+		#result {
+			cursor: pointer;
+		}
 	</style>
 </head>
 <body>
@@ -50,12 +53,16 @@
 					<input type="file" id="file" name="file">
 				</div>
 				<div class="form-group">
-					<label for="exampleInputEmail1">文件绝对路径</label>
+					<label for="exampleInputEmail1">替换路径：以"/"结尾</label>
 					<input type="url" class="form-control" id="url" placeholder="Example: https://www.laohu.com/" name="targetUrl">
 				</div>
 			</div>
 		</form>
 		<button id="submitBtn" type="submit" class="btn btn-default">提交</button>
+		<div class="page-header">
+		    <h5>结果地址</h5> 
+		</div>
+		<a id="result"></a>
 	</div>
 	<div class="progressBg"><div>等待结果...</div></div>
 	<div class="progress">
@@ -68,7 +75,8 @@
 			file = $('#file'),
 			url = $('#url'),
 			progress = $('.progress'),
-			bg = $('.progressBg')
+			bg = $('.progressBg'),
+			result = $('#result')
 
 		submitBtn.on('click', ajaxForm)
 		function ajaxForm() {
@@ -86,12 +94,11 @@
 	                	bg.show()
 	                },
 	                success:function(data){
-	                	if(data.status === 200) {
-	                		
-	                	} else {
-	                		console.error(data.msg)
+	                	if(data.status == 200) {
+	                		let path = data.path.match(/\/files.*/)[0]
+	                		let resultPaht = window.location.host + path
+	                		result.html(resultPaht).attr('href', path)
 	                	}
-	                    
 	                },
 	                complete: function() {
 	                	progress.hide()

@@ -1,0 +1,32 @@
+{
+  "name": "over",
+  "description": "JavaScript function overloading framework.",
+  "author": "Joe Ferner <joe@fernsroth.com>",
+  "keywords": [
+    "function",
+    "overload"
+  ],
+  "version": "0.0.5",
+  "bugs": {
+    "url": "https://github.com/nearinfinity/node-over/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nearinfinity/node-over.git"
+  },
+  "main": "overload.js",
+  "scripts": {
+    "test": "./node_modules/.bin/nodeunit test"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "nodeunit": "~0.7.4"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "_from": "over@0.0.5",
+  "_resolved": "http://registry.npm.taobao.org/over/download/over-0.0.5.tgz"
+}

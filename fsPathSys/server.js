@@ -1,11 +1,15 @@
 const http = require('http')
 const url = require('url')
 const fs = require('fs')
+const fstream = require('fstream')
+const tar = require('tar')
 const path = require('path')
 const multiparty = require('multiparty')
+const { exec } = require('child_process')
 const zlib = require('zlib')
 const gzip = zlib.createGzip()
-const unzip = zlib.createUnzip()
+const unzip = require('unzip')
+const archiver = require('archiver');
 const FS = require('./fs.js')
 const MIME_TYPE = {
     "css": "text/css",
@@ -32,15 +36,15 @@ const server = http.createServer((req, res) => {
 }).listen(3044)
 
 function serverStatic(req, res) {
-    let filePath
+	let pathName = url.parse(req.url).pathname
+    let filePath = "." + pathName
     if(~req.url.indexOf('api')){
     	let ip = req.socket.remoteAddress.slice(7),
     		nowTime = new Date().getTime(),
-            id = ip + nowTime
+            id = `ip_${ip}_t_${nowTime}`
     	cons('用户ip：' + ip)
  		resolveData(req, res, id)
     } else {
-        filePath = "." + url.parse(req.url).pathname
         sendFile(filePath, res)
     }
 }
@@ -50,21 +54,32 @@ function resolveData(req, res, id) {
     form.parse(req, function (err, fields, files) {
         let filename = files['file'][0].originalFilename,
         	targetUrl = fields['targetUrl'],
-            targetPath = __dirname + '/files/' + id + '.txt'
+            targetPath = __dirname + '/files/' + id 
         if (filename) {
         	cons('文件解压缩')
-            let inp = fs.createReadStream(files['file'][0].path),
-            	out = fs.createWriteStream(targetPath)
-        	inp.pipe(unzip).pipe(out)
-            inp.on('end', () => {
-            	cons('解压缩完成')
-            	cons('替换文件路径')
-            	setTimeout(() => {
-            		FS.fsPathRepeat(targetPath)
-            	}, 1000)
+        	fs.mkdirSync(targetPath)
+            let inp = fs.createReadStream(files['file'][0].path)
+            let extract = unzip.Extract({ path: targetPath })
+            inp.pipe(extract)
+            extract.on('error', () => {
+            	cons('解压出错:' + err);
             })
-            
-            
+            extract.on('close', () => {
+            	cons('解压完成');
+            	FS.fsPathRepeat(targetPath, targetUrl, res, cb)
+            	let resultPath
+            	function cb(path, res) {
+            		let data = {
+            			status: '200',
+            			path: path
+            		}
+            		res.writeHead(200, {'Content-type':'application/json'})
+            		res.end(JSON.stringify(data))
+            	}
+
+            })
+        	
+
         } else {
             let errData = {
                 status: 400,
@@ -77,32 +92,48 @@ function resolveData(req, res, id) {
     })
 }
 function sendFile(filePath, res) {
-    fs.open(filePath, 'r+', function(err){
-        if(err){
-            send404(res)
-        }else{
-            let ext = path.extname(filePath)
-            ext = ext ? ext.slice(1) : 'unknown'
-            let contentType = MIME_TYPE[ext] || "text/plain"
-            fs.readFile(filePath,function(err,data){
-                if(err){
-                    send500(res)
-                }else{
-                    res.writeHead(200,{'content-type':contentType})
-                    res.end(data)
-                }
-            })
-        }
-    })
+	if(filePath.match(/files/)) {
+		let dirName = `${filePath}.tar.gz`
+		exec(`tar -zcvf ${dirName} ${filePath}`, (error, stdout, stderr) => {
+			if (error) {
+				cons(`exec error: ${error}`);
+				return;
+			}
+			let out = fs.createReadStream(dirName)
+			res.writeHead(200, {
+				'Content-type':'application/octet-stream',
+				'Content-Disposition': 'attachment; filename=' + dirName.match(/ip_.*/)[0] 
+			})
+			out.pipe(res) 
+		})
+	} else {
+		fs.open(filePath, 'r+', function(err){
+	        if(err){
+	            send404(res)
+	        }else{
+	            let ext = path.extname(filePath)
+	            ext = ext ? ext.slice(1) : 'unknown'
+	            let contentType = MIME_TYPE[ext] || "text/plain"
+	            fs.readFile(filePath,function(err,data){
+	                if(err){
+	                    send500(res)
+	                }else{
+	                    res.writeHead(200,{'content-type':contentType})
+	                    res.end(data)
+	                }
+	            })
+	        }
+	    })
+	}
 }
 
-function cons(str) {
-	console.log(str)
-	console.log(`------------------------------------------`)
-}
 function send404(res){
     res.end("<h1 style='text-align:center'>404</h1><p style='text-align:center'>file not found</p>")
 }
 function send500(res){
     res.end("<h1>500</h1>服务器内部错误！")
+}
+function cons(str) {
+	console.log(str)
+	console.log(`------------------------------------------`)
 }

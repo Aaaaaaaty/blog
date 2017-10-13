@@ -1,22 +1,24 @@
 const fs = require('fs')
-function fsPathRepeat(path) {
+const { execSync } = require('child_process')
+function fsPathRepeat(path, targetUrl, res, cb) {
+	let originPath = path
 	let dataKey = ['.js', '.css', '.html']
 	let data = [
 		{	
 			'type': 'script',
-			'point': 'www.script.com/'
+			'point': targetUrl
 		},
 		{	
 			'type': 'link',
-			'point': 'www.css.com/'
+			'point': targetUrl
 		},
 		{	
 			'type': 'img',
-			'point': 'www.img.com/'
+			'point': targetUrl
 		},
 		{	
 			'type': 'background',
-			'point': 'www.bg.com/'
+			'point': targetUrl
 		}
 	]
 	function fsPathSys(path, dataKey) { //遍历路径
@@ -28,24 +30,28 @@ function fsPathRepeat(path) {
 					console.log(err)
 					return err
 				} else {
-					console.log(files)
 					files.forEach((item, index) => {
-						let nowPath = `${path}/${item}`
-						let stat = fs.statSync(nowPath)
-						if(!stat.isDirectory()) {
-							dataKey.forEach((obj, index) => {
-								if(~item.indexOf(obj)) {
-									console.log(123)
-									replaceAddress(nowPath)
-								}
-							})
-						} else {		
-							fsPathSys(nowPath, dataKey)
+						if(item === '__MACOSX') {
+							execSync('rm -rf '+ path +'/__MACOSX')
+						} else {
+							let nowPath = `${path}/${item}`
+							let stat = fs.statSync(nowPath)
+							if(!stat.isDirectory()) {
+								dataKey.forEach((obj, index) => {
+									if(~item.indexOf(obj)) {
+										replaceAddress(nowPath)
+									}
+								})
+							} else {		
+								fsPathSys(nowPath, dataKey)
+							}
 						}
+						
 					})
 				}
 			}
-		}else {
+		}
+		else {
 			dataKey.forEach((obj, index) => {
 				replaceAddress(path)
 			})
@@ -114,6 +120,10 @@ function fsPathRepeat(path) {
 	function writeFs(path, body) {
 		fs.writeFile(path, body, (err) => {
 		  	if (err) throw err;
+		  	if(cb) {
+		  		cb(originPath, res)
+		  		cb = null
+		  	}
 		})
 	}
 	fsPathSys(path, dataKey)

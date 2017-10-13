@@ -1,0 +1,29 @@
+{
+  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+  "name": "fstream",
+  "description": "Advanced file system stream things",
+  "version": "0.1.31",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/isaacs/fstream.git"
+  },
+  "main": "fstream.js",
+  "engines": {
+    "node": ">=0.6"
+  },
+  "dependencies": {
+    "graceful-fs": "~3.0.2",
+    "inherits": "~2.0.0",
+    "mkdirp": "0.5",
+    "rimraf": "2"
+  },
+  "devDependencies": {
+    "tap": ""
+  },
+  "scripts": {
+    "test": "tap examples/*.js"
+  },
+  "license": "BSD",
+  "_from": "fstream@0.1.31",
+  "_resolved": "http://registry.npm.taobao.org/fstream/download/fstream-0.1.31.tgz"
+}

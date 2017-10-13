@@ -1,0 +1,27 @@
+{
+  "name": "natives",
+  "version": "1.1.0",
+  "description": "Do stuff with Node.js's native JavaScript modules",
+  "main": "index.js",
+  "scripts": {
+    "test": "tap test/*.js --100"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaacs/natives.git"
+  },
+  "author": "Isaac Z. Schlueter <i@izs.me> (http://blog.izs.me/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/isaacs/natives/issues"
+  },
+  "homepage": "https://github.com/isaacs/natives#readme",
+  "devDependencies": {
+    "tap": "^7.0.0"
+  },
+  "files": [
+    "index.js"
+  ],
+  "_from": "natives@1.1.0",
+  "_resolved": "http://registry.npm.taobao.org/natives/download/natives-1.1.0.tgz"
+}

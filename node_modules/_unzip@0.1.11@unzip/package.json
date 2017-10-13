@@ -1,0 +1,54 @@
+{
+  "name": "unzip",
+  "version": "0.1.11",
+  "description": "Unzip cross-platform streaming API compatible with fstream and fs.ReadStream",
+  "author": "Evan Oxfeld <eoxfeld@gmail.com>",
+  "maintainers": [
+    {
+      "name": "Evan Oxfeld",
+      "email": "eoxfeld@gmail.com"
+    },
+    {
+      "name": "Joe Ferner",
+      "email": "joe.ferner@nearinfinity.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EvanOxfeld/node-unzip.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "fstream": ">= 0.1.30 < 1",
+    "pullstream": ">= 0.4.1 < 1",
+    "binary": ">= 0.3.0 < 1",
+    "readable-stream": "~1.0.31",
+    "setimmediate": ">= 1.0.1 < 2",
+    "match-stream": ">= 0.0.2 < 1"
+  },
+  "devDependencies": {
+    "tap": ">= 0.3.0 < 1",
+    "temp": ">= 0.4.0 < 1",
+    "dirdiff": ">= 0.0.1 < 1",
+    "stream-buffers": ">= 0.2.5 < 1"
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "keywords": [
+    "zip",
+    "unzip",
+    "zlib",
+    "uncompress",
+    "archive",
+    "stream",
+    "extract"
+  ],
+  "main": "unzip.js",
+  "scripts": {
+    "test": "tap ./test/*.js"
+  },
+  "_from": "unzip@0.1.11",
+  "_resolved": "http://registry.npm.taobao.org/unzip/download/unzip-0.1.11.tgz"
+}

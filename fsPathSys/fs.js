@@ -21,44 +21,7 @@ function fsPathRepeat(path, targetUrl, res, cb) {
 			'point': targetUrl
 		}
 	]
-	function fsPathSys(path, dataKey) { //遍历路径
-		let stat = fs.statSync(path)
-		if(stat.isDirectory()) {
-			fs.readdir(path, isDirectory)
-			function isDirectory(err, files) {
-				if(err) {
-					console.log(err)
-					return err
-				} else {
-					files.forEach((item, index) => {
-						if(item === '__MACOSX') {
-							execSync('rm -rf '+ path +'/__MACOSX')
-						} else {
-							let nowPath = `${path}/${item}`
-							let stat = fs.statSync(nowPath)
-							if(!stat.isDirectory()) {
-								dataKey.forEach((obj, index) => {
-									if(~item.indexOf(obj)) {
-										replaceAddress(nowPath)
-									}
-								})
-							} else {		
-								fsPathSys(nowPath, dataKey)
-							}
-						}
-						
-					})
-				}
-			}
-		}
-		else {
-			dataKey.forEach((obj, index) => {
-				replaceAddress(path)
-			})
-		}
-		
-	}
-
+	s
 	function replaceAddress(path) {
 		let readAble = fs.createReadStream(path)
 		let body = ''
@@ -69,8 +32,6 @@ function fsPathRepeat(path, targetUrl, res, cb) {
 			matchData(path, data, body)
 		})
 	}
-
-
 	function matchData(path, data, body) {
 		let replaceBody = {}
 		data.forEach((obj, i) => {

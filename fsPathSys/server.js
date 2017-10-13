@@ -1,15 +1,12 @@
 const http = require('http')
 const url = require('url')
 const fs = require('fs')
-const fstream = require('fstream')
-const tar = require('tar')
 const path = require('path')
 const multiparty = require('multiparty')
 const { exec } = require('child_process')
 const zlib = require('zlib')
 const gzip = zlib.createGzip()
 const unzip = require('unzip')
-const archiver = require('archiver');
 const FS = require('./fs.js')
 const MIME_TYPE = {
     "css": "text/css",
@@ -78,8 +75,6 @@ function resolveData(req, res, id) {
             	}
 
             })
-        	
-
         } else {
             let errData = {
                 status: 400,

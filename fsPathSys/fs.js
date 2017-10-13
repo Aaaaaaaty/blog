@@ -21,7 +21,6 @@ function fsPathRepeat(path, targetUrl, res, cb) {
 			'point': targetUrl
 		}
 	]
-	s
 	function replaceAddress(path) {
 		let readAble = fs.createReadStream(path)
 		let body = ''

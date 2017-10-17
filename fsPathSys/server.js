@@ -123,6 +123,7 @@ function sendFile(filePath, res) {
 }
 
 function send404(res){
+    res.writeHead(404)
     res.end("<h1 style='text-align:center'>404</h1><p style='text-align:center'>file not found</p>")
 }
 function send500(res){

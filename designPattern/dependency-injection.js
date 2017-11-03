@@ -26,7 +26,7 @@ setFuncParams = function (params) {
 }; 
 
 // 注射器 
-function Activitor(func, scope) { 
+function Activitor(func, scope) {
    return () => {
        func.apply(scope || {}, setFuncParams(getFuncParams(func)));
    } 

@@ -49,5 +49,6 @@ Event.listen('red',fn1 = function(size){
 Event.listen('red',fn2 = function(size){
     console.log("再次打印尺码是："+size); 
 });
+
 Event.remove("red",fn1);
 Event.trigger("red",42);

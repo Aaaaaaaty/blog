@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 const fs = require('fs')
 var run= function (obj) {
 	let str = ''

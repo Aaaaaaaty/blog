@@ -1,4 +1,5 @@
 ## 文章分享
+ - [Redux中文文档](http://cn.redux.js.org/index.html)
  - [JS装饰器（Decorator）场景实战](https://juejin.im/post/59f1c484f265da431c6f8940)
  - [用AOP来让你的JS代码变得更有可维护性吧](https://zhuanlan.zhihu.com/p/27607648)
  - [如何使用koa2+es6/7打造高质量RestfulAPI](https://zhuanlan.zhihu.com/p/26216336)

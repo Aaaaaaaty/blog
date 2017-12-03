@@ -1,34 +1,36 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        body {
-          background: black;
-          color:#CCCCCC; 
-        }
         #c2 {
           background-image: url(foo.png);
           background-repeat: no-repeat;
         }
-        div {
-          float: left;
-          border :1px solid #444444;
-          padding:10px;
-          margin: 10px;
-          background:#3B3B3B;
-        }
     </style>
 </head>
 
-<body>
+<body id="body">
+	<video src="./video.ogv" controls id="video"></video>	
   <div>
-    <video id="video" src="video.ogv" controls="true"/>
+  <canvas id="c1" width="320" height="192"></canvas>
   </div>
-  <div>
-    <canvas id="c1" width="160" height="96"></canvas>
-    <canvas id="c2" width="160" height="96"></canvas>
-  </div>
+  <p>
+    <input type="text">
+    <button id="submit">提交</button>
+  </p>
 </body>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="main.js"></script>
+    <script>
+	
+		canvasDrawVideo.onLoad('c1')
+    $('#submit').click(function() {
+      var data = $('input').val()
+        Event.trigger('data', {
+          value: data,
+        })
+    })
+    </script>
 </html>

@@ -1,43 +1,91 @@
-window.onload = function () {
-    var processor = {}
-    processor.doLoad = function doLoad() {
-        this.video = document.getElementById('video');
-        this.c1 = document.getElementById('c1');
-        this.ctx1 = this.c1.getContext('2d');
-        this.c2 = document.getElementById('c2');
-        this.ctx2 = this.c2.getContext('2d');
-        let self = this;
-        this.video.addEventListener('play', function () {
-            self.width = self.video.videoWidth / 2;
-            self.height = self.video.videoHeight / 2;
-            self.timerCallback();
-        }, false);
-    }
-    processor.timerCallback = function timerCallback() {
-        if (this.video.paused || this.video.ended) {
-            return;
-        }
-        this.computeFrame();
-        let self = this;
-        setTimeout(function () {
-            self.timerCallback();
-        }, 0);
-    }
-    processor.computeFrame = function computeFrame() {
-        this.ctx1.drawImage(this.video, 0, 0, this.width, this.height);
-        let frame = this.ctx1.getImageData(0, 0, this.width, this.height);
-        let l = frame.data.length / 4;
-
-        for (let i = 0; i < l; i++) {
-            let r = frame.data[i * 4 + 0];
-            let g = frame.data[i * 4 + 1];
-            let b = frame.data[i * 4 + 2];
-            if (g > 100 && r > 100 && b < 43) {
-                frame.data[i * 4 + 1] = 0;
+var Event = (function(){
+    var list = {},
+        listen,
+        trigger,
+        remove;
+        listen = function(key,fn){
+            if(!list[key]) {
+                list[key] = [];
             }
+            list[key].push(fn);
+        };
+        trigger = function(){
+            var key = Array.prototype.shift.call(arguments),
+                 fns = list[key];
+            if(!fns || fns.length === 0) {
+                return false;
+            }
+            for(var i = 0, fn; fn = fns[i++];) {
+                fn.apply(this,arguments);
+            }
+        };
+        remove = function(key,fn){
+            var fns = list[key];
+            if(!fns) {
+                return false;
+            }
+            if(!fn) {
+                fns && (fns.length = 0);
+            }else {
+                for(var i = fns.length - 1; i >= 0; i--){
+                    var _fn = fns[i];
+                    if(_fn === fn) {
+                        fns.splice(i,1);
+                    }
+                }
+            }
+        };
+        return {
+            listen: listen,
+            trigger: trigger,
+            remove: remove
         }
-        this.ctx2.putImageData(frame, 0, 0);
-        return;
-    }
-    processor.doLoad()
+})();
+var wordObj = []
+function Barrage(canvas, ctx, data) {
+    this.width = canvas.width
+    this.height = canvas.height
+    this.ctx = ctx
+    this.color = data.color || '#'+Math.floor(Math.random()*16777215).toString(16) //随机颜色
+    this.value = data.value
+    this.x = this.width //x坐标
+    this.y = Math.random() * this.height
+    this.speed = Math.random() + 0.5
+    this.fontSize = Math.random() * 10 + 12
 }
+Barrage.prototype.draw = function() {
+        if(this.x < -200) {
+            return
+        } else {
+            this.ctx.font = this.fontSize + 'px "microsoft yahei", sans-serif';
+            this.ctx.fillStyle = this.color
+            this.x = this.x - this.speed
+            this.ctx.fillText(this.value, this.x, this.y)
+        }
+}
+var canvasDrawVideo = {
+    onLoad: function (canvas) {
+        this.canvas = document.getElementById(canvas)
+        this.video = document.getElementById('video')
+        this.ctx = this.canvas.getContext('2d')
+        this.render()
+        this.video.play()
+        Event.listen('data', this.addNewWord.bind(this))
+    },
+    addNewWord: function(data) {
+        var newWord = new Barrage(this.canvas, this.ctx, data)
+        wordObj.push(newWord)
+    },
+    render: function() {
+        function renderWord() {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+            this.ctx.drawImage(this.video, 0, 0, this.canvas.width, this.canvas.height)
+            wordObj.forEach(function (item, index) {
+                item.draw()
+            })
+            setTimeout(renderWord.bind(this), 0)
+        }
+        setTimeout(renderWord.bind(this), 0)
+    }
+}
+

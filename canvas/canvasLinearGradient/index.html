@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas大面积数据展示</title>
+    <style>
+        #canvas {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+            display: block
+        }
+    </style>
+</head>
+<body>
+   <canvas height="400" width="600" id="canvas"></canvas> 
+   <script>
+        var base = +new Date(1968, 9, 3);
+        var oneDay = 24 * 3600 * 1000;
+        var date = [];
+
+        var data = [Math.random() * 300];
+
+        for (var i = 1; i < 20; i++) { //按照echarts
+            var now = new Date(base += oneDay);
+            date.push([now.getFullYear(), now.getMonth() + 1, now.getDate()].join('/'));
+            data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+        }
+        option = {
+            canvas:{
+                id: 'canvas'
+            },
+            xAxis: {
+                data: date
+            },
+            series: {
+                name: '模拟数据',
+                itemStyle: {
+                    color: 'rgb(255, 70, 131)'
+                },
+                areaStyle: {
+                    color: 'rgb(255, 158, 68)'
+                },
+                data: data
+            }
+            
+        };
+        function LinearGradient(option) {
+            this.canvas = document.getElementById(option.canvas.id)
+            this.ctx = this.canvas.getContext('2d')
+            this.width = this.canvas.width
+            this.height = this.canvas.height
+            this.tooltip = option.tooltip
+            this.title = option.text
+            this.xAxis = option.data
+            this.series = option.series
+        }
+        LinearGradient.prototype.draw = function() {
+            // dataMax = yMax; dataMin = yMin
+            var dataMax = 0,
+                dataMin = this.series.data[0],
+                diffY = 0,
+                diffX = 0,
+                self = this,
+            this.series.data.forEach(function (obj, i) {
+                if (dataMax < obj) dataMax = obj
+                if (dataMin > obj) dataMin = obj
+            })
+            diffY = this.height / (dataMax - dataMin)
+            diffX = this.width / this.series.data.length
+            this.ctx.beginPath()
+            this.ctx.lineTo(0, this.height)
+            this.series.data.forEach(function(item, index) {
+                if(index > self.series.data.length - 3)
+                var x = diffX * index,
+                    y = Math.floor(self.height - diffY * (item - dataMin)),
+                    next1X = diffX * (index + 1),
+                    next1Y = Math.floor(self.height - diffY * (self.series.data[index + 1] - dataMin))
+                    next2X = diffX * (index + 2),
+                    next2Y = Math.floor(self.height - diffY * (self.series.data[index + 2] - dataMin)) 
+
+                self.ctx.quadraticCurveTo(x - 5, y - 5, x, y);
+                // self.ctx.lineTo(x, y)
+            })
+            var lingrad = this.ctx.createLinearGradient(0,0,0,this.width);
+            lingrad.addColorStop(0, this.series.areaStyle.color);
+            lingrad.addColorStop(1, this.series.itemStyle.color);
+            this.ctx.lineTo(this.width, this.height)
+            this.ctx.lineTo(0, this.height)
+            this.ctx.strokeStyle = this.series.itemStyle.color
+            this.ctx.stroke()
+            this.ctx.fillStyle = lingrad 
+            this.ctx.fill()
+        }
+        var newMap = new LinearGradient(option)
+        newMap.draw()
+   </script>
+</body>
+</html>

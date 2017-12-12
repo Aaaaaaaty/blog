@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>粒子模拟文字效果</title>
+    <style>
+    </style>
+</head>
+
+<body id="body">
+    <canvas id="canvas" width="500" height="300"></canvas>
+    <input id='input' type="text">
+    <button id="btn">提交</button>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        $('#btn').click(function () {
+            var value = $('#input').val()
+            loadCanvas(value)
+        })
+        function loadCanvas(value) {
+            var fontSize = 48,
+                width = calWordWidth(value, fontSize), 
+                canvas = document.createElement('canvas')
+            canvas.id = 'b_canvas'
+            canvas.width = width 
+            canvas.height = fontSize + 10
+            var ctx = canvas.getContext('2d')
+            ctx.font = canvas.height + "px Microsoft YaHei"
+            ctx.fillText(value, 0, fontSize)
+            getImage(canvas, ctx) //导出为图片再导入到canvas获取图像数据
+        }
+        function getImage(canvas, ctx) {
+            var image = new Image()
+            image.src = canvas.toDataURL("image/png")
+            image.src = '1.jpg'
+            image.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                ctx.drawImage(image, 0, 0, this.width, this.height)
+                var imageData = ctx.getImageData(0, 0, this.width, this.height)
+                var dataLength = imageData.data.length
+                for(var i = 0; i < dataLength; i++) {
+                    let r = imageData.data[i * 4 + 0];
+                    let g = imageData.data[i * 4 + 1];
+                    let b = imageData.data[i * 4 + 2];
+                    if(r || g || b) console.log(r,g,b)                
+                }
+                console.log(2113)
+                document.getElementById('body').appendChild(canvas)
+            }
+        }
+        function calWordWidth(value, fontSize) {
+            var arr = value.split('')
+            var reg = /\w/,
+                width = 0
+            arr.forEach(function (item, index) {
+                if (reg.test(item)) {
+                     width += fontSize / 5 * 4 //字母宽度
+                } else {
+                     width += fontSize + 10 //汉字宽度
+                }
+            })
+            return width 
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas大面积数据展示</title>
+    <style>
+        #canvas {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            margin: 0 auto;
+            display: block
+        }
+    </style>
+</head>
+<body>
+   <canvas height="400" width="600" id="canvas"></canvas> 
+   <script>
+        var data = [Math.random() * 300];
+        for (var i = 1; i < 10; i++) { //按照echarts
+            data.push(Math.round((Math.random() - 0.5) * 20 + data[i - 1]));
+        }
+        option = {
+            canvas:{
+                id: 'canvas'
+            },
+            series: {
+                name: '模拟数据',
+                itemStyle: {
+                    color: 'rgb(255, 70, 131)'
+                },
+                areaStyle: {
+                    color: 'rgb(255, 158, 68)'
+                },
+                data: data
+            }
+        }
+        var ctrlNodesArr = []
+        var ctrlDrawIndex = 0
+        function LinearGradient(option) {
+            this.canvas = document.getElementById(option.canvas.id)
+            this.ctx = this.canvas.getContext('2d')
+            this.width = this.canvas.width
+            this.height = this.canvas.height
+            this.tooltip = option.tooltip
+            this.title = option.text
+            this.xAxis = option.data
+            this.series = option.series
+        }
+        LinearGradient.prototype.initData = function() {
+            var self = this
+            var scale = 0.2
+            var dataMax = 0,
+                dataMin = this.series.data[0],
+                diffY = 0,
+                diffX = 0,
+                self = this
+            this.series.data.forEach(function (obj, i) {
+                if (dataMax < obj) dataMax = obj
+                if (dataMin > obj) dataMin = obj
+            })
+            diffY = this.height / (dataMax - dataMin)
+            diffX = this.width / this.series.data.length
+            for(var index = 0; index < this.series.data.length; index ++) {
+                var last1X = diffX * (index - 1),
+                last1Y = Math.floor(self.height - diffY * (self.series.data[index - 1] - dataMin)),
+                last2X = diffX * (index - 2),
+                last2Y = Math.floor(self.height - diffY * (self.series.data[index - 2] - dataMin)),
+                nowX = diffX * (index),
+                nowY = Math.floor(self.height - diffY * (self.series.data[index] - dataMin)),
+                nextX = diffX * (index + 1),
+                nextY = Math.floor(self.height - diffY * (self.series.data[index + 1] - dataMin)),
+                cAx = last1X + (nowX - last2X) * scale,
+                cAy = last1Y + (nowY - last2Y) * scale,
+                cBx = nowX - (nextX - last1X) * scale,
+                cBy = nowY - (nextY - last1Y) * scale 
+                if (index === 1) {
+                    cAx = last1X + (nowX - 0) * scale
+                    cAy = last1Y + (nowY - self.height) * scale
+                } else if (index === self.series.data.length - 1) {
+                    cBx = nowX - (nowX - last1X) * scale
+                    cBy = nowY - (nowY - last1Y) * scale
+                }
+                var obj = {
+                    cAx: cAx,
+                    cAy: cAy,
+                    cBx: cBx,
+                    cBy: cBy,
+                    nowX: nowX,
+                    nowY: nowY,
+                    t: 0
+                }
+                ctrlNodesArr.push(obj)
+            }
+        }
+        LinearGradient.prototype.draw = function() {
+            // dataMax = yMax; dataMin = yMin
+            var self = this
+            this.ctx.beginPath()
+            // this.ctx.lineTo(0, this.height)
+            ctrlNodesArr.forEach(function(item, index) { //找到前一个点到下一个点中间的控制点
+                var ctrlAx = item.cAx,
+                    ctrlAy = item.cAy,
+                    ctrlBx = item.cBx,
+                    ctrlBy = item.cBy,
+                    x = item.nowX,
+                    y = item.nowY 
+                self.ctx.bezierCurveTo(ctrlAx, ctrlAy, ctrlBx, ctrlBy, x, y);
+            })
+            var lingrad = this.ctx.createLinearGradient(0,0,0,this.width);
+            lingrad.addColorStop(0, this.series.areaStyle.color);
+            lingrad.addColorStop(1, this.series.itemStyle.color);
+            // this.ctx.lineTo(this.width, this.height)
+            // this.ctx.lineTo(0, this.height)
+            this.ctx.strokeStyle = this.series.itemStyle.color
+            this.ctx.stroke()
+        }
+        LinearGradient.prototype.drawBall = function() {
+            var self = this
+            var item = ctrlNodesArr[ctrlDrawIndex]
+            var ctrlAx = item.cAx,
+                ctrlAy = item.cAy,
+                ctrlBx = item.cBx,
+                ctrlBy = item.cBy,
+                x = item.nowX,
+                y = item.nowY,
+                ox = 0,
+                oy = 0
+            if(ctrlDrawIndex === 0) {
+                ox = 0
+                oy = 0
+            } else {
+                ox = ctrlNodesArr[ctrlDrawIndex - 1].nowX
+                oy = ctrlNodesArr[ctrlDrawIndex - 1].nowY
+            }
+            if(item.t > 1) {
+                ctrlDrawIndex++
+            }else {
+                self.ctx.clearRect(0, 0, self.width, self.height)
+                item.t += 0.05
+                var ballX = ox * Math.pow((1 - item.t), 3) + 3 * ctrlAx * item.t * Math.pow((1 - item.t), 2) + 3 * ctrlBx * Math.pow(item.t, 2) * (1 - item.t) + x * Math.pow(item.t, 3)
+                var ballY = oy * Math.pow((1 - item.t), 3) + 3 * ctrlAy * item.t * Math.pow((1 - item.t), 2) + 3 * ctrlBy * Math.pow(item.t, 2) * (1 - item.t) + y * Math.pow(item.t, 3)
+                newMap.draw()
+                self.ctx.beginPath()
+                self.ctx.arc(ballX, ballY, 5, 0, Math.PI * 2, false)
+                self.ctx.fill()
+            }
+            if(ctrlDrawIndex !== ctrlNodesArr.length) {
+                window.requestAnimationFrame(newMap.drawBall.bind(self))
+            }
+        }
+        var newMap = new LinearGradient(option)
+        newMap.initData()
+        newMap.drawBall()
+   </script>
+</body>
+</html>

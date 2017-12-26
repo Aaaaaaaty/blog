@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p></p>
+    <script src="https://cdn.bootcss.com/async/2.6.0/async.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+    
+    var numMax = 0
+    var resultArr = []
+    var fetchUrl = function (offset, callback) {
+        $.ajax({
+            url: 'https://data-gkcx.eol.cn/soudaxue/queryschool.html?messtype=jsonp&page='+ offset +'&size=30',
+            type: 'get',
+            dataType: 'jsonp',
+            success: function(data) {
+                data.school.forEach(function(item, indx) {
+                    var obj = {
+                        name: item.schoolname,
+                        province: item.province
+                    }
+                    resultArr.push(obj)
+                })
+                callback(null, data)
+            }
+        }) 
+    };
+    var offsets = [];
+    for (var i = 1; i < 94; i++) {
+        offsets.push(i);
+    }
+    async.map(offsets, function (offset, callback) {
+        fetchUrl(offset, callback);
+    }, function (err, result) {
+        console.log(resultArr)
+        $('p').html(JSON.stringify(resultArr))
+    }); 
+</script>
+</body>
+
+</html>

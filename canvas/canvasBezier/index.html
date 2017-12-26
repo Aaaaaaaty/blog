@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bezier</title>
+    <style>
+        #canvas {
+            background-color: #ccc;
+        }
+    </style>
+</head>
+<body>
+   <canvas id="canvas" width="400" height="300"></canvas> 
+   <script>
+        var t = 0
+        function draw() {
+            var canvas = document.getElementById('canvas');
+            if (canvas.getContext) {
+                var ctx = canvas.getContext('2d');
+                var ctrlAx = 100,
+                    ctrlAy = 3,
+                    ctrlBx = 220,
+                    ctrlBy = 250,
+                    x = 300,
+                    y = 200,
+                    ox = 50,
+                    oy = 50
+                //三次贝塞尔曲线
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                ctx.beginPath()
+                ctx.moveTo(ox, oy)
+                ctx.bezierCurveTo(ctrlAx, ctrlAy, ctrlBx, ctrlBy, x, y)
+                ctx.stroke()
+                if(t > 1) return
+                t += 0.01
+                var ballX = ox * Math.pow(( 1 - t ), 3) + 3 * ctrlAx * t * Math.pow(( 1 - t ), 2) + 3 * ctrlBx * Math.pow(t, 2) * ( 1 - t ) + x * Math.pow(t, 3)
+                var ballY = oy * Math.pow(( 1 - t ), 3) + 3 * ctrlAy * t * Math.pow(( 1 - t ), 2) + 3 * ctrlBy * Math.pow(t, 2) * ( 1 - t ) + y * Math.pow(t, 3)
+                ctx.beginPath()
+                ctx.arc(ballX, ballY, 5, 0, Math.PI * 2, false);
+                ctx.fill()
+                window.requestAnimationFrame(draw)
+            }
+        }
+        draw()
+   </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>bezier</title>
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            background-color: #dcdcdc;
+            margin: 10px;
+            display: block;
+        }
+        .btn {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+   <canvas id="canvas" width="800" height="600"></canvas> 
+   <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+   <script>
+       var canvas = document.getElementById('canvas')
+       var ctx = canvas.getContext('2d')
+       var isDrag = false
+       var isDragNode = false
+       var clickNode = {x:200, y:200, r:30}
+       var clickIndex = 0
+       var dragIndex = 0
+       var clickR = 0
+       var dragR = 0
+       var moveR = 10
+       var clickDiffR = 0
+       ctx.arc(clickNode.x, clickNode.y, clickNode.r, 0, Math.PI * 2, false)
+       ctx.stroke();
+       $(canvas).mousedown(function(e){
+            isDrag = true
+            clickon = new Date().getTime()
+            var diffLeft = $(this).offset().left,
+                diffTop = $(this).offset().top,
+                clientX = e.clientX,
+                clientY = e.clientY,
+                x = clientX - diffLeft,
+                y = clientY - diffTop
+            var newNode
+            var absX = Math.abs(clickNode.x - x),
+                absY = Math.abs(clickNode.y - y)
+            if (absX < clickNode.r && absY < clickNode.r) {
+                isDragNode = true
+            }
+        }).mousemove(function(e) {
+            if(isDrag && isDragNode) {
+                var diffLeft = $(this).offset().left,
+                diffTop = $(this).offset().top,
+                clientX = e.clientX,
+                clientY = e.clientY,
+                x = clientX - diffLeft,
+                y = clientY - diffTop,
+                ox = clickNode.x,
+                oy = clickNode.y,
+                or = clickNode.r,
+                diss = Math.sqrt(Math.pow(Math.abs(ox - x), 2) + Math.pow(Math.abs(oy - y), 2)) //点击点距起始点距离
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                //绘制拖拽圆
+                if (diss - or > - 10) {
+                    if (diss - or > 10) {
+                       moveR = (diss - or) * 0.5 
+                    }
+                    if (moveR > clickNode.r) moveR = clickNode.r
+                    if (moveR < 10) moveR = 10
+                    ctx.beginPath()
+                    ctx.arc(x, y, moveR, 0, Math.PI * 2, false)
+                    ctx.stroke() 
+                    clickDiffR = diss - or
+                    //求连接曲线的坐标
+                    var r = Math.sqrt(Math.pow(Math.abs(x - clickNode.x), 2) + Math.pow(Math.abs(y - clickNode.y), 2)),
+                        sina = Math.abs(y - clickNode.y) / r,
+                        cosa = Math.abs(x - clickNode.x) / r,
+                        k = (- y + clickNode.y) / (x - clickNode.x)
+                    if(k > 0) {
+                        var xo1 = - sina * clickR + clickNode.x,
+                            yo1 = - cosa * clickR + clickNode.y,
+                            xo2 = sina * clickR + clickNode.x,
+                            yo2 = cosa * clickR + clickNode.y,
+                            xd1 = - sina * moveR + x,
+                            yd1 = - cosa * moveR + y,
+                            xd2 = sina * moveR + x,
+                            yd2 = cosa * moveR + y
+                    } else {
+                        var xo1 = sina * clickR + clickNode.x,
+                            yo1 = cosa * clickR + clickNode.y,
+                            xo2 = - sina * clickR + clickNode.x,
+                            yo2 = - cosa * clickR + clickNode.y,
+                            xd1 = sina * moveR + x,
+                            yd1 = cosa * moveR + y,
+                            xd2 = - sina * moveR + x,
+                            yd2 = - cosa * moveR + y
+                    console.log(x, xd1, xd2, - sina * moveR)
+                    }
+                    ctx.beginPath()
+                    ctx.arc(xo1, yo1, 2, 0, Math.PI * 2, false)
+                    ctx.stroke() 
+                    ctx.beginPath()
+                    ctx.arc(xo2, yo2, 2, 0, Math.PI * 2, false)
+                    ctx.stroke() 
+                    ctx.beginPath()
+                    ctx.arc(xd1, yd1, 2, 0, Math.PI * 2, false)
+                    ctx.stroke() 
+                    ctx.beginPath()
+                    ctx.arc(xd2, yd2, 2, 0, Math.PI * 2, false)
+                    ctx.stroke() 
+                }
+                //绘制被拖拽圆
+                if(diss > or) {
+                    clickR = 2 * or - diss 
+                } else {
+                    clickR = or
+                }
+                if(clickR < 10) clickR = 10
+                ctx.beginPath()
+                ctx.arc(clickNode.x, clickNode.y, clickR, 0, Math.PI * 2, false)
+                ctx.stroke() 
+            }
+        }).mouseup(function(e) {
+            if(isDrag && isDragNode) {
+                isDrag = false
+                isDragNode = false
+                clickNode.r = clickR 
+            }
+            clickoff = new Date().getTime()
+            
+        })
+   </script>
+</body>
+</html>

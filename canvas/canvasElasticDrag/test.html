@@ -37,7 +37,8 @@
        var moveR = 10
        var clickDiffR = 0
        ctx.arc(clickNode.x, clickNode.y, clickNode.r, 0, Math.PI * 2, false)
-       ctx.stroke();
+       ctx.fillStyle = '#9b9b9b'
+       ctx.fill();
        $(canvas).mousedown(function(e){
             isDrag = true
             clickon = new Date().getTime()
@@ -64,26 +65,40 @@
                 ox = clickNode.x,
                 oy = clickNode.y,
                 or = clickNode.r,
+                moveRmin = 10,
+                moveRmax = clickNode.r - moveRmin,
                 diss = Math.sqrt(Math.pow(Math.abs(ox - x), 2) + Math.pow(Math.abs(oy - y), 2)) //点击点距起始点距离
                 ctx.clearRect(0, 0, canvas.width, canvas.height)
+                //绘制被拖拽圆
+                if(diss > or) {
+                    clickR = 2 * or - diss 
+                } else {
+                    clickR = or
+                }
+                if(clickR < moveRmin) clickR =moveRmin 
+                ctx.beginPath()
+                ctx.arc(clickNode.x, clickNode.y, clickR, 0, Math.PI * 2, false)
+                ctx.fill() 
                 //绘制拖拽圆
-                if (diss - or > - 10) {
-                    if (diss - or > 10) {
+                if (diss - or > - moveRmin) {
+                    if (diss - or > moveRmin) {
                        moveR = (diss - or) * 0.5 
                     }
                     if (moveR > clickNode.r) moveR = clickNode.r
-                    if (moveR < 10) moveR = 10
+                    if (moveR < moveRmin) moveR =moveRmin 
                     ctx.beginPath()
                     ctx.arc(x, y, moveR, 0, Math.PI * 2, false)
-                    ctx.stroke() 
+                    ctx.fill() 
                     clickDiffR = diss - or
                     //求连接曲线的坐标
                     var r = Math.sqrt(Math.pow(Math.abs(x - clickNode.x), 2) + Math.pow(Math.abs(y - clickNode.y), 2)),
                         sina = Math.abs(y - clickNode.y) / r,
                         cosa = Math.abs(x - clickNode.x) / r,
-                        k = (- y + clickNode.y) / (x - clickNode.x)
+                        k = (- y + clickNode.y) / (x - clickNode.x),
+                        ctrlx = clickNode.x - (clickNode.x - x) / 2,
+                        ctrly = clickNode.y - (clickNode.y - y) / 2
                     if(k > 0) {
-                        var xo1 = - sina * clickR + clickNode.x,
+                        var xo1 = - sina * clickR + clickNode.x, //四个切点的坐标
                             yo1 = - cosa * clickR + clickNode.y,
                             xo2 = sina * clickR + clickNode.x,
                             yo2 = cosa * clickR + clickNode.y,
@@ -92,39 +107,24 @@
                             xd2 = sina * moveR + x,
                             yd2 = cosa * moveR + y
                     } else {
-                        var xo1 = sina * clickR + clickNode.x,
+                        var xo1 = - sina * clickR + clickNode.x,
                             yo1 = cosa * clickR + clickNode.y,
-                            xo2 = - sina * clickR + clickNode.x,
+                            xo2 = sina * clickR + clickNode.x,
                             yo2 = - cosa * clickR + clickNode.y,
-                            xd1 = sina * moveR + x,
+                            xd1 = - sina * moveR + x,
                             yd1 = cosa * moveR + y,
-                            xd2 = - sina * moveR + x,
+                            xd2 = sina * moveR + x,
                             yd2 = - cosa * moveR + y
-                    console.log(x, xd1, xd2, - sina * moveR)
                     }
                     ctx.beginPath()
-                    ctx.arc(xo1, yo1, 2, 0, Math.PI * 2, false)
-                    ctx.stroke() 
-                    ctx.beginPath()
-                    ctx.arc(xo2, yo2, 2, 0, Math.PI * 2, false)
-                    ctx.stroke() 
-                    ctx.beginPath()
-                    ctx.arc(xd1, yd1, 2, 0, Math.PI * 2, false)
-                    ctx.stroke() 
-                    ctx.beginPath()
-                    ctx.arc(xd2, yd2, 2, 0, Math.PI * 2, false)
-                    ctx.stroke() 
+                    ctx.moveTo(xo1, yo1)
+                    ctx.lineTo(xo2, yo2)
+                    ctx.quadraticCurveTo(ctrlx, ctrly, xd2, yd2)
+                    ctx.lineTo(xd1, yd1)
+                    ctx.quadraticCurveTo(ctrlx, ctrly, xo1, yo1)
+                    ctx.fill()
                 }
-                //绘制被拖拽圆
-                if(diss > or) {
-                    clickR = 2 * or - diss 
-                } else {
-                    clickR = or
-                }
-                if(clickR < 10) clickR = 10
-                ctx.beginPath()
-                ctx.arc(clickNode.x, clickNode.y, clickR, 0, Math.PI * 2, false)
-                ctx.stroke() 
+                
             }
         }).mouseup(function(e) {
             if(isDrag && isDragNode) {

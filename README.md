@@ -1,3 +1,4 @@
+![悄悄是别离的笙箫，沉默是今晚的康桥](https://user-images.githubusercontent.com/15126694/34658763-add3e53a-f46c-11e7-828c-c46290df1cbb.jpg)
 <h3 align="center">一只🐟的笔记</h3>
 
 <p align="center">
@@ -6,11 +7,23 @@
   </p>
   
 ## 不定期更新中————
+
+### Canvas进阶系列
+—— 持续更新中
+ - [bezierMaker.js——N阶贝塞尔曲线生成器](https://github.com/Aaaaaaaty/Blog/issues/35)
+ - [基于canvas使用粒子拼出你想要的文字[2]——粒子的动画效果](https://github.com/Aaaaaaaty/Blog/issues/34)
+ - [基于canvas使用粒子拼出你想要的文字](https://github.com/Aaaaaaaty/Blog/issues/32)
+ - [基于canvas使用贝塞尔曲线平滑拟合折线段](https://github.com/Aaaaaaaty/Blog/issues/31)
+ - [用canvas实现视频播放与弹幕功能](https://github.com/Aaaaaaaty/Blog/issues/30)
+ - [基于canvas实现波浪式绘制图片](https://github.com/Aaaaaaaty/Blog/issues/12)
+ - [基于canvas实现的一个截图小demo](https://github.com/Aaaaaaaty/Blog/issues/5)
+
+该系列记录了我自己对于canvas学习的过程，期间实现了如：截图效果、粒子动画、曲线动画等等，并开源了[bezierMaker.js](https://github.com/Aaaaaaaty/bezierMaker.js)
 ![toutu.jpeg](http://upload-images.jianshu.io/upload_images/2094574-80ad43dc4fcfdfbf.jpeg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
-### JavaScript小众系列开始更新啦
-   ——何时完结不确定，写多少看我会多少！这是已经更新的地址：
+### JavaScript小众系列
+   ——何时完结不确定，附已经更新的地址：
  - 小众系列之按位非运算符：[JavaScript中奇特的~运算符](https://github.com/Aaaaaaaty/Blog/issues/22)
  - 小众系列之终极类型转换：[从hello world看JavaScript隐藏的黑魔法制](https://github.com/Aaaaaaaty/Blog/issues/16)
  - 小众系列之隐式类型转换：[从[] == ![]看隐式强制转换机制](https://github.com/Aaaaaaaty/Blog/issues/14)

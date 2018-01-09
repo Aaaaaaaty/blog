@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>canvas轮播图</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #canvas {
+            background-color: #dcdcdc;
+            margin: 10px;
+            display: block;
+        }
+        .btn {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas> 
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script> 
+    <script>
+        var canvas = document.getElementById('canvas')
+        var ctx = canvas.getContext('2d')
+        var isDrag = false
+        var clickNode = { x: 100, y: 300, r: 15 }
+        var clickR = 0
+        var dragR = 0
+        var moveR = 10
+        var clickDiffR = 0
+        var startX = 0
+        var startY = 0
+        var moveX = 0
+        var moveY = 0
+        var minX = 100
+        var maxX = 700
+        var nowX = 0
+        drawBasic(ctx)
+        ctx.arc(clickNode.x, clickNode.y, clickNode.r, 0, Math.PI * 2, false)
+        ctx.fillStyle = '#9b9b9b'
+        ctx.fill()
+        $(canvas).mousedown(function(e) {
+            var diffLeft = $(this).offset().left,
+                clientX = e.clientX
+            startX = clientX - diffLeft
+            isDrag = true
+        }).mousemove(function(e) {
+            if(isDrag) {
+                var diffLeft = $(this).offset().left,
+                    clientX = e.clientX,
+                    moveX = clientX - diffLeft
+                var disX = moveX - startX
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                drawBasic(ctx)
+                if (clickNode.x + disX < minX) {
+                    nowX = minX
+                } else if(clickNode.x + disX > maxX) {
+                    nowX = maxX 
+                } else {
+                    nowX = clickNode.x 
+                    nowX += disX
+                }
+                ctx.beginPath()
+                ctx.arc(nowX, clickNode.y, clickNode.r, 0, Math.PI * 2, false)
+                ctx.fill() 
+            }
+        }).mouseup(function() {
+            isDrag = false
+            clickNode.x = nowX
+        })
+        function drawBasic(ctx) {
+            ctx.beginPath()
+            ctx.moveTo(100, 300)
+            ctx.lineTo(700, 300)
+            ctx.stroke()
+            ctx.arc(100, 300, 5, 0, 2 * Math.PI, false)
+            ctx.arc(200, 300, 5, 0, 2 * Math.PI, false)
+            ctx.arc(300, 300, 5, 0, 2 * Math.PI, false)
+            ctx.arc(400, 300, 5, 0, 2 * Math.PI, false)
+            ctx.arc(500, 300, 5, 0, 2 * Math.PI, false)
+            ctx.arc(600, 300, 5, 0, 2 * Math.PI, false)
+            ctx.arc(700, 300, 5, 0, 2 * Math.PI, false)
+            ctx.fill()
+        }
+    </script>
+</body>
+</html>

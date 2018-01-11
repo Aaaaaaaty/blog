@@ -10,6 +10,7 @@
 
 ### Canvas进阶系列
 —— 持续更新中
+ - [canvas进阶——贝塞尔公式推导与物体跟随复杂曲线的轨迹运动](https://github.com/Aaaaaaaty/Blog/issues/36)
  - [bezierMaker.js——N阶贝塞尔曲线生成器](https://github.com/Aaaaaaaty/Blog/issues/35)
  - [基于canvas使用粒子拼出你想要的文字[2]——粒子的动画效果](https://github.com/Aaaaaaaty/Blog/issues/34)
  - [基于canvas使用粒子拼出你想要的文字](https://github.com/Aaaaaaaty/Blog/issues/32)
@@ -30,6 +31,8 @@
  - 小众系列之事件循环：[从HTML5与PromiseA+规范来看事件循环](https://github.com/Aaaaaaaty/Blog/issues/13)
 
 这个系列旨在对一些人们不常用遇到的知识点，以及可能常用到但不曾深入了解的部分做一个重新梳理，虽然可能有些部分看起来没有什么用，因为平时开发真的用不到！但个人认为糟粕也好精华也罢里面全部蕴藏着JS一些偏本质的东西或者说底层规范，如果能适当避开舒适区来看这些小细节，也许对自己也会有些帮助~文章更新在[我的博客](https://github.com/Aaaaaaaty/Blog)，欢迎不定期关注。
+### 2018.1
+ - [canvas进阶——贝塞尔公式推导与物体跟随复杂曲线的轨迹运动](https://github.com/Aaaaaaaty/Blog/issues/36)
 ### 2017.12
  - [bezierMaker.js——N阶贝塞尔曲线生成器](https://github.com/Aaaaaaaty/Blog/issues/35)[Canvas]
  - [基于canvas使用粒子拼出你想要的文字[2]——粒子的动画效果](https://github.com/Aaaaaaaty/Blog/issues/34)[Canvas]

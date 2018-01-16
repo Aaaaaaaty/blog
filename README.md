@@ -3,7 +3,7 @@
 
 <p align="center">
    <a href=""><img id="like" src="https://img.shields.io/badge/掘金-2.7k喜欢-blue.svg" alt="Build Status"></a>
-   <a href=""><img id="read" src="https://img.shields.io/badge/掘金-53.2k阅读-blue.svg" alt="Build Status"></a>
+   <a href=""><img id="read" src="https://img.shields.io/badge/掘金-53.4k阅读-blue.svg" alt="Build Status"></a>
   </p>
   
 ## 不定期更新中————

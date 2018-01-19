@@ -1,7 +1,8 @@
 function CanvasDistortGround (name) {
     this.name = name
     this.$el = $('#' + this.name) 
-    this.fileInputBtn = this.$el.find('input')
+    this.fileInputBtn = this.$el.find('.file')
+    this.checkInputBtn = this.$el.find('.check')
     this.printBtn = this.$el.find('.print') 
     this.makeBtn = this.$el.find('.make') 
     this.clearBtn = this.$el.find('.clear') 
@@ -20,6 +21,7 @@ function CanvasDistortGround (name) {
     this.clickon = 0 //鼠标按下时间戳
     this.clickoff = 0 //鼠标抬起
     this.baseX = 800 //基准线横坐标 旨在通过基准线计算偏移量
+    this.baseY = 0
     this.imgStartX = 100
     this.imgStartY = 100
     this.imgWidth = 0
@@ -55,16 +57,17 @@ CanvasDistortGround.prototype.init = function() {
                 _.imgWidth = this.width
                 _.imgHeight = this.height
                 _.ctx.drawImage(this, _.imgStartX, _.imgStartY)
+                _.baseY = _.imgStartY + _.imgHeight / 2
                 _.imgData = _.ctx.getImageData(_.imgStartX, _.imgStartY, _.imgWidth, _.imgHeight)
                 _.imgDataArr.origin = []
                 _.imgData.data.forEach(function(item, index) {
                     _.imgDataArr.origin.push(item)
                 })
                 _.drawBaseLine() 
-                _.addEventListener()
             }
         }
     })
+    _.addEventListener()
 }
 CanvasDistortGround.prototype.addEventListener = function() {
     var _ = this
@@ -191,53 +194,42 @@ CanvasDistortGround.prototype.addEventListener = function() {
         _.createDistortImage(_.clickNodes) 
     })
     this.animateBtn.click(function() {
-        _.createAnimate()
+        var type = _.checkInputBtn.get(0).checked ? 'col' : 'row'
+        _.createAnimate(type)
     })
 }
-CanvasDistortGround.prototype.createAnimate = function() {
+CanvasDistortGround.prototype.createAnimate = function(type) {
     var _ = this
-    var sliceNum = new Array(4) //控制帧数量
+    var imgNum = 4
+    var sliceNum = new Array(imgNum) //控制帧数量
     sliceNum.fill(0).forEach(function(item, i) {
         _.imgAnimateDataObj[i] = []
     })
-    Object.keys(_.imgAnimateDataSymArr).forEach(function(item, index) {
-        var imgDataSlice = _.imgAnimateDataSymArr[item].imgDataSlice 
-        var arr = {
-            0: imgDataSlice, 
-            1: imgDataSlice, 
-            2: imgDataSlice, 
-            3: imgDataSlice, 
+    for(var i = 0; i < imgNum; i++) {
+        if(!i) {
+            _.imgAnimateDataObj[i] = _.imgDataArr.origin
+        } else {
+            _.clickNodes.forEach(function (item, index) {
+                if (type === 'row') {
+                    var x = _.baseX + (item.x - _.baseX) / (imgNum - 1) * i
+                    var y = item.y
+                    _.imgAnimateDataObj[i].push({ x: x, y: y })
+                } else if(type === 'col') {
+                    var x = item.x
+                    var y = _.baseY + (item.y - _.baseY) / (imgNum - 1) * i 
+                    _.imgAnimateDataObj[i].push({ x: x, y: y })
+                }
+            })
+            _.imgAnimateDataObj[i] = _.sliceImgData(_.imgAnimateDataObj[i], type) //控制点转换为生成的扭曲图像重新赋值
         }
-        var diffX = _.imgAnimateDataSymArr[item].diffX
-        var num = parseInt(diffX / (sliceNum.length -1)) * 4
-        _.imgAnimateDataObj[0].push(imgDataSlice)
-        for (var i = 0; i < Math.abs(num); i++) {
-            arr[0] = _.arraymove(diffX, arr[0])
-        }  
-        _.imgAnimateDataObj[1].push(arr[0])
-        for (var i = 0; i < Math.abs(num * 2); i++) {
-            arr[1] = _.arraymove(diffX, arr[1])
-        }  
-        _.imgAnimateDataObj[2].push(arr[1])
-        for (var i = 0; i < Math.abs(diffX * 4); i++) {
-            arr[2] = _.arraymove(diffX, arr[2])
-        }  
-        _.imgAnimateDataObj[3].push(arr[2])
-    })
-    Object.keys(_.imgAnimateDataObj).forEach(function (item, index) {
-        var arr = []
-        _.imgAnimateDataObj[item].forEach(function(obj, i) {
-            arr = arr.concat(obj)
-        }) 
-        _.imgAnimateDataObj[item] = arr
-    })
-    var canvasBg = document.createElement('canvas')
+    }
+    var canvasBg = document.createElement('canvas') //离屏canvas 导出扭曲图片
     canvasBg.id = _.name + 'canvasBg'
     canvasBg.width = _.imgWidth
     canvasBg.height = _.imgHeight
     var bgctx = canvasBg.getContext('2d')
     var url = []
-    for(var j = 0; j < sliceNum.length; j++) {
+    for(var j = 0; j < imgNum; j++) {
         var imgData = bgctx.getImageData(0, 0, _.imgWidth, _.imgHeight)
         _.imgAnimateDataObj[j].forEach(function(item, index) {
             imgData.data[index] = item
@@ -247,7 +239,8 @@ CanvasDistortGround.prototype.createAnimate = function() {
     }
     var index = -1
     var to = 1 //控制方向
-    setInterval(function() {
+    clearInterval(_.timer)
+    _.timer = setInterval(function() {
         if(to) {
             index++
             if (index === 4) {
@@ -262,42 +255,76 @@ CanvasDistortGround.prototype.createAnimate = function() {
             }
         }
         $('#0').attr('src', url[index])
-    }, 100)
+    }, 100) 
+    // $('#0').attr('src', url[0])
+    // $('#1').attr('src', url[1])
+    // $('#2').attr('src', url[2])
+    // $('#3').attr('src', url[3])
 }
-CanvasDistortGround.prototype.sliceImgData = function(ctrlNodes) { //对图像进行切分
+
+CanvasDistortGround.prototype.sliceImgData = function(ctrlNodes, type) { //对图像进行切分
     var _ = this
     var arr = []
     var bezierArr = []
+    var imgDataSlice = []
     for (i = 0; i < 1; i += 0.001) {
         bezierArr.push(_.bezier(ctrlNodes, i))
     }
+    _.imgDataArr.origin.forEach(function (item, index) { //移位后像素状态会产生变化需要重置
+        _.imgData.data[index] = item
+    })
     bezierArr.forEach(function (obj, index) {
-        if (_.imgStartY < obj.y && _.imgStartY + _.imgHeight > obj.y) {
+        if (_.imgStartY < obj.y && _.imgStartY + _.imgHeight > obj.y && type === 'row') {
             var diffX = parseInt(obj.x - _.baseX, 10) //计算偏移量
             var dissY = parseInt(obj.y - _.imgStartY, 10)
             var rowNum = dissY
-            _.imgDataArr.origin.forEach(function (item, index) {
-                _.imgData.data[index] = item
-            })
-            var imgDataSlice = _.imgData.data.slice((rowNum) * _.imgWidth * 4, rowNum * _.imgWidth * 4 + _.imgWidth * 4) //按层切片
-            _.imgAnimateDataSymArr[rowNum] = {
-                diffX: diffX,
-                imgDataSlice: [].slice.call(imgDataSlice)
-            }
+            imgDataSlice = _.imgData.data.slice((rowNum) * _.imgWidth * 4, rowNum * _.imgWidth * 4 + _.imgWidth * 4) //按层切片
             for (var i = 0; i < Math.abs(diffX * 4); i++) {
                 imgDataSlice = _.arraymove(diffX, imgDataSlice)
             }
             _.imgChangeObj[rowNum] = imgDataSlice
+        }else if(_.baseX + _.imgWidth / 2 > obj.x && _.baseX - _.imgWidth / 2 < obj.x && type === 'col') {
+            var diffX = parseInt(obj.x - (_.baseX - _.imgWidth / 2), 10) //计算偏移量
+            var diffY = parseInt(obj.y - _.baseY, 10)
+            var rowNum = diffX
+            _.imgChangeObj[rowNum] = {
+                diffX: diffX,
+                diffY: diffY
+            }
+            
         }
     })
-    Object.keys(_.imgChangeObj).forEach(function (item, index) {
-        arr = arr.concat(Array.from(_.imgChangeObj[item]))
-    })
+    if(type === 'row') {
+        Object.keys(_.imgChangeObj).forEach(function (item, index) {
+            arr = arr.concat(Array.from(_.imgChangeObj[item]))
+        })
+    } else if(type === 'col') {
+        for (var i = 0; i < _.imgWidth; i++) {
+            imgDataSlice = []
+            for (var j = 0; j < _.imgHeight; j++) {
+                var index = j * _.imgWidth * 4 + i * 4
+                var sliceArr = _.imgData.data.slice(index, index + 4)
+                imgDataSlice = imgDataSlice.concat(Array.from(sliceArr))
+            }
+            if(_.imgChangeObj[i]) {
+                for (var k = 0; k < Math.abs(_.imgChangeObj[i].diffY * 4); k++) {
+                    imgDataSlice = _.arraymove(_.imgChangeObj[i].diffY, imgDataSlice)
+                }
+                for (var p = 0; p < imgDataSlice.length / 4; p++) {
+                    arr[p * _.imgWidth * 4 + i * 4] = imgDataSlice[p * 4]
+                    arr[p * _.imgWidth * 4 + i * 4 + 1] = imgDataSlice[p * 4 + 1]
+                    arr[p * _.imgWidth * 4 + i * 4 + 2] = imgDataSlice[p * 4 + 2]
+                    arr[p * _.imgWidth * 4 + i * 4 + 3] = imgDataSlice[p * 4 + 3]
+                }
+            }
+        }
+    }
     return arr
 }
 CanvasDistortGround.prototype.createDistortImage = function(ctrlNodes) {
     var _ = this
-    var arr = _.sliceImgData(ctrlNodes)
+    var type = _.checkInputBtn.get(0).checked ? 'col' : 'row'
+    var arr = _.sliceImgData(ctrlNodes, type)
     _.imgDataArr.temp = arr
     _.imgDataArr.temp.forEach(function (item, index) { //更新imgData
         _.imgData.data[index] = item
@@ -342,6 +369,12 @@ CanvasDistortGround.prototype.drawBaseLine = function() {
     this.ctx.lineTo(this.baseX, this.canvas.height)
     this.ctx.moveTo(this.imgStartX, this.imgStartY)
     this.ctx.lineTo(this.canvas.width, this.imgStartY)
+
+    this.ctx.moveTo(this.baseX - this.imgWidth / 2, this.imgStartY)
+    this.ctx.lineTo(this.baseX - this.imgWidth / 2, this.imgStartY + this.imgHeight)
+    this.ctx.moveTo(this.baseX + this.imgWidth / 2, this.imgStartY)
+    this.ctx.lineTo(this.baseX + this.imgWidth / 2, this.imgStartY + this.imgHeight)
+
     this.ctx.moveTo(this.imgStartX, this.imgStartY + this.imgHeight)
     this.ctx.lineTo(this.canvas.width, this.imgStartY + this.imgHeight)
     this.ctx.moveTo(this.imgStartX + this.imgWidth, this.imgStartY + this.imgHeight / 2)

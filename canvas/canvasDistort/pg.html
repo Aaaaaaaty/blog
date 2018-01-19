@@ -27,6 +27,9 @@
     <button type="button" id="addObj" class="btn btn-primary">添加对象</button> 
     <div id="img">
         <img src="" alt="" id="0">
+        <img src="" alt="" id="1">
+        <img src="" alt="" id="2">
+        <img src="" alt="" id="3">
     </div>
     <img src="123.png" alt="">
     <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
@@ -38,7 +41,8 @@
             var html = ''
                 html += '<div id=' + name + '>'
                 html += '<canvas class="canvas" width="1200" height="600"></canvas>'
-                html += '<input type="file">'
+                html += '<input type="file" class="file">'
+                html += '<div><label><input type="checkbox" class="check">竖直方向合成</label></div>'
                 html += '<button type="button" class="btn btn-primary print">绘制</button>'
                 html += '<button type="button" class="btn btn-primary make">扭曲</button>'
                 html += '<button type="button" class="btn btn-primary clear">清空</button>'

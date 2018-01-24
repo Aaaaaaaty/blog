@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>推箱子</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .ctrl {
+            position: absolute;
+            top: 0;
+            left: 0;
+        } 
+        #up {
+            top: 70%;
+            left: 45%;
+        }
+        #left {
+            top: 80%;
+            left: 25%;
+        }
+        #down {
+            top: 80%;
+            left: 45%;
+        }
+        #right {
+            top: 80%;
+            left: 65%;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas> 
+    <img src="./images/up.jpeg" alt="" class="ctrl" id="up">
+    <img src="./images/left.jpeg" alt="" class="ctrl" id="left">
+    <img src="./images/down.jpeg" alt="" class="ctrl" id="down">
+    <img src="./images/right.jpeg" alt="" class="ctrl" id="right">
+    <script>
+        /**
+         * type类
+         * wood: 地面
+         * wall: 墙体
+         * box: 待推的箱子
+         * des: 目的地
+         * boy: 人物
+         *  
+         * */
+        var option = {
+            wall:{
+                url: './images/wall.jpeg',
+                data: [{
+                    y: 0,
+                    x: 3
+                }, {
+                    y: 0,
+                    x: 4
+                }, {
+                    y: 0,
+                    x: 5
+                }, {
+                    y: 0,
+                    x: 6
+                }, {
+                    y: 0,
+                    x: 7
+                }, {
+                    y: 1,
+                    x: 0
+                }, {
+                    y: 1,
+                    x: 1
+                }, {
+                    y: 1,
+                    x: 2
+                }, {
+                    y: 1,
+                    x: 3
+                }, {
+                    y: 1,
+                    x: 7
+                }, {
+                    y: 2,
+                    x: 0
+                }, {
+                    y: 2,
+                    x: 5
+                }, {
+                    y: 2,
+                    x: 7
+                }, {
+                    y: 3,
+                    x: 0
+                }, {
+                    y: 3,
+                    x: 7
+                }, {
+                    y: 4,
+                    x: 0
+                }, {
+                    y: 4,
+                    x: 5
+                }, {
+                    y: 4,
+                    x: 6
+                }, {
+                    y: 4,
+                    x: 7
+                }, {
+                    y: 5,
+                    x: 0
+                }, {
+                    y: 5,
+                    x: 1
+                }, {
+                    y: 5,
+                    x: 5
+                }, {
+                    y: 6,
+                    x: 1
+                }, {
+                    y: 6,
+                    x: 4
+                }, {
+                    y: 6,
+                    x: 5
+                }, {
+                    y: 7,
+                    x: 1
+                }, {
+                    y: 7,
+                    x: 2
+                }, {
+                    y: 7,
+                    x: 3
+                }, {
+                    y: 7,
+                    x: 4
+                },{
+                    y: 7,
+                    x: 5
+                }]
+            },
+            wood: {
+                url: './images/wood.jpeg',
+                data: [{
+                    y: 1,
+                    x: 4
+                }, {
+                    y: 1,
+                    x: 5
+                }, {
+                    y: 1,
+                    x: 6
+                }, {
+                    y: 2,
+                    x: 1
+                }, {
+                    y: 2,
+                    x: 2
+                }, {
+                    y: 2,
+                    x: 3
+                }, {
+                    y: 2,
+                    x: 4
+                }, {
+                    y: 2,
+                    x: 6
+                }, {
+                    y: 3,
+                    x: 1
+                }, {
+                    y: 3,
+                    x: 5
+                }, {
+                    y: 3,
+                    x: 6
+                }, {
+                    y: 4,
+                    x: 1
+                }, {
+                    y: 4,
+                    x: 2
+                }, {
+                    y: 6,
+                    x: 2
+                }, {
+                    y: 6,
+                    x: 3
+                }, {
+                    y: 6,
+                    x: 4
+                },{
+                    x: 3,
+                    y: 3
+                }, {
+                    x: 3,
+                    y: 4
+                }, {
+                    x: 3,
+                    y: 5
+                },{
+                    y: 3,
+                    x: 2
+                }, {
+                    y: 5,
+                    x: 2
+                }]
+            },
+            des: {
+                url: './images/des.jpeg',
+                data: [{
+                    x: 4,
+                    y: 3
+                }, {
+                    x: 4,
+                    y: 4
+                }, {
+                    x: 4,
+                    y: 5
+                }]
+            },
+            box: {
+                url:'./images/box.jpeg',
+                data: [{
+                    x: 3,
+                    y: 3
+                }, {
+                    x: 3,
+                    y: 4
+                }, {
+                    x: 3,
+                    y: 5
+                }]
+            },
+            fixBox: {
+                url: './images/fix-box.jpeg',
+                data: []
+            },
+            boy: {
+                url: './images/boy.jpeg',
+                data: [{
+                    x: 4,
+                    y: 4
+                }]
+            }
+        }
+
+        function BoxGround(option) {
+            this.canvas = document.getElementById('canvas')
+            this.ctx = this.canvas.getContext('2d')
+            this.canvasWidth = this.canvas.width = window.innerWidth
+            this.canvasHeight = this.canvas.height = window.innerHeight
+            this.rowNum = 8
+            this.colNum = 8
+            this.borderX = 10 //黑色边界
+            this.borderY = 10
+            this.elWidth = (this.canvasWidth - 2 * this.borderX) / this.rowNum //各个元素所占宽
+            this.elHeight = (this.canvasWidth - 2 * this.borderY) / this.colNum //各个元素所占高
+            this.sources = option || {}
+            this.images = {}
+            this.isWin = false
+        }
+
+        BoxGround.prototype.init = function() {
+            var _ = this
+            var eventArr = ['up', 'down', 'left', 'right']
+            eventArr.forEach(function(item, index) {
+                var obj = document.getElementById(item)
+                obj.addEventListener('click', _.emitMove.bind(_, item), false)
+            })
+            this.loadImages(this.renderCanvas.bind(this))
+        }
+        BoxGround.prototype.renderCanvas = function() {
+            var _ = this
+            this.drawBg() //绘制背景
+            Object.keys(this.sources).forEach(function(item, index) { //绘制各个格子相应物体
+                if(_.sources[item].data.length) {
+                    _.sources[item].data.forEach(function (obj, i) {
+                        _.ctx.drawImage(_.images[item], obj.x * _.elWidth, obj.y * _.elHeight, _.elWidth, _.elHeight)
+                    })
+                }
+            })
+            if(this.isWin) {
+                setTimeout(function() {
+                    alert('you win')
+                }, 0)
+                return
+            }
+            window.requestAnimationFrame(this.renderCanvas.bind(this))
+        }
+        BoxGround.prototype.loadImages = function(callback) {
+            var count = 0,  
+                imgNum = Object.keys(this.sources).length
+            var _ = this
+            Object.keys(this.sources).forEach(function(item, index) {
+                _.images[item] = new Image()
+                _.images[item].onload = function() {
+                    if(++count >= imgNum) {
+                        callback()
+                    }
+                }
+                _.images[item].src = _.sources[item].url
+            })
+        }
+        BoxGround.prototype.drawBg = function() {
+            this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasWidth)
+        }
+        BoxGround.prototype.emitMove = function(type) {
+            var x = this.sources.boy.data[0].x,
+                y = this.sources.boy.data[0].y,
+                canBoyMove = false,
+                canBoxMove = false,
+                isBoyOnBox = false,
+                _ = this
+            switch (type) {
+                case 'up': 
+                    y -- 
+                    break
+                case 'down':
+                    y ++
+                    break
+                case 'left':
+                    x --
+                    break
+                case 'right':
+                    x ++
+                    break
+            }
+            this.sources.wood.data.concat(this.sources.des.data).forEach(function(item, index) {
+                if(item.x === x && item.y === y) canBoyMove = true //人物理论可以挪动但不知道箱子是否会阻碍
+            })
+            if(canBoyMove) {
+                this.sources.box.data.forEach(function(item, index) { //判断箱子是否可以移动，不能则导致人物无法移动
+                    var boxX = item.x,
+                        boxY = item.y
+                    if(boxX === x && boxY === y) {
+                        isBoyOnBox = true
+                        switch (type) {
+                            case 'up':
+                                boxY--
+                                break
+                            case 'down':
+                                boxY++
+                                break
+                            case 'left':
+                                boxX--
+                                break
+                            case 'right':
+                                boxX++
+                                break
+                        } 
+                        _.sources.wood.data.concat(_.sources.des.data).forEach(function (obj, i) {
+                            if (obj.x === boxX && obj.y === boxY) { //判断出箱子下一个位置是地板但是仍需判断是否会被箱子阻碍
+                                var boxRepeat = 0
+                                _.sources.box.data.forEach(function(data, t) {//遍历箱子，阻碍则增加boxRepeat值
+                                    if(data.x === boxX && data.y === boxY) {
+                                        boxRepeat ++
+                                    }
+                                })
+                                if(boxRepeat < 1) {
+                                    var desNum = 0
+                                    canBoxMove = true
+                                    item.x = boxX
+                                    item.y = boxY
+                                    _.sources.fixBox.data = []
+                                    _.sources.des.data.forEach(function(des, num) {
+                                        _.sources.box.data.forEach(function(box) {
+                                            if(des.x === box.x && des.y === box.y) {
+                                                desNum++
+                                                _.sources.fixBox.data.push({ x: box.x, y: box.y })
+                                            }
+                                        })
+                                    })
+                                    if(desNum === _.sources.des.data.length) {
+                                        // setTimeout(function(){
+                                            _.isWin = true
+                                        // }, 0)
+                                    }
+                                }
+                                
+                            }
+                        }) 
+                    } 
+                })
+                if(isBoyOnBox && canBoxMove || !isBoyOnBox) {
+                    _.sources.boy.data[0].x = x
+                    _.sources.boy.data[0].y = y
+                    canBoyMove = false
+                    canBoxMove = false
+                    isBoyOnBox = false
+                } 
+            }
+            
+            
+            
+            
+            
+        }
+        var boxGround = new BoxGround(option)
+        boxGround.init()
+    </script>
+</body>
+</html>

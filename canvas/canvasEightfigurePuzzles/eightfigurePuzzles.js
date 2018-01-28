@@ -78,7 +78,7 @@ function Dictionary() {
     };
 }
 function Graph() {
-    var vertices = [];
+    var vertices = []; //顶点数组
     var adjList = new Dictionary();
     var initializeColor = function(){
         var color = {};
@@ -99,43 +99,42 @@ function Graph() {
     this.pathData = function(v){
         var color = initializeColor(),
             queue = new Queue(),
-            dis = {}, // 用于保存起始顶点v到任意顶点u的距离
-            pred = {}; // 用于保存v到u的路径上u的上一级顶点（前溯点）
+            dis = {}, // 用于保存起始顶点到任意节点的距离
+            prevVertex = {}; // 当前顶点的上一级顶点（前溯点）
         queue.enqueue(v);
         while (!queue.isEmpty()){
-            var u = queue.dequeue(),
-                neighbors = adjList.get(u);
-            color[u] = 'grey';
-            for (i=0; i<neighbors.length; i++){
-                var w = neighbors[i];
-                if (color[w] === 'white'){
-                    color[w] = 'grey';
-                    if(!dis[u]) dis[u] = 0
-                    dis[w] = dis[u] + 1; // w到u的距离差是1
-                    pred[w] = u; // w的上一级顶点是u
+            var currentNode = queue.dequeue(),
+                childrenNodes = adjList.get(currentNode);
+            color[currentNode] = 'grey';
+            for (i=0; i<childrenNodes.length; i++){
+                var childNode = childrenNodes[i];
+                if (color[childNode] === 'white'){
+                    color[childNode] = 'grey';
+                    if(!dis[currentNode]) dis[currentNode] = 0
+                    dis[childNode] = dis[currentNode] + 1; // w到u的距离差是1
+                    prevVertex[childNode] = currentNode; // w的上一级顶点是u
                     
-                    queue.enqueue(w);
+                    queue.enqueue(childNode);
                 }
             }
-            color[u] = 'black';
+            color[currentNode] = 'black';
         }
-        console.log(dis, pred) 
         return { // 返回保存的数据
             dis: dis,
-            pred: pred
+            prevVertex: prevVertex
         };
     };
     // 格式化输出路径信息
     this.printPathData = function (pathData) {
-        var fromVertex = vertices[0]; // 获取起始点
-        for (var i=1; i<vertices.length; i++){
+        var startVertex = vertices[0]; // 获取起始点
+        for (var i = 1; i < vertices.length; i++){
             var toVertex = vertices[i], // 要到达的顶点
                 path = []; // 用于保存路径
             // 从目标顶点一直回溯到起始顶点
-            for (var v=toVertex; v!== fromVertex; v= pathData.pred[v]) {
+            for (var v = toVertex; v !== startVertex; v = pathData.prevVertex[v]) {
                 path.push(v); // 顶点添加进路径
             }
-            path.push(fromVertex); // 将起始顶点添加进路径
+            path.push(startVertex); // 将起始顶点添加进路径
             var s = path.pop();
             while (path.length > 0){
                 s += ' - ' + path.pop(); // 从路径数组倒序输出顶点

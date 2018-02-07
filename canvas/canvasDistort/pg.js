@@ -237,6 +237,9 @@ CanvasDistortGround.prototype.createAnimate = function(type) {
         bgctx.putImageData(imgData, 0, 0) 
         url[j] = canvasBg.toDataURL()
     }
+    //至此获取到全部url，主体功能结束，如果有需要可拿到url后自行拓展
+
+    //下面的部分不是必需的，只是当前的展示功能
     var index = -1
     var to = 1 //控制方向
     clearInterval(_.timer)
@@ -262,7 +265,7 @@ CanvasDistortGround.prototype.createAnimate = function(type) {
     // $('#3').attr('src', url[3])
 }
 
-CanvasDistortGround.prototype.sliceImgData = function(ctrlNodes, type) { //对图像进行切分
+CanvasDistortGround.prototype.sliceImgData = function(ctrlNodes, type) { //对图像进行切分，分为row与col两种切分方式
     var _ = this
     var arr = []
     var bezierArr = []
@@ -321,7 +324,7 @@ CanvasDistortGround.prototype.sliceImgData = function(ctrlNodes, type) { //对�
     }
     return arr
 }
-CanvasDistortGround.prototype.createDistortImage = function(ctrlNodes) {
+CanvasDistortGround.prototype.createDistortImage = function(ctrlNodes) { //生成扭曲图片
     var _ = this
     var type = _.checkInputBtn.get(0).checked ? 'col' : 'row'
     var arr = _.sliceImgData(ctrlNodes, type)
@@ -332,7 +335,7 @@ CanvasDistortGround.prototype.createDistortImage = function(ctrlNodes) {
     _.ctx.putImageData(_.imgData, _.imgStartX, _.imgStartY)
     _.imgDataArr.temp = null
 }
-CanvasDistortGround.prototype.arraymove = function(type, arr) {
+CanvasDistortGround.prototype.arraymove = function(type, arr) { //切片后的数据进行移位
     var newArray = []
     if(type > 0) { //右移
         var lastOne = arr[arr.length - 1]
@@ -359,12 +362,12 @@ CanvasDistortGround.prototype.drawBezier = function(ctx, origin_nodes) {
     var nodes = origin_nodes
     this.t += 0.01
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.drawBaseLine() 
+    this.drawBaseLine() //绘制参考线
     this.ctx.drawImage(this.img, 100, 100)
-    this.drawnode(nodes)
+    this.drawnode(nodes) //绘制控制点
     window.requestAnimationFrame(this.drawBezier.bind(this, this.ctx, nodes))
 }
-CanvasDistortGround.prototype.drawBaseLine = function() {
+CanvasDistortGround.prototype.drawBaseLine = function() { //绘制基础线段，可自行修改；之后图像扭曲区域为参考线所绘制的同原图大小一样的矩形内部
     this.ctx.moveTo(this.baseX, 0)
     this.ctx.lineTo(this.baseX, this.canvas.height)
     this.ctx.moveTo(this.imgStartX, this.imgStartY)
@@ -382,12 +385,12 @@ CanvasDistortGround.prototype.drawBaseLine = function() {
     this.ctx.strokeStyle = '#b4b4b4'
     this.ctx.stroke()
 }
-CanvasDistortGround.prototype.drawnode = function(nodes) {
+CanvasDistortGround.prototype.drawnode = function(nodes) { //绘制控制点生成动画中的子控制点
     if(!nodes.length) return
     var _ = this
     var _nodes = nodes
     var next_nodes = []
-    _nodes.forEach(function(item, index) {
+    _nodes.forEach(function(item, index) { //绘制控制点信息
         var x = item.x,
             y = item.y    
         if(_nodes.length === _.num) {
@@ -442,7 +445,7 @@ CanvasDistortGround.prototype.drawnode = function(nodes) {
     }
 }
 
-CanvasDistortGround.prototype.factorial = function(num) {
+CanvasDistortGround.prototype.factorial = function(num) { //计算阶乘
     if (num <= 1) {
         return 1;
     } else {
@@ -450,7 +453,7 @@ CanvasDistortGround.prototype.factorial = function(num) {
     }
 }
 
-CanvasDistortGround.prototype.bezier = function(arr, t) { //通过各控制点与占比t计算当前贝塞尔曲线上的点坐标
+CanvasDistortGround.prototype.bezier = function(arr, t) { //通过各控制点与占比t计算当前贝塞尔曲线上的点坐标，坐标点不同是由t的值决定的。控制点数组均不变
     var x = 0,
         y = 0,
         n = arr.length - 1,

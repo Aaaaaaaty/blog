@@ -33,6 +33,7 @@
 
 这个系列旨在对一些人们不常用遇到的知识点，以及可能常用到但不曾深入了解的部分做一个重新梳理，虽然可能有些部分看起来没有什么用，因为平时开发真的用不到！但个人认为糟粕也好精华也罢里面全部蕴藏着JS一些偏本质的东西或者说底层规范，如果能适当避开舒适区来看这些小细节，也许对自己也会有些帮助~文章更新在[我的博客](https://github.com/Aaaaaaaty/Blog)，欢迎不定期关注。
 ### 2018.2
+ - [由一个“bug”到鲜为人知的jQuery.cssHooks](https://github.com/Aaaaaaaty/blog/issues/41)[源码]
  - [记一次“失利后”经过半年准备通过阿里社招的经历与感悟](https://github.com/Aaaaaaaty/blog/issues/39)[自述]
 ### 2018.1
  - [基于JavaScript求解八数码最短路径并生成动画效果](https://github.com/Aaaaaaaty/blog/issues/38)[Algorithm]

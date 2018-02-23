@@ -66,7 +66,10 @@
                     x: 6
                 }, {
                     y: 0,
-                    x: 7
+                    x: 8
+                }, {
+                    y: 0,
+                    x: 8
                 }, {
                     y: 1,
                     x: 0
@@ -81,7 +84,7 @@
                     x: 3
                 }, {
                     y: 1,
-                    x: 7
+                    x: 8
                 }, {
                     y: 2,
                     x: 0
@@ -90,13 +93,13 @@
                     x: 5
                 }, {
                     y: 2,
-                    x: 7
+                    x: 8
                 }, {
                     y: 3,
                     x: 0
                 }, {
                     y: 3,
-                    x: 7
+                    x: 8
                 }, {
                     y: 4,
                     x: 0
@@ -108,7 +111,7 @@
                     x: 6
                 }, {
                     y: 4,
-                    x: 7
+                    x: 8
                 }, {
                     y: 5,
                     x: 0
@@ -128,25 +131,121 @@
                     y: 6,
                     x: 5
                 }, {
-                    y: 7,
+                    y: 13,
                     x: 1
                 }, {
-                    y: 7,
+                    y: 13,
                     x: 2
                 }, {
-                    y: 7,
+                    y: 13,
                     x: 3
                 }, {
-                    y: 7,
+                    y: 13,
                     x: 4
                 },{
-                    y: 7,
+                    y: 13,
                     x: 5
+                },{
+                    y: 5,
+                    x: 8
+                },{
+                    y: 6,
+                    x: 8
+                },{
+                    y: 13,
+                    x: 8
+                },{
+                    y: 8,
+                    x: 8
+                },{
+                    y: 9,
+                    x: 8
+                },{
+                    y: 10,
+                    x: 8
+                },{
+                    y: 11,
+                    x: 8
+                },{
+                    y: 12,
+                    x: 8
+                },{
+                    y: 13,
+                    x: 8
                 }]
             },
-            wood: {
-                url: './images/wood.jpeg',
+            floor: {
+                url: './images/floor.jpeg',
                 data: [{
+                    y: 0,
+                    x: 0
+                },{
+                    y: 1,
+                    x: 9
+                },{
+                    y: 0,
+                    x: 9
+                },{
+                    y: 2,
+                    x: 9
+                },{
+                    y: 3,
+                    x: 9
+                },{
+                    y: 4,
+                    x: 9
+                },{
+                    y: 5,
+                    x: 9
+                },{
+                    y: 6,
+                    x: 9
+                },{
+                    y: 7,
+                    x: 9
+                },{
+                    y: 8,
+                    x: 9
+                },{
+                    y: 9,
+                    x: 9
+                },{
+                    y: 10,
+                    x: 9
+                },{
+                    y: 11,
+                    x: 9
+                },{
+                    y: 12,
+                    x: 9
+                },{
+                    y: 13,
+                    x: 9
+                },{
+                    y: 1,
+                    x: 7
+                },{
+                    y: 0,
+                    x: 7
+                },{
+                    y: 2,
+                    x: 7
+                },{
+                    y: 3,
+                    x: 7
+                },{
+                    y: 4,
+                    x: 7
+                },{
+                    y: 0,
+                    x: 1
+                },{
+                    y: 0,
+                    x: 2
+                },{
+                    y: 0,
+                    x: 9
+                },{
                     y: 1,
                     x: 4
                 }, {
@@ -209,6 +308,48 @@
                 }, {
                     y: 5,
                     x: 2
+                }, {
+                    y: 5,
+                    x: 6
+                }, {
+                    y: 5,
+                    x: 7
+                }, {
+                    y: 6,
+                    x: 0
+                }, {
+                    y: 6,
+                    x: 6
+                }, {
+                    y: 6,
+                    x: 7
+                }, {
+                    y: 7,
+                    x: 8
+                }, {
+                    y: 8,
+                    x: 0
+                }, {
+                    y: 8,
+                    x: 1
+                }, {
+                    y: 8,
+                    x: 2
+                }, {
+                    y: 8,
+                    x: 3
+                }, {
+                    y: 8,
+                    x: 4
+                }, {
+                    y: 8,
+                    x: 5
+                }, {
+                    y: 8,
+                    x: 6
+                }, {
+                    y: 8,
+                    x: 7
                 }]
             },
             des: {
@@ -242,7 +383,7 @@
                 data: []
             },
             boy: {
-                url: './images/boy.jpeg',
+                url: './images/boy.png',
                 data: [{
                     x: 4,
                     y: 4
@@ -255,12 +396,10 @@
             this.ctx = this.canvas.getContext('2d')
             this.canvasWidth = this.canvas.width = window.innerWidth
             this.canvasHeight = this.canvas.height = window.innerHeight
-            this.rowNum = 8
-            this.colNum = 8
-            this.borderX = 10 //黑色边界
-            this.borderY = 10
-            this.elWidth = (this.canvasWidth - 2 * this.borderX) / this.rowNum //各个元素所占宽
-            this.elHeight = (this.canvasWidth - 2 * this.borderY) / this.colNum //各个元素所占高
+            this.rowNum = 10
+            this.colNum = 14
+            this.elWidth = this.canvasHeight / this.colNum * this.rowNum > this.canvasWidth ? this.canvasWidth / this.rowNum : this.canvasHeight / this.colNum//各个元素所占宽
+            this.elHeight = this.elWidth  //各个元素所占高
             this.sources = option || {}
             this.images = {}
             this.isWin = false
@@ -278,10 +417,11 @@
         BoxGround.prototype.renderCanvas = function() {
             var _ = this
             this.drawBg() //绘制背景
+            var border = (this.canvasWidth - this.elWidth * this.rowNum) / 2
             Object.keys(this.sources).forEach(function(item, index) { //绘制各个格子相应物体
                 if(_.sources[item].data.length) {
                     _.sources[item].data.forEach(function (obj, i) {
-                        _.ctx.drawImage(_.images[item], obj.x * _.elWidth, obj.y * _.elHeight, _.elWidth, _.elHeight)
+                        _.ctx.drawImage(_.images[item], obj.x * _.elWidth + border, obj.y * _.elHeight, _.elWidth, _.elHeight)
                     })
                 }
             })
@@ -308,7 +448,7 @@
             })
         }
         BoxGround.prototype.drawBg = function() {
-            this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasWidth)
+            this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         }
         BoxGround.prototype.emitMove = function(type) {
             var x = this.sources.boy.data[0].x,
@@ -331,7 +471,7 @@
                     x ++
                     break
             }
-            this.sources.wood.data.concat(this.sources.des.data).forEach(function(item, index) {
+            this.sources.floor.data.concat(this.sources.des.data).forEach(function(item, index) {
                 if(item.x === x && item.y === y) canBoyMove = true //人物理论可以挪动但不知道箱子是否会阻碍
             })
             if(canBoyMove) {

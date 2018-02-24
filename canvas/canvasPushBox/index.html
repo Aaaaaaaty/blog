@@ -35,10 +35,10 @@
 </head>
 <body>
     <canvas id="canvas"></canvas> 
-    <img src="./images/up.jpeg" alt="" class="ctrl" id="up">
+    <!-- <img src="./images/up.jpeg" alt="" class="ctrl" id="up">
     <img src="./images/left.jpeg" alt="" class="ctrl" id="left">
     <img src="./images/down.jpeg" alt="" class="ctrl" id="down">
-    <img src="./images/right.jpeg" alt="" class="ctrl" id="right">
+    <img src="./images/right.jpeg" alt="" class="ctrl" id="right"> -->
     <script>
         /**
          * type类
@@ -145,6 +145,15 @@
                 },{
                     y: 13,
                     x: 5
+                },{
+                    y: 13,
+                    x: 0
+                },{
+                    y: 13,
+                    x: 6
+                },{
+                    y: 13,
+                    x: 7
                 },{
                     y: 5,
                     x: 8
@@ -350,6 +359,126 @@
                 }, {
                     y: 8,
                     x: 7
+                }, {
+                    y: 7,
+                    x: 0
+                }, {
+                    y: 7,
+                    x: 1
+                }, {
+                    y: 7,
+                    x: 2
+                }, {
+                    y: 7,
+                    x: 3
+                }, {
+                    y: 7,
+                    x: 4
+                }, {
+                    y: 7,
+                    x: 5
+                }, {
+                    y: 7,
+                    x: 6
+                }, {
+                    y: 7,
+                    x: 7
+                }, {
+                    y: 9,
+                    x: 0
+                }, {
+                    y: 9,
+                    x: 1
+                }, {
+                    y: 9,
+                    x: 2
+                }, {
+                    y: 9,
+                    x: 3
+                }, {
+                    y: 9,
+                    x: 4
+                }, {
+                    y: 9,
+                    x: 5
+                }, {
+                    y: 9,
+                    x: 6
+                }, {
+                    y: 9,
+                    x: 7
+                }, {
+                    y: 10,
+                    x: 0
+                }, {
+                    y: 10,
+                    x: 1
+                }, {
+                    y: 10,
+                    x: 2
+                }, {
+                    y: 10,
+                    x: 3
+                }, {
+                    y: 10,
+                    x: 4
+                }, {
+                    y: 10,
+                    x: 5
+                }, {
+                    y: 10,
+                    x: 6
+                }, {
+                    y: 10,
+                    x: 7
+                }, {
+                    y: 11,
+                    x: 0
+                }, {
+                    y: 11,
+                    x: 1
+                }, {
+                    y: 11,
+                    x: 2
+                }, {
+                    y: 11,
+                    x: 3
+                }, {
+                    y: 11,
+                    x: 4
+                }, {
+                    y: 11,
+                    x: 5
+                }, {
+                    y: 11,
+                    x: 6
+                }, {
+                    y: 11,
+                    x: 7
+                }, {
+                    y: 12,
+                    x: 0
+                }, {
+                    y: 12,
+                    x: 1
+                }, {
+                    y: 12,
+                    x: 2
+                }, {
+                    y: 12,
+                    x: 3
+                }, {
+                    y: 12,
+                    x: 4
+                }, {
+                    y: 12,
+                    x: 5
+                }, {
+                    y: 12,
+                    x: 6
+                }, {
+                    y: 12,
+                    x: 7
                 }]
             },
             des: {
@@ -403,14 +532,16 @@
             this.sources = option || {}
             this.images = {}
             this.isWin = false
+            this.top = this.left = this.rigth = this.bottom = 0
+            this.controlCircleRadius = 80
         }
 
         BoxGround.prototype.init = function() {
             var _ = this
             var eventArr = ['up', 'down', 'left', 'right']
             eventArr.forEach(function(item, index) {
-                var obj = document.getElementById(item)
-                obj.addEventListener('click', _.emitMove.bind(_, item), false)
+                // var obj = document.getElementById(item)
+                // obj.addEventListener('click', _.emitMove.bind(_, item), false)
             })
             this.loadImages(this.renderCanvas.bind(this))
         }
@@ -431,7 +562,26 @@
                 }, 0)
                 return
             }
+            this.controlDirection()
             window.requestAnimationFrame(this.renderCanvas.bind(this))
+        }
+        BoxGround.prototype.controlDirection = function() {
+            //绘制控制盘
+            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius, 0, 2 * Math.PI, false)
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+            this.ctx.fill()
+            this.ctx.beginPath()
+            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius - 15, 0, 2 * Math.PI, false)
+            this.ctx.fillStyle = 'rgba(100, 100, 100, 0.5)'
+            this.ctx.fill()
+            this.ctx.beginPath()
+            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius - 35, 0, 2 * Math.PI, false)
+            this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'
+            this.ctx.fill()
+            this.ctx.beginPath()
+            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius - 51, 0, 2 * Math.PI, false)
+            this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
+            this.ctx.fill()
         }
         BoxGround.prototype.loadImages = function(callback) {
             var count = 0,  
@@ -448,6 +598,7 @@
             })
         }
         BoxGround.prototype.drawBg = function() {
+            this.ctx.fillStyle = 'rgb(69, 160, 89)'
             this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
         }
         BoxGround.prototype.emitMove = function(type) {

@@ -39,6 +39,7 @@
     <img src="./images/left.jpeg" alt="" class="ctrl" id="left">
     <img src="./images/down.jpeg" alt="" class="ctrl" id="down">
     <img src="./images/right.jpeg" alt="" class="ctrl" id="right"> -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <script>
         /**
          * type类
@@ -543,6 +544,9 @@
                 // var obj = document.getElementById(item)
                 // obj.addEventListener('click', _.emitMove.bind(_, item), false)
             })
+            $('body').on('mousemove', function(e) {
+                e.preventDefault()
+            }) 
             this.loadImages(this.renderCanvas.bind(this))
         }
         BoxGround.prototype.renderCanvas = function() {

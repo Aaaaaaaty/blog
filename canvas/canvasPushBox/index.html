@@ -35,18 +35,11 @@
 </head>
 <body>
     <canvas id="canvas"></canvas> 
-<<<<<<< HEAD
-    <img src="./images/up.jpeg" alt="" class="ctrl" id="up">
-    <img src="./images/left.jpeg" alt="" class="ctrl" id="left">
-    <img src="./images/down.jpeg" alt="" class="ctrl" id="down">
-    <img src="./images/right.jpeg" alt="" class="ctrl" id="right">
-=======
     <!-- <img src="./images/up.jpeg" alt="" class="ctrl" id="up">
     <img src="./images/left.jpeg" alt="" class="ctrl" id="left">
     <img src="./images/down.jpeg" alt="" class="ctrl" id="down">
     <img src="./images/right.jpeg" alt="" class="ctrl" id="right"> -->
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
     <script>
         /**
          * type类
@@ -74,14 +67,10 @@
                     x: 6
                 }, {
                     y: 0,
-<<<<<<< HEAD
-                    x: 7
-=======
                     x: 8
                 }, {
                     y: 0,
                     x: 8
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 }, {
                     y: 1,
                     x: 0
@@ -96,11 +85,7 @@
                     x: 3
                 }, {
                     y: 1,
-<<<<<<< HEAD
-                    x: 7
-=======
                     x: 8
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 }, {
                     y: 2,
                     x: 0
@@ -109,21 +94,13 @@
                     x: 5
                 }, {
                     y: 2,
-<<<<<<< HEAD
-                    x: 7
-=======
                     x: 8
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 }, {
                     y: 3,
                     x: 0
                 }, {
                     y: 3,
-<<<<<<< HEAD
-                    x: 7
-=======
                     x: 8
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 }, {
                     y: 4,
                     x: 0
@@ -135,11 +112,7 @@
                     x: 6
                 }, {
                     y: 4,
-<<<<<<< HEAD
-                    x: 7
-=======
                     x: 8
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 }, {
                     y: 5,
                     x: 0
@@ -159,27 +132,6 @@
                     y: 6,
                     x: 5
                 }, {
-<<<<<<< HEAD
-                    y: 7,
-                    x: 1
-                }, {
-                    y: 7,
-                    x: 2
-                }, {
-                    y: 7,
-                    x: 3
-                }, {
-                    y: 7,
-                    x: 4
-                },{
-                    y: 7,
-                    x: 5
-                }]
-            },
-            wood: {
-                url: './images/wood.jpeg',
-                data: [{
-=======
                     y: 13,
                     x: 1
                 }, {
@@ -304,7 +256,6 @@
                     y: 0,
                     x: 9
                 },{
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                     y: 1,
                     x: 4
                 }, {
@@ -367,8 +318,6 @@
                 }, {
                     y: 5,
                     x: 2
-<<<<<<< HEAD
-=======
                 }, {
                     y: 5,
                     x: 6
@@ -531,7 +480,6 @@
                 }, {
                     y: 12,
                     x: 7
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 }]
             },
             des: {
@@ -565,11 +513,7 @@
                 data: []
             },
             boy: {
-<<<<<<< HEAD
-                url: './images/boy.jpeg',
-=======
                 url: './images/boy.png',
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 data: [{
                     x: 4,
                     y: 4
@@ -582,17 +526,6 @@
             this.ctx = this.canvas.getContext('2d')
             this.canvasWidth = this.canvas.width = window.innerWidth
             this.canvasHeight = this.canvas.height = window.innerHeight
-<<<<<<< HEAD
-            this.rowNum = 8
-            this.colNum = 8
-            this.borderX = 10 //黑色边界
-            this.borderY = 10
-            this.elWidth = (this.canvasWidth - 2 * this.borderX) / this.rowNum //各个元素所占宽
-            this.elHeight = (this.canvasWidth - 2 * this.borderY) / this.colNum //各个元素所占高
-            this.sources = option || {}
-            this.images = {}
-            this.isWin = false
-=======
             this.rowNum = 10
             this.colNum = 14
             this.elWidth = this.canvasHeight / this.colNum * this.rowNum > this.canvasWidth ? this.canvasWidth / this.rowNum : this.canvasHeight / this.colNum//各个元素所占宽
@@ -602,42 +535,28 @@
             this.isWin = false
             this.top = this.left = this.rigth = this.bottom = 0
             this.controlCircleRadius = 80
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
         }
 
         BoxGround.prototype.init = function() {
             var _ = this
             var eventArr = ['up', 'down', 'left', 'right']
             eventArr.forEach(function(item, index) {
-<<<<<<< HEAD
-                var obj = document.getElementById(item)
-                obj.addEventListener('click', _.emitMove.bind(_, item), false)
-            })
-=======
                 // var obj = document.getElementById(item)
                 // obj.addEventListener('click', _.emitMove.bind(_, item), false)
             })
             $('body').on('mousemove', function(e) {
                 e.preventDefault()
             }) 
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
             this.loadImages(this.renderCanvas.bind(this))
         }
         BoxGround.prototype.renderCanvas = function() {
             var _ = this
             this.drawBg() //绘制背景
-<<<<<<< HEAD
-            Object.keys(this.sources).forEach(function(item, index) { //绘制各个格子相应物体
-                if(_.sources[item].data.length) {
-                    _.sources[item].data.forEach(function (obj, i) {
-                        _.ctx.drawImage(_.images[item], obj.x * _.elWidth, obj.y * _.elHeight, _.elWidth, _.elHeight)
-=======
             var border = (this.canvasWidth - this.elWidth * this.rowNum) / 2
             Object.keys(this.sources).forEach(function(item, index) { //绘制各个格子相应物体
                 if(_.sources[item].data.length) {
                     _.sources[item].data.forEach(function (obj, i) {
                         _.ctx.drawImage(_.images[item], obj.x * _.elWidth + border, obj.y * _.elHeight, _.elWidth, _.elHeight)
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                     })
                 }
             })
@@ -647,10 +566,6 @@
                 }, 0)
                 return
             }
-<<<<<<< HEAD
-            window.requestAnimationFrame(this.renderCanvas.bind(this))
-        }
-=======
             this.controlDirection()
             window.requestAnimationFrame(this.renderCanvas.bind(this))
         }
@@ -672,7 +587,6 @@
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
             this.ctx.fill()
         }
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
         BoxGround.prototype.loadImages = function(callback) {
             var count = 0,  
                 imgNum = Object.keys(this.sources).length
@@ -688,12 +602,8 @@
             })
         }
         BoxGround.prototype.drawBg = function() {
-<<<<<<< HEAD
-            this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasWidth)
-=======
             this.ctx.fillStyle = 'rgb(69, 160, 89)'
             this.ctx.fillRect(0, 0, this.canvasWidth, this.canvasHeight)
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
         }
         BoxGround.prototype.emitMove = function(type) {
             var x = this.sources.boy.data[0].x,
@@ -716,11 +626,7 @@
                     x ++
                     break
             }
-<<<<<<< HEAD
-            this.sources.wood.data.concat(this.sources.des.data).forEach(function(item, index) {
-=======
             this.sources.floor.data.concat(this.sources.des.data).forEach(function(item, index) {
->>>>>>> f752ac2332fc23041ccd60cd70bae70da54ed096
                 if(item.x === x && item.y === y) canBoyMove = true //人物理论可以挪动但不知道箱子是否会阻碍
             })
             if(canBoyMove) {

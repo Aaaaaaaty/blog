@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .div {
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-size: 60px;
+            line-height: 100px;
+            border: 1px solid black;
+            text-align: center;
+            transition: all 0s;
+            -moz-transition: all 0s; /* Firefox 4 */
+            -webkit-transition: all 0s; /* Safari 和 Chrome */
+            -o-transition: all 0s; /* Opera */
+        }
+        .eightPuzzles {
+            width: 320px;
+            display: table-cell;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="eightPuzzles">
+        <div id="0" class="div">0</div>
+        <div id="1" class="div">1</div>
+        <div id="2" class="div">2</div>
+        <div id="3" class="div">3</div>
+        <div id="4" class="div">4</div>
+        <div id="5" class="div">5</div>
+        <div id="6" class="div">6</div>
+        <div id="7" class="div">7</div>
+        <div id="8" class="div">8</div>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./test.js"></script>
+    <script>
+        var option = {
+            startNode: [
+                [2, 6, 3],
+                [4, 8, 0],
+                [7, 1, 5]
+            ],
+            endNode: [
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 0]
+            ],
+            animateTime: '300'
+        }
+        var eightPuzzles = new EightPuzzles(option)
+        eightPuzzles.calDom(eightPuzzles.startNode)
+        eightPuzzles.solveEightPuzzles()
+        setTimeout(function() {
+            $('.div').css({
+                'transition': 'all '+ option.animateTime+'ms',
+                '-moz-transition': 'all '+ option.animateTime+'ms', /* Firefox 4 */
+                '-webkit-transition': 'all '+ option.animateTime+'ms', /* Safari 和 Chrome */
+                '-o-transition': 'all '+ option.animateTime+'ms' /* Opera */
+            })
+        }, 0)
+    </script>
+</body>
+</html>

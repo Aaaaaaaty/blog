@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .wrapper {
+            position: relative;
+            top: 200px;
+            left: 200px;
+        }
+        .wrapper-kmp {
+            position: relative;
+            top: 400px;
+            left: 200px;
+        }
+        .div {
+            width: 30px;
+            height: 30px;
+            background-color: #dcdcdc;
+            position: absolute;
+            left: 10px;
+            top: 0;
+            font-size: 20px;
+            line-height: 30px;
+            border: 1px solid black;
+            text-align: center;
+            transition: all 0s;
+            -moz-transition: all 0s; /* Firefox 4 */
+            -webkit-transition: all 0s; /* Safari 和 Chrome */
+            -o-transition: all 0s; /* Opera */
+        }
+        .num {
+            position: absolute;
+            top: 4px;
+            left: -104px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <span id="normalNum" class="num">比较次数:<span>0</span></span>
+        <div id="baseStr"></div>
+        <div id="targetStr"></div>
+    </div>
+    <div class="wrapper-kmp">
+        <span id="kmpNum" class="num">比较次数:<span>0</span></span>
+        <div id="baseStr-kmp"></div>
+        <div id="targetStr-kmp"></div>
+    </div>
+    <!-- <script src="./jquery.js"></script> -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="./kmp.js"></script>
+    <script>
+        init()
+    </script>
+</body>
+</html>

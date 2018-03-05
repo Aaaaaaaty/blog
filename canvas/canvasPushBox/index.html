@@ -10,6 +10,11 @@
             margin: 0;
             padding: 0;
         }
+        #canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
         .ctrl {
             position: absolute;
             top: 0;
@@ -533,7 +538,8 @@
             this.sources = option || {}
             this.images = {}
             this.isWin = false
-            this.top = this.left = this.rigth = this.bottom = 0
+            this.controlShow = false
+            this.rowDiff = this.colDiff = 0
             this.controlCircleRadius = 80
         }
 
@@ -544,13 +550,26 @@
                 // var obj = document.getElementById(item)
                 // obj.addEventListener('click', _.emitMove.bind(_, item), false)
             })
-            $('body').on('mousemove', function(e) {
+            $('body').on('touchstart', function(e) {
+                _.touchStartX = e.touches[0].clientX
+                _.touchStartY = e.touches[0].clientY
+                _.controlShow = true
+            })
+            $('body').on('touchmove', function(e) {
+                var touchmoveX = e.touches[0].clientX 
+                var touchmoveY = e.touches[0].clientY
+                _.rowDiff = touchmoveX - _.touchStartX
+                _.colDiff = touchmoveY - _.touchStartY
                 e.preventDefault()
             }) 
+            $('body').on('touchend', function(e) {
+                _.controlShow = false
+            })
             this.loadImages(this.renderCanvas.bind(this))
         }
         BoxGround.prototype.renderCanvas = function() {
             var _ = this
+            this.ctx.clearRect(0, 0, this.canvasWidth, this.canvasHeight)
             this.drawBg() //绘制背景
             var border = (this.canvasWidth - this.elWidth * this.rowNum) / 2
             Object.keys(this.sources).forEach(function(item, index) { //绘制各个格子相应物体
@@ -566,26 +585,39 @@
                 }, 0)
                 return
             }
-            this.controlDirection()
+            if(this.controlShow) this.controlDirection()
             window.requestAnimationFrame(this.renderCanvas.bind(this))
         }
         BoxGround.prototype.controlDirection = function() {
             //绘制控制盘
-            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius, 0, 2 * Math.PI, false)
+            var x = this.touchStartX < this.controlCircleRadius ? this.controlCircleRadius : this.touchStartX > this.canvasWidth - this.controlCircleRadius ? this.canvasWidth - this.controlCircleRadius : this.touchStartX,
+                y = this.touchStartY < this.controlCircleRadius ? this.controlCircleRadius : this.touchStartY > this.canvasHeight - this.controlCircleRadius ? this.canvasHeight - this.controlCircleRadius : this.touchStartY,
+                ctlBallX = 0,
+                ctlBallY = 0
+            if(Math.abs(this.rowDiff) > Math.abs(this.colDiff)) {
+                
+            }
+            
+            this.ctx.beginPath()
+            this.ctx.arc(x, y, this.controlCircleRadius, 0, 2 * Math.PI, false)
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
             this.ctx.fill()
+            this.ctx.closePath()
             this.ctx.beginPath()
-            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius - 15, 0, 2 * Math.PI, false)
+            this.ctx.arc(x, y, this.controlCircleRadius - 15, 0, 2 * Math.PI, false)
             this.ctx.fillStyle = 'rgba(100, 100, 100, 0.5)'
             this.ctx.fill()
+            this.ctx.closePath()
             this.ctx.beginPath()
-            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius - 35, 0, 2 * Math.PI, false)
+            this.ctx.arc(x, y, this.controlCircleRadius - 35, 0, 2 * Math.PI, false)
             this.ctx.fillStyle = 'rgba(255, 255, 255, 0.2)'
             this.ctx.fill()
+            this.ctx.closePath()
             this.ctx.beginPath()
-            this.ctx.arc(this.canvasWidth - this.controlCircleRadius - 20, this.canvasHeight - this.controlCircleRadius - 50, this.controlCircleRadius - 51, 0, 2 * Math.PI, false)
+            this.ctx.arc(x, y, this.controlCircleRadius - 51, 0, 2 * Math.PI, false)
             this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
             this.ctx.fill()
+            this.ctx.closePath()
         }
         BoxGround.prototype.loadImages = function(callback) {
             var count = 0,  

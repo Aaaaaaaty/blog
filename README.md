@@ -4,8 +4,12 @@
 <p align="center">
    <a href=""><img id="like" src="https://img.shields.io/badge/掘金-3.2k喜欢-blue.svg" alt="Build Status"></a>
    <a href=""><img id="read" src="https://img.shields.io/badge/掘金-65.1k阅读-blue.svg" alt="Build Status"></a>
-  </p>
+  </p>
   
+  
+***PS:天猫持续招人啦~~~ base杭州，JAVA、算法、客户端、前端（any职位我们组都能hold住）有兴趣欢迎发邮件到tianyu.aty@alibaba-inc.com 注明来自[github]***
+
+
 ## 不定期更新中————
 
 ### Canvas进阶系列

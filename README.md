@@ -7,7 +7,7 @@
   </p>
   
   
-***PS:天猫持续招人啦~~~ base杭州，JAVA、算法、客户端、前端（any职位我们组都能hold住）有兴趣欢迎发邮件到tianyu.aty@alibaba-inc.com 注明来自[github]***
+***PS:天猫持续招人啦~~~ base杭州，JAVA、算法、客户端、前端（any职位我们组都能hold住）有兴趣欢迎发简历到tianyu.aty@alibaba-inc.com 注明来自[github]***
 
 
 ## 不定期更新中————

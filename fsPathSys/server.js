@@ -3,7 +3,7 @@ const url = require('url')
 const fs = require('fs')
 const path = require('path')
 const multiparty = require('multiparty')
-const { exec } = require('child_process')
+const { execFile } = require('child_process')
 const zlib = require('zlib')
 const gzip = zlib.createGzip()
 const unzip = require('unzip')
@@ -42,6 +42,12 @@ function serverStatic(req, res) {
     	cons('用户ip：' + ip)
  		resolveData(req, res, id)
     } else {
+        let root = path.resolve('.')
+        let resolved = path.resolve(root, filePath.replace(/^\.\//, ''))
+        if (resolved !== root && resolved.indexOf(root + path.sep) !== 0) {
+            send404(res)
+            return
+        }
         sendFile(filePath, res)
     }
 }
@@ -51,7 +57,7 @@ function resolveData(req, res, id) {
     form.parse(req, function (err, fields, files) {
         let filename = files['file'][0].originalFilename,
         	targetUrl = fields['targetUrl'],
-            targetPath = __dirname + '/files/' + id 
+            targetPath = __dirname + '/files/' + id
         if (filename) {
         	cons('文件解压缩')
         	fs.mkdirSync(targetPath)
@@ -83,13 +89,13 @@ function resolveData(req, res, id) {
             res.writeHead(400, {'Content-type':'application/json'})
             res.end(JSON.stringify(errData))
         }
-          
+
     })
 }
 function sendFile(filePath, res) {
 	if(filePath.match(/files/)) {
 		let dirName = `${filePath}.tar.gz`
-		exec(`tar -zcvf ${dirName} ${filePath}`, (error, stdout, stderr) => {
+		execFile('tar', ['-zcvf', dirName, filePath], (error, stdout, stderr) => {
 			if (error) {
 				cons(`exec error: ${error}`);
 				return;
@@ -97,9 +103,9 @@ function sendFile(filePath, res) {
 			let out = fs.createReadStream(dirName)
 			res.writeHead(200, {
 				'Content-type':'application/octet-stream',
-				'Content-Disposition': 'attachment; filename=' + dirName.match(/ip_.*/)[0] 
+				'Content-Disposition': 'attachment; filename=' + dirName.match(/ip_.*/)[0]
 			})
-			out.pipe(res) 
+			out.pipe(res)
 		})
 	} else {
 		fs.open(filePath, 'r+', function(err){
